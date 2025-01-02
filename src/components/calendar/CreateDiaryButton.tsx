@@ -1,6 +1,10 @@
-const CreateDiaryButton = () => {
+const CreateDiaryButton = ({
+  onGoToCreateDiary,
+}: {
+  onGoToCreateDiary: () => void;
+}) => {
   return (
-    <p>+</p>
+    <span onClick={onGoToCreateDiary}>+</span>
     // 추후 원 안에 + 들어간 icon으로 변경
   );
 };

@@ -1,6 +1,15 @@
 /* 캘린더 컨테이너 크기 조정 */
 .calendar-container {
-    width: 50%;
-    min-width: 500px;
-    margin: auto;
+  width: 50%;
+  min-width: 500px;
+  margin: auto;
+}
+
+.fc-daygrid-day-events > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  font-size: 2.5em;
+  cursor: pointer;
 }

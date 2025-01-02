@@ -1,7 +1,5 @@
-import { useState } from 'react';
-
-const EmotionIcon = () => {
-  const dailyEmotion = '';
+const EmotionIcon = ({ onViewDiary }: { onViewDiary: () => void }) => {
+  const dailyEmotion = '😡';
   // const [dailyEmotion, setDailyEmotion] = useState('')
 
   /**
@@ -9,7 +7,7 @@ const EmotionIcon = () => {
    *
    */
 
-  return <span>{dailyEmotion}</span>;
+  return <span onClick={onViewDiary}>{dailyEmotion}</span>;
 };
 
 export default EmotionIcon;
