@@ -22,7 +22,6 @@ const MainPage = () => {
     // <Header />
     <div>
       <Calendar
-        selectedDate={selectedDate}
         onViewDiary={handleViewDiary}
         onGoToCreateDiary={handleGoToCreateDiary}
       />
