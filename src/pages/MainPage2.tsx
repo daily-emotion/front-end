@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Calendar from '../components/calendar/Calendar.tsx';
+import Calendar2 from '../components/calendar/Calendar2.tsx';
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ const MainPage = () => {
   return (
     // <Header />
     <div>
-      <Calendar
+      <Calendar2
         onViewDiary={handleViewDiary}
         onGoToCreateDiary={handleGoToCreateDiary}
       />
