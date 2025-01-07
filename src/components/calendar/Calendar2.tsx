@@ -8,7 +8,6 @@ import '@fullcalendar/common/main.css';
 import '../../styles/components/calendar/Calendar2.css';
 import EmotionIcon from './EmotionIcon';
 import CreateDiaryButton from './CreateDiaryButton';
-import { createRoot } from 'react-dom/client';
 
 interface CalendarProps {
   onViewDiary: () => void;
@@ -25,8 +24,6 @@ type DiaryData = DiaryEntry[];
 
 // React.FC<CalendarProps>는 이 컴포넌트는 함수형, CalendarProps라는 형태의 props를 사용한다는 뜻
 const Calendar: React.FC<CalendarProps> = ({ onViewDiary, onGoToCreateDiary}) => {
-  // const [hasDiaryOnTheDate, setHasDiaryOnTheDate] = useState(false);
-  // const [dailyEmotion, setDailyEmotion] = useState('');
   const calendarRef = useRef<FullCalendar>(null);
 
   // 현재 렌더링된 연도와 월 (문자열 타입 필요 시 타입 바꿔야 함)
@@ -37,7 +34,6 @@ const Calendar: React.FC<CalendarProps> = ({ onViewDiary, onGoToCreateDiary}) =>
     new Date().getMonth() + 1
   );
   const [diaryData, setDiaryData] = useState<DiaryData>([]);
-  // const monthDates = getMonthDates(presentYear, presentMonth);
 
   // 일기 더미 데이터 (라이프사이클 콜백 함수 이용하지 않으면 렌더링 무한루프 발생)
   useEffect(() => {
