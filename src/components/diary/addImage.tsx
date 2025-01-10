@@ -1,0 +1,48 @@
+import React, { useCallback } from 'react';
+import { useDropzone } from 'react-dropzone';
+
+// Props 인터페이스 정의
+interface MyDropzoneProps {
+  addImage: (file: File) => void; // 파일 추가 콜백 함수
+}
+
+const MyDropzone: React.FC<MyDropzoneProps> = ({ addImage }) => {
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      acceptedFiles.forEach((file) => {
+        const reader = new FileReader();
+
+        reader.onabort = () => console.log('File reading was aborted');
+        reader.onerror = () => console.log('File reading has failed');
+        reader.onload = () => {
+          // Do whatever you want with the file contents
+          const binaryStr = reader.result;
+          console.log('File content:', binaryStr);
+          addImage(file); // 파일 추가 콜백 호출
+        };
+
+        reader.readAsArrayBuffer(file); // 파일 읽기
+      });
+    },
+    [addImage] // addImage를 의존성으로 추가
+  );
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
+  return (
+    <div
+      {...getRootProps()}
+      style={{
+        border: '2px dashed #cccccc',
+        padding: '20px',
+        textAlign: 'center',
+        cursor: 'pointer',
+      }}
+    >
+      <input {...getInputProps()} />
+      <p>사진 추가</p>
+    </div>
+  );
+};
+
+export default MyDropzone;
