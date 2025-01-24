@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // API 기본 URL 설정
 // export const API_BASE_URL = 'https://daily-emotion.site/';
-export const API_BASE_URL = 'http://localhost:5173';
+export const API_BASE_URL = 'http://localhost:8080/api';
 
 // Diary 타입 정의
 export interface Diary {
@@ -31,12 +31,14 @@ export const DiaryService = {
       const response = await axios.post<{ success: boolean }>(`${API_BASE_URL}/diaries/${date}`, diary,
         {
         headers: {
-          // "Authorization": token
+          // "Authorization": token,
+          'Content-Type': 'application/json',
         }
       });
       return response.data;
     } catch {
       console.log('API : 일기 생성에 실패하였습니다.');
+      console.log(`${API_BASE_URL}/diaries/${date}`); // URL 확인
     }
   },
 
@@ -45,7 +47,8 @@ export const DiaryService = {
     try {
       const response = await axios.get<Diary>(`${API_BASE_URL}/diaries/${date}`,{
         headers: {
-          // "Authorization": token
+          // "Authorization": token,
+          'Content-Type': 'application/json',
         }
       });
       return response.data;
@@ -59,7 +62,8 @@ export const DiaryService = {
     try {
       const response = await axios.put<{ success: boolean }>(`${API_BASE_URL}/diaries/${date}`, updateDiary,{
         headers: {
-          // "Authorization": token
+          // "Authorization": token,
+          'Content-Type': 'application/json',
         }
       }); // <{ success: boolean }> : 응답 데이터 구조 정의
       return response.data;
@@ -73,7 +77,8 @@ export const DiaryService = {
     try {
       const response = await axios.delete<{ success: boolean }>(`${API_BASE_URL}/diaries/${date}`,{
         headers: {
-          // "Authorization": token
+          // "Authorization": token,
+          'Content-Type': 'application/json',
         }
       });
       return response.data;
@@ -82,4 +87,3 @@ export const DiaryService = {
     }
   },
 };
-
