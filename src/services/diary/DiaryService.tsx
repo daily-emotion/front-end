@@ -8,10 +8,9 @@ export const API_BASE_URL = 'http://localhost:5173';
 export interface Diary {
   date: string;
   emotion: string;
-  content: string | null;
+  content ?: string;
   tags: string[];
-  imageId: number | null;
-  imageUrl: string | null;
+  image ?: string;
 }
 
 // DiaryService 정의
@@ -83,4 +82,3 @@ export const DiaryService = {
     }
   },
 };
-
