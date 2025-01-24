@@ -39,7 +39,7 @@ const UpdateDiaryPage: React.FC = () => {
     try {
       await DiaryService.updateDiary(date, updatedDiary);
       alert("일기가 성공적으로 수정되었습니다.");
-      navigate(`/diaries/${date}`);
+      navigate(`/diaries/view/${date}`);
     } catch (err) {
       console.error("Error updating diary:", err);
       alert("일기 수정에 실패했습니다.");
@@ -66,7 +66,7 @@ const UpdateDiaryPage: React.FC = () => {
         <button onClick={handleUpdate} style={{ marginRight: "10px" }}>
           수정 완료
         </button>
-        <button onClick={() => navigate(`/diaries/${date}`)}>취소</button>
+        <button onClick={() => navigate(`/diaries/view/${date}`)}>취소</button>
       </div>
     </div>
   );
