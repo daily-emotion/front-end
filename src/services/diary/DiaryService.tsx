@@ -1,17 +1,16 @@
 import axios from 'axios';
 
 // API 기본 URL 설정
-// export const API_BASE_URL = 'https://https://daily-emotion.site/';
+// export const API_BASE_URL = 'https://daily-emotion.site/';
 export const API_BASE_URL = 'http://localhost:5173';
 
 // Diary 타입 정의
 export interface Diary {
   date: string;
   emotion: string;
-  content: string | null;
+  content ?: string;
   tags: string[];
-  imageId: number | null;
-  imageUrl: string | null;
+  image ?: string;
 }
 
 // DiaryService 정의
@@ -32,8 +31,8 @@ export const DiaryService = {
       const response = await axios.post<{ success: boolean }>(`${API_BASE_URL}/diaries`, diary,
         {
         headers: {
-          'Content-Type': 'application/json',
-        },
+          // "Authorization": token
+        }
       });
       return response.data;
     } catch {
@@ -44,7 +43,11 @@ export const DiaryService = {
   // 특정 날짜 일기 조회
   getDiaryByDate: async (date: string) => {
     try {
-      const response = await axios.get<Diary>(`${API_BASE_URL}/diaries/${date}`);
+      const response = await axios.get<Diary>(`${API_BASE_URL}/diaries/${date}`,{
+        headers: {
+          // "Authorization": token
+        }
+      });
       return response.data;
     } catch {
       console.log('API : 특정 날짜 일기 조회에 실패하였습니다.');
@@ -54,7 +57,11 @@ export const DiaryService = {
   // 일기 수정
   updateDiary: async (date: string, updateDiary: Partial<Diary>) => { // Partial<Diary> : Diary 타입의 모든 속성을 필수에서 선택으로 변경됨
     try {
-      const response = await axios.put<{ success: boolean }>(`${API_BASE_URL}/diaries/${date}`, updateDiary); // <{ success: boolean }> : 응답 데이터 구조 정의
+      const response = await axios.put<{ success: boolean }>(`${API_BASE_URL}/diaries/${date}`, updateDiary,{
+        headers: {
+          // "Authorization": token
+        }
+      }); // <{ success: boolean }> : 응답 데이터 구조 정의
       return response.data;
     } catch {
       console.log('API : 일기 수정에 실패하였습니다.');
@@ -64,10 +71,15 @@ export const DiaryService = {
   // 일기 삭제
   deleteDiary: async (date: string) => {
     try {
-      const response = await axios.delete<{ success: boolean }>(`${API_BASE_URL}/diaries/${date}`);
+      const response = await axios.delete<{ success: boolean }>(`${API_BASE_URL}/diaries/${date}`,{
+        headers: {
+          // "Authorization": token
+        }
+      });
       return response.data;
     } catch {
       console.log('API : 일기 삭제에 실패하였습니다.');
     }
   },
 };
+
