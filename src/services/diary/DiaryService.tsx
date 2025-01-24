@@ -26,9 +26,9 @@ export const DiaryService = {
   },
 
   // 일기 생성
-  createDiary: async (diary: Diary) => {
+  createDiary: async (diary: Diary, date : string) => {
     try {
-      const response = await axios.post<{ success: boolean }>(`${API_BASE_URL}/diaries`, diary,
+      const response = await axios.post<{ success: boolean }>(`${API_BASE_URL}/diaries/${date}`, diary,
         {
         headers: {
           // "Authorization": token,
