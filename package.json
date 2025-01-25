@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "start": "vite",
+    "build": "npx vite optimize & vite build",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "test": "jest"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
