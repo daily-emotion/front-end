@@ -1,8 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Calendar2 from '../components/calendar/Calendar2.tsx';
 
 const MainPage = () => {
+
+  useEffect(() => {
+    const tokenHash = window.location.hash.substring(1);
+    const params = new URLSearchParams(tokenHash);
+    const accessToken = params.get('accessToken');
+    const refreshToken = params.get('refreshToken');
+
+    if (accessToken && refreshToken) {
+      localStorage.setItem("Authorization", `Bearer ${accessToken}`);
+      localStorage.setItem("Refresh Token", refreshToken);
+    } else {
+      console.error("No Tokens Received");
+    }
+  });
+
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState('');
 

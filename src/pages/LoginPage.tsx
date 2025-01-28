@@ -2,11 +2,18 @@ import Logo from "../assets/images/Daily-Emotion-Logo.png";
 import "../styles/pages/LoginPage.css";
 
 const LoginPage = () => {
-  const handleLoginNaver = () => {};
+  const handleLoginNaver = () => {
+    // window.location.href = `https://dailyemotion.site/api/oauth2/authorization/naver`;
+    window.location.href = `http://localhost:8080/api/oauth2/authorization/naver`;
+  };
 
-  const handleLoginKakao = () => {};
+  const handleLoginKakao = () => {
+    window.location.href = `http://localhost:8080/api/oauth2/authorization/kakao`;  
+  };
 
-  const handleLoginGoogle = () => {};
+  const handleLoginGoogle = () => {
+    window.location.href = `http://localhost:8080/api/oauth2/authorization/google`;
+  };
 
   return (
     <div className="container">
