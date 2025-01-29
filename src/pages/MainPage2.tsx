@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Calendar from '../components/calendar/Calendar.tsx';
+import Calendar2 from '../components/calendar/Calendar2.tsx';
 
-const MainPage = () => {
+const MainPage2 = () => {
   const accessToken = localStorage.getItem('Authorization');
   const refreshToken = localStorage.getItem('Refresh Token');
   console.log(`Authorization: ${accessToken}`);
@@ -26,7 +26,7 @@ const MainPage = () => {
   return (
     // <Header />
     <div>
-      <Calendar
+      <Calendar2
         onViewDiary={handleViewDiary}
         onGoToCreateDiary={handleGoToCreateDiary}
       />
@@ -36,4 +36,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default MainPage2;

@@ -5,11 +5,21 @@
   margin: auto;
 }
 
-.fc-daygrid-day-events > div {
+.fc-daygrid-event {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: auto;
-  font-size: 2.5em;
   cursor: pointer;
 }
+
+.fc-daygrid-day-frame {
+  position: relative;
+}
+
+/* .custom-event {
+
+} */
