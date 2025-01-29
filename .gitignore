@@ -23,4 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
+# 환경변수 파일 무시
 .env
+.env.*
