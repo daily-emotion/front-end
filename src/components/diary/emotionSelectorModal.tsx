@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Emotion, emotions } from "../../contants/emtionsContants";
+import { Emotion, EmotionKey, emotions } from "../../contants/emtionsContants";
 
 
 
@@ -17,15 +17,17 @@ const EmotionSelectorModal: React.FC<EmotionSelectorModalProps> = ({
   const [currentEmotion, setCurrentEmotion] = useState<Emotion | null>(selectedEmotion);
 
   // 감정 선택 함수
-  const selectEmotion = (emotion: Emotion) => {
-    setCurrentEmotion(emotion); // 선택한 감정을 설정
+  const selectEmotion = (emoji: EmotionKey) => {
+    const emotionValue:Emotion = emotions[emoji];
+    setCurrentEmotion(emotionValue); // 선택한 감정을 설정
+    console.log("선택된 감정: ", emotionValue);
   };
 
   // 저장 버튼 클릭 시 실행
   const handleSave = () => {
     if (currentEmotion) {
-      onSelect(currentEmotion); // 부모 컴포넌트에 선택된 감정을 전달
-      onClose(); // 모달 닫기
+      onSelect(currentEmotion); // ✅ 감정명을 부모 컴포넌트에 전달
+      onClose();
     }
   };
 
@@ -55,10 +57,10 @@ const EmotionSelectorModal: React.FC<EmotionSelectorModalProps> = ({
       >
         <h3>감정 표현 선택</h3>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-          {emotions.map((emotion) => (
+          {Object.entries(emotions).map(([emoji, emotion]) => (
             <button
-              key={emotion}
-              onClick={() => selectEmotion(emotion)}
+              key={emoji}
+              onClick={() => selectEmotion(emoji as EmotionKey)}
               style={{
                 padding: "8px 16px",
                 border: "none",
@@ -68,7 +70,7 @@ const EmotionSelectorModal: React.FC<EmotionSelectorModalProps> = ({
                 cursor: "pointer",
               }}
             >
-              {emotion}
+              {emoji}
             </button>
           ))}
         </div>
