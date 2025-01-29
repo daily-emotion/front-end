@@ -6,7 +6,7 @@ import MyDropzone from "../components/diary/addImage";
 import EmotionSelectorModal from "../components/diary/emotionSelectorModal";
 import { useNavigate } from "react-router-dom";
 import { DiaryService } from "../services/diary/DiaryService";
-import { Emotion } from "../contants/emtionsContants";
+import { emotions, Emotion, EmotionKey } from "../contants/emtionsContants";
 import { tags } from "../contants/tagsContants";
 
 const CreateDiaryPage: React.FC = () => {
@@ -38,13 +38,17 @@ const CreateDiaryPage: React.FC = () => {
   if (!date) return; // null 값 처리
 
   // KST 시간대로 날짜 format
-  const formatDate = `${date.getFullYear()}-${(date.getMonth() + 1)
-    .toString()
-    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+  const formatDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+    setSelectedDate(date);
+    navigate(`/diaries/new/${formatDate}`);
+  };
 
-  setSelectedDate(date);
-  navigate(`/diaries/new/${formatDate}`);
-};
+  // 감정명을 이모지 변환
+  const getEmojiFromEmotion = (emotion:Emotion | null) => {
+    return Object.keys(emotions).find(
+      (emoji) => emotions[emoji as EmotionKey] === emotion
+    ) || "";
+  };
 
   const handleSaveTags = (tags: string[]) => {
     setSelectedTags(tags);
@@ -109,7 +113,7 @@ const CreateDiaryPage: React.FC = () => {
         <h3>감정 표현:</h3>
         <div>
           <span style={{ fontSize: "22px" }}>
-            {selectedEmotion || <p>감정을 선택해주세요</p>}
+            {selectedEmotion ? getEmojiFromEmotion(selectedEmotion) : <p>감정을 선택해주세요</p>}
           </span>
           <button onClick={() => setIsEmotionModalOpen(true)} style={{ marginLeft: "10px" }}>
             감정 선택
