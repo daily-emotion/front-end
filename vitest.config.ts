@@ -1,10 +1,17 @@
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
-export default defineConfig({
-  test: {
-    globals: true, // 전역 테스트 API 활성화
-    environment: 'jsdom', // 브라우저 환경 시뮬레이션
-    setupFiles: './src/setupTests.ts', // 테스트 환경 초기화 파일 경로
-  },
-})
+export default defineConfig(({ mode }) => {
+  return {
+    plugins : [react()],
+    server: {
+        proxy: mode === 'development' ? {'/api': { target:'http://localhost:8080', changeOrigin : true } } : undefined,
+    },
+    build: {
+      outDir: "dist",
+      emptyOutDir: true, // 빌드 전에 dist 폴더 비우기 허용
+    },
+  };
+});
+
