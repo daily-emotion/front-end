@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Calendar2 from '../components/calendar/Calendar2.tsx';
+import Header from '../components/common/Header.tsx';
+import MonthlyChart from '../components/report/MonthlyChart.tsx';
 
 const MainPage2 = () => {
   const accessToken = localStorage.getItem('Authorization');
@@ -24,15 +26,17 @@ const MainPage2 = () => {
   };
 
   return (
-    // <Header />
-    <div>
-      <Calendar2
-        onViewDiary={handleViewDiary}
-        onGoToCreateDiary={handleGoToCreateDiary}
-      />
-      {/* 중간 세로 실선 */}
-      <div className="chart-container">{/* 차트 라이브러리 적용 */}</div>
-    </div>
+    <>
+      <Header />
+      <div style={{ display: 'flex', gap: '16px' }}>
+        <Calendar2
+          onViewDiary={handleViewDiary}
+          onGoToCreateDiary={handleGoToCreateDiary}
+        />
+        {/* 중간 세로 실선 */}
+        <MonthlyChart />
+      </div>
+    </>
   );
 };
 
