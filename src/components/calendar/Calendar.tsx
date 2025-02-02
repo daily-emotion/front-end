@@ -9,6 +9,7 @@ import '../../styles/components/calendar/Calendar.css';
 import EmotionIcon from './EmotionIcon';
 import CreateDiaryButton from './CreateDiaryButton';
 import { createRoot } from 'react-dom/client';
+import { useNavigate } from 'react-router-dom';
 
 interface CalendarProps {
   onViewDiary: () => void;
@@ -23,10 +24,21 @@ interface DiaryEntry {
 type DiaryData = DiaryEntry[];
 
 // React.FC<CalendarProps>는 이 컴포넌트는 함수형, CalendarProps라는 형태의 props를 사용한다는 뜻
-const Calendar: React.FC<CalendarProps> = ({ onViewDiary, onGoToCreateDiary}) => {
+const Calendar: React.FC<CalendarProps> = ({
+  onViewDiary,
+  onGoToCreateDiary,
+}) => {
   // const [hasDiaryOnTheDate, setHasDiaryOnTheDate] = useState(false);
   // const [dailyEmotion, setDailyEmotion] = useState('');
   const calendarRef = useRef<FullCalendar>(null);
+  const navigate = useNavigate();
+
+  const handleGoToCreateDiary = (date: string) => {
+    navigate(`/diaries/new/${date}`);
+  };
+  const handleViewDiary = (date: string) => {
+    navigate(`/diaries/view/${date}`);
+  };
 
   // 현재 렌더링된 연도와 월 (문자열 타입 필요 시 타입 바꿔야 함)
   const [presentYear, setPresentYear] = useState<number>(
@@ -90,6 +102,7 @@ const Calendar: React.FC<CalendarProps> = ({ onViewDiary, onGoToCreateDiary}) =>
     <div className="calendar-container">
       <FullCalendar
         ref={calendarRef} // ref 속성으로 연결
+        timeZone="Asia/Seoul"
         plugins={[interactionPlugin, dayGridPlugin]}
         initialView="dayGridMonth"
         selectable={false}

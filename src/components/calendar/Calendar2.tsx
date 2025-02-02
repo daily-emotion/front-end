@@ -23,7 +23,10 @@ interface DiaryEntry {
 type DiaryData = DiaryEntry[];
 
 // React.FC<CalendarProps>는 이 컴포넌트는 함수형, CalendarProps라는 형태의 props를 사용한다는 뜻
-const Calendar: React.FC<CalendarProps> = ({ onViewDiary, onGoToCreateDiary}) => {
+const Calendar: React.FC<CalendarProps> = ({
+  onViewDiary,
+  onGoToCreateDiary,
+}) => {
   const calendarRef = useRef<FullCalendar>(null);
 
   // 현재 렌더링된 연도와 월 (문자열 타입 필요 시 타입 바꿔야 함)
@@ -43,7 +46,7 @@ const Calendar: React.FC<CalendarProps> = ({ onViewDiary, onGoToCreateDiary}) =>
       { date: '2025-01-04', emotion: '😢' },
     ]);
   }, []); // 빈 배열: 최초 렌더링 시 한 번만 실행
-  
+
   // 해당 연, 월 Full-Calendar로부터 받아오기 =>
   function getPresentYearAndMonth() {
     if (calendarRef.current) {
@@ -78,6 +81,7 @@ const Calendar: React.FC<CalendarProps> = ({ onViewDiary, onGoToCreateDiary}) =>
     <div className="calendar-container">
       <FullCalendar
         ref={calendarRef} // ref 속성으로 연결
+        timeZone="Asia/Seoul"
         plugins={[interactionPlugin, dayGridPlugin]}
         initialView="dayGridMonth"
         selectable={false}
