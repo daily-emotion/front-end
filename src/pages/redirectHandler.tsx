@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const redirectHandler = () => {
+const RedirectHandler = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,4 +26,4 @@ const redirectHandler = () => {
   return <div>Login Processing...</div>;
 };
 
-export default redirectHandler;
+export default RedirectHandler;
