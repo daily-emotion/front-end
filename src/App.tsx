@@ -6,6 +6,8 @@ import MainPage from './pages/MainPage';
 import MainPage2 from './pages/MainPage2';
 import DiaryDetail from './pages/viewDiaryPage';
 import CreateDiary from './pages/createDiary';
+import UpdateDiaryPage from './pages/updateDiary';
+
 
 function App() {
   return (
@@ -17,11 +19,10 @@ function App() {
         <Route path="/main2" element={<MainPage2 />} />
         <Route
           path="/diaries/view/:date"
-          element={<DiaryDetail date={'2025-1-14'} />}
+          element={<DiaryDetail />}
         />
         <Route path="/diaries/new/:date" element={<CreateDiary />} />
-        {/* <Route path="/diaries/edit/:date" element={<CreateDiary />} />   */}
-        {/* <Route path="/diaries/view/:date" element={<CreateDiary />} />  */}
+        <Route path="/diaries/edit/:date" element={<UpdateDiaryPage />} />
       </Routes>
     </Router>
   );

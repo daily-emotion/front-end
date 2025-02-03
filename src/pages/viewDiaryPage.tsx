@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Diary, DiaryService } from "../services/diary/DiaryService";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Mock 데이터 생성
 // const mockDiary: Diary = {
@@ -22,16 +23,18 @@ import { Diary, DiaryService } from "../services/diary/DiaryService";
 //   },
 // };
 
-const DiaryDetail: React.FC<{ date: string }> = ({ date }) => {
+const DiaryDetail: React.FC = () => {
+  const { date } = useParams<{ date: string }>(); // URL 파라미터에서 date 가져오기
   const [diary, setDiary] = useState<Diary | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDiary = async () => {
       setLoading(true);
       try {
-        const data = await DiaryService.getDiaryByDate(date);
+        const data = await DiaryService.getDiaryByDate(date!);  // ! 을 붙인 이유는 절대 undefined가 올 수 없음을 알려준다.
         setDiary(data || null); // undefined일 경우 null로 처리
         setError(null);
       } catch (err) {
@@ -45,9 +48,13 @@ const DiaryDetail: React.FC<{ date: string }> = ({ date }) => {
     fetchDiary();
   }, [date]);
 
+  const updateDiary = () =>{
+    navigate(`/diaries/view/:date`);
+  }
+
   const deleteDiary = async () =>{
     try {
-        await DiaryService.deleteDiary(date); // 삭제 요청
+        await DiaryService.deleteDiary(date!); // 삭제 요청
         setDiary(null); // 삭제 후 화면에서 제거
         alert("일기가 성공적으로 삭제되었습니다."); // 성공 메시지
       } catch (err) {
@@ -74,7 +81,7 @@ const DiaryDetail: React.FC<{ date: string }> = ({ date }) => {
             </div>
           )}
 
-          <button>수정하기</button>
+          <button onClick={updateDiary}>수정하기</button>
           <button onClick={deleteDiary}>삭제하기</button>
         </>
       ) : (
