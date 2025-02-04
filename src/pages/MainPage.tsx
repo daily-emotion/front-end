@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Calendar from '../components/calendar/Calendar.tsx';
+import Header from '../components/common/Header.tsx';
+import MonthlyChart from '../components/report/MonthlyChart.tsx';
 
 const MainPage = () => {
-  const accessToken = localStorage.getItem('Authorization');
+  const accessToken: string | null = localStorage.getItem('Authorization');
   const refreshToken = localStorage.getItem('Refresh Token');
   console.log(`Authorization: ${accessToken}`);
   console.log(`Refresh Token: ${refreshToken}`);
@@ -16,23 +18,25 @@ const MainPage = () => {
   };
 
   const handleGoToCreateDiary = () => {
-    navigate(`/diary/create/${selectedDate}`, { state: { selectedDate } });
+    navigate(`/diaries/new/${selectedDate}`, { state: { selectedDate } });
   };
 
   const handleViewDiary = () => {
-    navigate(`/diary/view/${selectedDate}`, { state: { selectedDate } });
+    navigate(`/diaries/view/${selectedDate}`, { state: { selectedDate } });
   };
 
   return (
-    // <Header />
-    <div>
-      <Calendar
-        onViewDiary={handleViewDiary}
-        onGoToCreateDiary={handleGoToCreateDiary}
-      />
-      {/* 중간 세로 실선 */}
-      <div className="chart-container">{/* 차트 라이브러리 적용 */}</div>
-    </div>
+    <>
+      <Header />
+      <div style={{ display: 'flex', gap: '16px' }}>
+        <Calendar
+          onViewDiary={handleViewDiary}
+          onGoToCreateDiary={handleGoToCreateDiary}
+          accessToken={accessToken}
+        />
+        <MonthlyChart />
+      </div>
+    </>
   );
 };
 
