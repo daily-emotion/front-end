@@ -1,33 +1,11 @@
 import axios from 'axios';
+import { refreshAccessToken } from '../services/auth/tokenService';
 
 // Axios 인스턴스 생성
 const api = axios.create({
   baseURL: 'http://localhost:8080/api',
   withCredentials: true, // 쿠키 전송을 위해 필요 (옵션)
 });
-
-// Refresh Token 요청 함수
-async function refreshAccessToken() {
-  try {
-    const response = await axios.post(
-      'http://localhost:8080/api/user/token/refresh',
-      {},
-      {
-        headers: {
-          RefreshToken: localStorage.getItem('Refresh Token'),
-          Authorization: localStorage.getItem('Authorization'),
-        },
-      }
-    );
-
-    const newAccessToken = response.headers['Authorization']; // 서버에서 반환한 새로운 Access Token 반환
-    console.log(`refreshAccessToken() 성공: ${newAccessToken}`);
-    return newAccessToken;
-  } catch (error) {
-    console.error(`refreshAccessToken() 실패: ${error}`);
-    throw error;
-  }
-}
 
 // Axios 요청 인터셉터 설정 (모든 요청에 Access Token 자동 추가)
 api.interceptors.request.use(
