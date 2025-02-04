@@ -14,22 +14,18 @@ import { useNavigate } from 'react-router-dom';
 interface CalendarProps {
   onViewDiary: () => void;
   onGoToCreateDiary: () => void;
+  accessToken: string | null;
 }
 
-interface DiaryEntry {
-  date: string;
-  emotion: string;
-}
-
-type DiaryData = DiaryEntry[];
+type DiaryData = { [key: string]: string }[]; // 배열 안에 여러 객체를 담을 수 있는 형태
 
 // React.FC<CalendarProps>는 이 컴포넌트는 함수형, CalendarProps라는 형태의 props를 사용한다는 뜻
-const Calendar: React.FC<CalendarProps> = () => {
+const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
   const [currentYear, setCurrentYear] = useState<number>(0);
   const [currentMonth, setCurrentMonth] = useState<number>(0);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [diaryData, setDiaryData] = useState<DiaryData>([]);
+  const [diaryData, setDiaryData] = useState<DiaryData>([{}]);
   const calendarRef = useRef<FullCalendar>(null);
   const calendarApi = calendarRef.current?.getApi();
   const navigate = useNavigate();
@@ -45,7 +41,7 @@ const Calendar: React.FC<CalendarProps> = () => {
   }, []);
 
   const handleGoToCreateDiary = (date: string) => {
-    console.log(date);
+    console.log(`받아온 날짜: ${date}`);
     setSelectedDate(date);
     console.log(selectedDate);
     navigate(`/diaries/new/${date}`);
@@ -55,23 +51,26 @@ const Calendar: React.FC<CalendarProps> = () => {
     console.log(`받아온 날짜: ${date}`);
     setSelectedDate(date);
     console.log(`상태 변경된 날짜: ${selectedDate}`);
-    navigate(`/diaries/new/${date}`);
+    navigate(`/diaries/view/${date}`);
   };
 
   // 일기 더미 데이터 (라이프사이클 콜백 함수 이용하지 않으면 렌더링 무한루프 발생)
   useEffect(() => {
     setDiaryData([
-      { date: '2025-01-02', emotion: '😡' },
-      { date: '2025-01-03', emotion: '😁' },
-      { date: '2025-01-04', emotion: '😢' },
+      { emotion: 'ANGER', date: '2025-01-02' },
+      { emotion: 'HAPPINESS', date: '2025-01-03' },
+      { emotion: 'SAD', date: '2025-01-04' },
     ]);
   }, []); // 빈 배열: 최초 렌더링 시 한 번만 실행
 
-  // 해당 월 일기 데이터 받아오기
-  const fetchDiaryData = async (presentYear: number, presentMonth: number) => {
+  // 해당 월 일기 데이터 받아오기 (useEffect()로 변경 필요)
+  const fetchDiaryData = async (year: number, month: number) => {
     try {
       const res = await axios.get<DiaryData>(
-        `${presentYear}, ${presentMonth}로 해당 월 일기 불러오는 API`
+        `http://localhost:5173/diaries/monthly/${currentYear}${currentMonth}`,
+        {
+          headers: { Authorization: accessToken },
+        }
       );
       const newDiaryData: DiaryData = res.data;
       // setDiaryData(newDiaryData);
@@ -123,7 +122,7 @@ const Calendar: React.FC<CalendarProps> = () => {
           // 셀 안에 있는 날짜 추출
           const date = info.date.toISOString().split('T')[0];
           const matchingEntry = diaryData.find((entry) => entry.date === date);
-          console.log(matchingEntry);
+          console.log('일기 작성된 날짜: ', matchingEntry);
           // info: 특정 dayCell 하나에 대한 정보 전체. info.el은 그 셀 전체를 나타내는 DOM 요소
           const eventContainer = info.el.querySelector(
             '.fc-daygrid-day-events'

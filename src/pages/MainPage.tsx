@@ -5,7 +5,7 @@ import Header from '../components/common/Header.tsx';
 import MonthlyChart from '../components/report/MonthlyChart.tsx';
 
 const MainPage = () => {
-  const accessToken = localStorage.getItem('Authorization');
+  const accessToken: string | null = localStorage.getItem('Authorization');
   const refreshToken = localStorage.getItem('Refresh Token');
   console.log(`Authorization: ${accessToken}`);
   console.log(`Refresh Token: ${refreshToken}`);
@@ -32,6 +32,7 @@ const MainPage = () => {
         <Calendar
           onViewDiary={handleViewDiary}
           onGoToCreateDiary={handleGoToCreateDiary}
+          accessToken={accessToken}
         />
         <MonthlyChart />
       </div>
