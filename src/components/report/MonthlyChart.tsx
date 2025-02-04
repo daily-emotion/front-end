@@ -104,14 +104,14 @@ const MonthlyChart = () => {
   };
 
   const emotionTranslations: Record<string, string> = {
-    HAPPINESS: '행복함',
-    SADNESS: '슬픔',
-    ANGER: '화남',
-    DISGUST: '혐오감',
-    FEAR: '무서움',
-    SURPRISE: '놀라움',
-    INTEREST: '궁금함',
-    SHAME: '수치심',
+    HAPPINESS: '행복한',
+    SADNESS: '슬픈',
+    ANGER: '화난',
+    DISGUST: '혐오스러운',
+    FEAR: '무서운',
+    SURPRISE: '놀라운',
+    INTEREST: '궁금한',
+    SHAME: '수치스러운',
   };
 
   const sortedEmotions = Object.entries(emotionPercentages).sort(
@@ -119,6 +119,7 @@ const MonthlyChart = () => {
   );
 
   const emotions = Object.keys(emotionTranslations);
+  console.log(emotions);
 
   return (
     <div className="chart-container">

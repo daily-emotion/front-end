@@ -24,10 +24,7 @@ interface DiaryEntry {
 type DiaryData = DiaryEntry[];
 
 // React.FC<CalendarProps>는 이 컴포넌트는 함수형, CalendarProps라는 형태의 props를 사용한다는 뜻
-const Calendar: React.FC<CalendarProps> = ({
-  onViewDiary,
-  onGoToCreateDiary,
-}) => {
+const Calendar: React.FC<CalendarProps> = () => {
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
   const [currentYear, setCurrentYear] = useState<number>(0);
   const [currentMonth, setCurrentMonth] = useState<number>(0);
@@ -54,11 +51,11 @@ const Calendar: React.FC<CalendarProps> = ({
     navigate(`/diaries/new/${date}`);
   };
 
-  const handleSelectDate = (date: string) => {
+  const handleViewDiary = (date: string) => {
     console.log(`받아온 날짜: ${date}`);
     setSelectedDate(date);
     console.log(`상태 변경된 날짜: ${selectedDate}`);
-    navigate(`/diaries/new/${selectedDate}`);
+    navigate(`/diaries/new/${date}`);
   };
 
   // 일기 더미 데이터 (라이프사이클 콜백 함수 이용하지 않으면 렌더링 무한루프 발생)
@@ -139,8 +136,9 @@ const Calendar: React.FC<CalendarProps> = ({
             root.render(
               matchingEntry ? (
                 <EmotionIcon
+                  date={date}
                   emotion={matchingEntry.emotion}
-                  onViewDiary={onViewDiary}
+                  onViewDiary={handleViewDiary}
                 />
               ) : (
                 <CreateDiaryButton

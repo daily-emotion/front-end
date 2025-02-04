@@ -1,6 +1,6 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import {API_BASE_URL, DiaryService} from './DiaryService';
+import { API_BASE_URL, DiaryService } from './DiaryService';
 
 // DiaryService 테스트를 위한 describe 블록
 describe('DiaryService 테스트', () => {
@@ -27,7 +27,8 @@ describe('DiaryService 테스트', () => {
 
   // createDiary() 함수 테스트
   it('createDiary()가 일기를 성공적으로 생성해야 합니다', async () => {
-    const mockDiary = { // 생성할 일기 데이터
+    const mockDiary = {
+      // 생성할 일기 데이터
       date: '2025-01-07',
       emotion: 'happy',
       content: '내용',
@@ -45,7 +46,8 @@ describe('DiaryService 테스트', () => {
 
   // getDiaryByDate() 함수 테스트
   it('getDiaryByDate()가 특정 날짜의 일기를 반환해야 합니다', async () => {
-    const mockResponse = { // 특정 날짜의 일기 mock 데이터 정의
+    const mockResponse = {
+      // 특정 날짜의 일기 mock 데이터 정의
       date: '2025-01-07',
       content: '오늘은 좋은 날',
       emotion: 'happy',
@@ -63,7 +65,9 @@ describe('DiaryService 테스트', () => {
   it('updateDiary()가 일기를 성공적으로 수정해야 합니다', async () => {
     const updatedDiary = { content: '수정된 내용' }; // 수정할 데이터
     const mockResponse = { success: true }; // 성공 응답 mock 데이터 정의
-    mock.onPut(`${API_BASE_URL}/diaries/2025-01-07`, updatedDiary).reply(200, mockResponse); // PUT 요청에 대해 mock 응답 설정
+    mock
+      .onPut(`${API_BASE_URL}/diaries/2025-01-07`, updatedDiary)
+      .reply(200, mockResponse); // PUT 요청에 대해 mock 응답 설정
 
     const data = await DiaryService.updateDiary('2025-01-07', updatedDiary); // 실제 updateDiary() 호출
     expect(data).toEqual(mockResponse); // 반환된 데이터가 mock 데이터와 일치하는지 확인
@@ -72,7 +76,9 @@ describe('DiaryService 테스트', () => {
   // deleteDiary() 함수 테스트
   it('deleteDiary()가 일기를 성공적으로 삭제해야 합니다', async () => {
     const mockResponse = { success: true }; // 성공 응답 mock 데이터 정의
-    mock.onDelete(`${API_BASE_URL}/diaries/2025-01-07`).reply(200, mockResponse); // DELETE 요청에 대해 mock 응답 설정
+    mock
+      .onDelete(`${API_BASE_URL}/diaries/2025-01-07`)
+      .reply(200, mockResponse); // DELETE 요청에 대해 mock 응답 설정
 
     const data = await DiaryService.deleteDiary('2025-01-07'); // 실제 deleteDiary() 호출
     expect(data).toEqual(mockResponse); // 반환된 데이터가 mock 데이터와 일치하는지 확인

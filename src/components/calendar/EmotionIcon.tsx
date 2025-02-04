@@ -1,5 +1,13 @@
-const EmotionIcon = ({ emotion, onViewDiary }: { emotion: string, onViewDiary: () => void }) => {
-  return <span onClick={onViewDiary}>{emotion}</span>;
+const EmotionIcon = ({
+  date,
+  emotion,
+  onViewDiary,
+}: {
+  date: string;
+  emotion: string;
+  onViewDiary: (date: string) => void;
+}) => {
+  return <span onClick={() => onViewDiary(date)}>{emotion}</span>;
 };
 
 export default EmotionIcon;
