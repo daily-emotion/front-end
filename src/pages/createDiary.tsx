@@ -67,6 +67,25 @@ const CreateDiaryPage: React.FC = () => {
 
   const handleAddImage = (file: File) => {
     setUploadedImages((prevImages) => [...prevImages, file]);
+
+    // 허용할 이미지 용량 및 확장자
+    const imageMaxSize = 10 * 1024 * 1024; // 10MB
+    //const allowFileExtension = ["jpeg","jpg","png"];
+
+    // 확장자 확인
+    // if(!allowFileExtension(file)) {
+    //   alert("업로드 가능한 확장자가 아닙니다.[ 가능한 확장자 : ", ${allowFileExtension}, " ] ")
+    // }
+
+    // 이미지 용량 확인
+    if(file.size > imageMaxSize){
+      alert(`업로드 가능한 최대 용량은 10MB입니다. (현재 파일 용량 : ${(file.size / (1024 * 1024)).toFixed(2)}MB)`);
+      return;
+    } 
+
+    // 전달할 API
+    const response = DiaryService.imageUpload(file);
+    console.log(`IMAGE response: ${response}`);
   };
 
   const handleDeleteImage = (index: number) => {
@@ -91,7 +110,6 @@ const CreateDiaryPage: React.FC = () => {
         emotion: selectedEmotion,
         content: content,
         tags: selectedTags,
-        image: uploadedImages.length > 0 ? uploadedImages[0].name : undefined,
       };
 
       console.log(`diary: ${JSON.stringify(diary)}`);
@@ -101,7 +119,7 @@ const CreateDiaryPage: React.FC = () => {
 
       console.log(`response: ${response}`);
 
-      if (!response || !response.success) {
+      if (!response) {
         throw new Error('일기가 등록되지않았습니다.');
       }
 
@@ -183,6 +201,7 @@ const CreateDiaryPage: React.FC = () => {
           {uploadedImages.map((file, index) => (
             <li key={index} style={{ display: 'flex', alignItems: 'center' }}>
               {file.name}
+              {(file.size / (1024 * 1024)).toFixed(2)}MB
               <button
                 onClick={() => handleDeleteImage(index)}
                 style={{ marginLeft: '10px' }}

@@ -2,27 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Diary, DiaryService } from "../services/diary/DiaryService";
 import { useNavigate, useParams } from "react-router-dom";
 
-// Mock 데이터 생성
-// const mockDiary: Diary = {
-//   date: "2025-1-14",
-//   emotion: "😊", // 감정 표현
-//   content: "오늘은 정말 즐거운 하루를 보냈어요!", // 일기 내용
-//   tags: ["운동", "독서"], // 태그 목록
-//   imageId: 1,
-//   imageUrl: "https://dummyimage.com/300x200/000/fff", // 대체 샘플 이미지 URL
-// };
-
-// Mock DiaryService
-// const MockDiaryService = {
-//   getDiaryByDate: async (date: string): Promise<Diary> => {
-//     console.log(`Mock 호출 - 날짜: ${date}`);
-//     if (date === mockDiary.date) {
-//       return mockDiary;
-//     }
-//     throw new Error("Mock: 일기를 찾을 수 없습니다.");
-//   },
-// };
-
 const DiaryDetail: React.FC = () => {
   const { date } = useParams<{ date: string }>(); // URL 파라미터에서 date 가져오기
   const [diary, setDiary] = useState<Diary | null>(null);
@@ -47,6 +26,14 @@ const DiaryDetail: React.FC = () => {
 
     fetchDiary();
   }, [date]);
+
+  // 일기를 찾을 수 없을 경우 생성페이지로 이동
+  useEffect(() => {
+    if(error === "일기를 가져오는 데 실패했습니다."){
+      alert("해당 날짜의 일기가 존재하지않습니다. 새로운 일기를 작성해주세요.");
+      navigate(`/diaries/new/${date}`);
+    }
+  }, [error, navigate, date]);  // 의존성 배열을 추가함으로써 불필요한 렌더링 방지
 
   const updateDiary = () =>{
     navigate(`/diaries/view/:date`);
@@ -74,19 +61,16 @@ const DiaryDetail: React.FC = () => {
           <p><strong>감정 표현:</strong> {diary.emotion}</p>
           <p><strong>내용:</strong> {diary.content || "내용이 없습니다."}</p>
           <p><strong>태그:</strong> {diary.tags?.join(", ") || "태그가 없습니다."}</p>
-          {diary.imageUrl && (
+          { diary.imageUrl ? (
             <div>
               <strong>이미지:</strong>
               <img src={diary.imageUrl} alt="Diary" style={{ maxWidth: "300px", marginTop: "10px" }} />
             </div>
-          )}
-
+          ) : null}
           <button onClick={updateDiary}>수정하기</button>
           <button onClick={deleteDiary}>삭제하기</button>
         </>
-      ) : (
-        <p>일기를 찾을 수 없습니다.</p>
-      )}
+      ): null}
     </div>
   );
 };
