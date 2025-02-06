@@ -26,6 +26,8 @@ const CreateDiaryPage: React.FC = () => {
   // image
   const [uploadedImages, setUploadedImages] = useState<File[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // imageUrl
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string[]>([]);
   // error
   const [error, setError] = useState<string | null>(null);
   // router
@@ -65,7 +67,7 @@ const CreateDiaryPage: React.FC = () => {
     setSelectedTags(selectedTags.filter((t) => t !== tag));
   };
 
-  const handleAddImage = (file: File) => {
+  const handleAddImage = async(file: File) => {
     setUploadedImages((prevImages) => [...prevImages, file]);
 
     // 허용할 이미지 용량 및 확장자
@@ -83,9 +85,17 @@ const CreateDiaryPage: React.FC = () => {
       return;
     } 
 
-    // 전달할 API
-    const response = DiaryService.imageUpload(file);
-    console.log(`IMAGE response: ${response}`);
+    // 이미지 업로드 API
+    try{
+      const imageUrl = await DiaryService.imageUpload(file);
+      if (imageUrl){
+        setUploadedImageUrl((prevUrls) => [...prevUrls, imageUrl]);
+        setUploadedImages((prevImages) => [...prevImages, file]);
+      }
+    } catch (error){
+      console.error('이미지 업로드 실패:', error);
+      alert('이미지 업로드 중 오류가 발생했습니다.');
+    }
   };
 
   const handleDeleteImage = (index: number) => {
@@ -109,7 +119,8 @@ const CreateDiaryPage: React.FC = () => {
         date: selectedDate.toISOString().split('T')[0],
         emotion: selectedEmotion,
         content: content,
-        tags: selectedTags,
+        tag: selectedTags,
+        imageUrl: uploadedImageUrl.join(','),
       };
 
       console.log(`diary: ${JSON.stringify(diary)}`);

@@ -7,10 +7,9 @@ export const API_SERVER_URL =
 
 // Diary 타입 정의
 export interface Diary {
-  date: string;
   emotion: string;
   content?: string;
-  tags: string[];
+  tag: string[];
   imageFile?: File;
   imageUrl?: string;
 }
@@ -42,10 +41,10 @@ export const DiaryService = {
     try {
       // josn 데이터 전송
       const diaryData = {
-        date : diary.date,
         emotion : diary.emotion,
         conteent : diary.content,
-        tags : diary.tags,
+        tag : diary.tag,
+        imageUrl : diary.imageUrl,
       };
 
       const response = await axios.post(
@@ -67,11 +66,11 @@ export const DiaryService = {
   },
 
   // 이미지 첨부
-  imageUpload: async (imageFile: File, setImageUrl : (url:string) => void) => {
+  imageUpload: async (imageFile: File) => {
     try{
       // 이미지 format
       const formData = new FormData();
-        formData.append('image', imageFile); // 파일 객체 추가
+        formData.append('file', imageFile); // 파일 객체 추가
 
       formData.forEach((value, key) => {
         console.log(`${key}: ${value}`);
@@ -85,10 +84,6 @@ export const DiaryService = {
       });
 
       console.log("이미지 첨부 : ",response.data);
-      
-      // 응답 받은 URL을 저장
-      setImageUrl(response.data.imageUrl);
-
       return response.data.imageUrl;
 
     } catch {
