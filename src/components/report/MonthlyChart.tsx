@@ -44,7 +44,7 @@ const MonthlyChart = () => {
           headers: { Authorization: accessToken },
         })
         .then((res) => {
-          console.log('사용자 정보: ', res);
+          console.log('사용자 정보 (MonthlyChart): ', res);
           setUserName(res.data.name);
         })
         .catch((err) => {
@@ -71,9 +71,9 @@ const MonthlyChart = () => {
         const emotionCounts = emotionCountsMockData.emotionCounts;
         setEmotionCounts(emotionCounts);
 
-        const percentages = calculateEmotionPercentages(emotionCounts);
-        console.log('이번 달 작성된 일기 감정의 백분율: ', percentages);
-        setEmotionPercentages(percentages);
+        const emotionPercentages = calculateEmotionPercentages(emotionCounts);
+        console.log('이번 달 작성된 일기 감정의 백분율: ', emotionPercentages);
+        setEmotionPercentages(emotionPercentages);
       } catch (err) {
         console.log(`월별 감정 통계 조회 실패: ${err}`);
         alert(`월별 일기 감정 통계를 조회하는 데 실패했습니다: ${err}`);
