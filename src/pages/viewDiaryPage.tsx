@@ -57,10 +57,10 @@ const DiaryDetail: React.FC = () => {
     <div style={{ padding: "20px" }}>
       {diary ? (
         <>
-          <h2>{diary.date}</h2>
+          <h2>{date}</h2>
           <p><strong>감정 표현:</strong> {diary.emotion}</p>
           <p><strong>내용:</strong> {diary.content || "내용이 없습니다."}</p>
-          <p><strong>태그:</strong> {diary.tags?.join(", ") || "태그가 없습니다."}</p>
+          <p><strong>태그:</strong> {diary.tag?.join(", ") || "태그가 없습니다."}</p>
           { diary.imageUrl ? (
             <div>
               <strong>이미지:</strong>
