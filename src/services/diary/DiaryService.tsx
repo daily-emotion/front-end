@@ -37,10 +37,10 @@ export const DiaryService = {
   // 일기 생성
   createDiary: async (diary: Diary, date: string) => {
     try {
-      // josn 데이터 전송
+      // json 데이터 전송
       const diaryData = {
         emotion: diary.emotion,
-        conteent: diary.content,
+        content: diary.content,
         tag: diary.tag,
         imageUrl: diary.imageUrl,
       };
