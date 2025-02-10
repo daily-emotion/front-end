@@ -56,6 +56,26 @@ const MonthlyChart = () => {
   }, [accessToken, navigate]);
 
   useEffect(() => {
+    const calculateEmotionPercentages = (
+      emotionCounts: Record<string, number>
+    ) => {
+      const total = Object.values(emotionCounts).reduce(
+        (acc, count) => acc + count,
+        0
+      );
+
+      if (total === 0) return {};
+
+      return Object.fromEntries(
+        // Object.fromEntries() : 배열 => 객체
+        Object.entries(emotionCounts).map(([Key, count]) => [
+          // Object.entries() : 객체 => 배열
+          Key,
+          parseFloat(((count / total) * 100).toFixed(0)), // parseFloat() : 소수점 숫자 문자열 => 숫자
+        ])
+      );
+    };
+
     const fetchEmotionCountsData = async () => {
       try {
         const response = await axios.get<{
@@ -83,26 +103,6 @@ const MonthlyChart = () => {
     fetchEmotionCountsData();
   }, [yearMonth]);
 
-  const calculateEmotionPercentages = (
-    emotionCounts: Record<string, number>
-  ) => {
-    const total = Object.values(emotionCounts).reduce(
-      (acc, count) => acc + count,
-      0
-    );
-
-    if (total === 0) return {};
-
-    return Object.fromEntries(
-      // Object.fromEntries() : 배열 => 객체
-      Object.entries(emotionCounts).map(([Key, count]) => [
-        // Object.entries() : 객체 => 배열
-        Key,
-        parseFloat(((count / total) * 100).toFixed(0)), // parseFloat() : 소수점 숫자 문자열 => 숫자
-      ])
-    );
-  };
-
   const emotionTranslations: Record<string, string> = {
     HAPPINESS: '행복한',
     SADNESS: '슬픈',
@@ -114,12 +114,12 @@ const MonthlyChart = () => {
     SHAME: '수치스러운',
   };
 
+  const emotions = Object.keys(emotionTranslations);
+  console.log('감정 한글화: ', emotions);
+
   const sortedEmotions = Object.entries(emotionPercentages).sort(
     ([, a], [, b]) => b - a
   );
-
-  const emotions = Object.keys(emotionTranslations);
-  console.log('감정 한글화: ', emotions);
 
   return (
     <div className="chart-container">
