@@ -73,7 +73,8 @@ const Report = ({ isThisMonth }: ReportProps) => {
 
       try {
         const res = await axios.get<MonthlyStat>( // GET 요청 제네릭은 호출 결과물인 response.data 타입 지정
-          `http://localhost:8080/reports/summary/${year}/${month}`,
+          `http://localhost:8080/api/reports/summary/${year}/${month}`,
+          // `https://dailyemotion.site/api/reports/summary/${year}/${month}`,
           {
             headers: { Authorization: accessToken },
           }

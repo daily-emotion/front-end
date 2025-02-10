@@ -81,9 +81,13 @@ const MonthlyChart = () => {
         const response = await axios.get<{
           yearMonth: string;
           emotionCounts: Record<string, number>;
-        }>(`http://localhost:8080/api/reports/emotions/${year}/${month}`, {
-          headers: { Authorization: accessToken },
-        });
+        }>(
+          `http://localhost:8080/api/reports/emotions/${year}/${month}`,
+          // `https://dailyemotion.site/api/reports/emotions/${year}/${month}`,
+          {
+            headers: { Authorization: accessToken },
+          }
+        );
 
         console.log('이번 달 작성된 일기 감정 빈도: ', response.data);
         setYearMonth(response.data.yearMonth);

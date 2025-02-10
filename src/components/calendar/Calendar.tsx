@@ -67,7 +67,8 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
   const fetchDiaryData = async (year: number, month: number) => {
     try {
       const res = await axios.get<DiaryData>(
-        `http://localhost:5173/diaries/monthly/${currentYear}${String(currentMonth).padStart(2, '0')}`,
+        `http://localhost:8080/diaries/monthly/${currentYear}${String(currentMonth).padStart(2, '0')}`,
+        // `https://dailyemotion.site/api/diaries/monthly/${currentYear}${String(currentMonth).padStart(2, '0')}`,
         {
           headers: { Authorization: accessToken },
         }

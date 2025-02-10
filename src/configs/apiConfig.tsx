@@ -4,6 +4,7 @@ import { refreshAccessToken } from '../services/auth/tokenService';
 // Axios 인스턴스 생성
 const api = axios.create({
   baseURL: 'http://localhost:8080/api',
+  // baseURL: 'https://dailyemotion.site/api',
   withCredentials: true, // 쿠키 전송을 위해 필요 (옵션)
 });
 
