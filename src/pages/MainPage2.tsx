@@ -32,6 +32,7 @@ const MainPage2 = () => {
         <Calendar2
           onViewDiary={handleViewDiary}
           onGoToCreateDiary={handleGoToCreateDiary}
+          accessToken={accessToken}
         />
         {/* 중간 세로 실선 */}
         <MonthlyChart />
