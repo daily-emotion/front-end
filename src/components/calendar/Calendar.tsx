@@ -11,6 +11,7 @@ import CreateDiaryButton from './CreateDiaryButton';
 import { createRoot } from 'react-dom/client';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { CalendarApi } from '@fullcalendar/core/index.js';
 
 interface CalendarProps {
   onViewDiary: () => void;
@@ -23,8 +24,7 @@ type DiaryData = { [key: string]: string }[]; // 배열 안에 여러 객체를 
 // React.FC<CalendarProps>는 이 컴포넌트는 함수형, CalendarProps라는 형태의 props를 사용한다는 뜻
 const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
   const calendarRef = useRef<FullCalendar>(null);
-  console.log(`calendarRef: ${calendarRef}`);
-  const [calendarApi, setCalendarApi] = useState<FullCalendar | null>(null);
+  const [calendarApi, setCalendarApi] = useState<CalendarApi | null>(null);
   const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
   console.log(`currentDate: ${currentDate}`);
@@ -38,9 +38,15 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
   const [diaryData, setDiaryData] = useState<DiaryData>([{}]);
 
   useEffect(() => {
+    if (calendarRef.current) {
+      setCalendarApi(calendarRef.current.getApi());
+    }
+  });
+
+  useEffect(() => {
     if (!calendarApi) return;
 
-    const currentDate: Date | null = calendarApi?.getDate() ?? null;
+    const currentDate: Date = calendarApi?.getDate();
     setCurrentDate(currentDate);
     console.log(`currentDate: ${currentDate}`);
 
@@ -68,6 +74,9 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
           }
         );
         const newDiaryData: DiaryData = res.data;
+        console.log(
+          `${currentYear}년 ${currentMonth}월의 일기 데이터: ${newDiaryData}`
+        );
         setDiaryData(newDiaryData);
       } catch (error) {
         console.error(
@@ -89,14 +98,14 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
   const handleGoToCreateDiary = (date: string) => {
     console.log(`받아온 날짜: ${date}`);
     setSelectedDate(date);
-    console.log(selectedDate);
+    console.log(`선택된 날짜: ${selectedDate}`);
     navigate(`/diaries/new/${date}`);
   };
 
   const handleViewDiary = (date: string) => {
     console.log(`받아온 날짜: ${date}`);
     setSelectedDate(date);
-    console.log(`상태 변경된 날짜: ${selectedDate}`);
+    console.log(`선택된 날짜: ${selectedDate}`);
     navigate(`/diaries/view/${date}`);
   };
 
@@ -111,7 +120,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
         locale="ko" // 한글 번역 적용
         datesSet={() => {
           if (calendarRef.current) {
-            setCalendarApi(calendarRef.current.getApi());
+            setCalendarApi(calendarRef.current.getApi() as CalendarApi);
           }
         }} // 캘린더가 로드될 때 실행
         dayHeaderContent={(info) => {
@@ -143,7 +152,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
         }}
         dayCellDidMount={(info) => {
           // 셀 안에 있는 날짜 추출
-          const date = info.date.toISOString().split('T')[0];
+          const date = info.date.toISOString().split('T')[0]; // timezone이 한국으로 설정되어 있어서 이 코드에서 변환하지 않아도 됨
           const matchingEntry = diaryData.find((entry) => entry.date === date);
           console.log('일기 작성된 날짜: ', matchingEntry);
           // info: 특정 dayCell 하나에 대한 정보 전체. info.el은 그 셀 전체를 나타내는 DOM 요소
