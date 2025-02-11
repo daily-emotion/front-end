@@ -1,16 +1,19 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 interface ReportProps {
   isThisMonth: boolean;
 }
 
-interface MonthlyStat {
-  yearMonth: string;
-  stats: {
+interface StatData {
+  monthlyStats: {
     yearMonth: string;
-    topEmotions: { value: number; key: string }[];
-    topTags: { value: number; key: string }[];
-  };
+    stats: {
+      yearMonth: string;
+      topEmotions: Record<string, number>[];
+      topTags: Record<string, number>[];
+    };
+  }[];
 }
 
 const accessToken = localStorage.getItem('Authorization');
@@ -27,52 +30,47 @@ const emotionTranslations: Record<string, string> = {
 };
 
 const Report = ({ isThisMonth }: ReportProps) => {
+  // 현재 시간 (한국 기준)
+  const now = new Date();
+  const koreanTime = new Date(now.getTime() + 9 * 60 * 60 * 1000); // UTC+9 적용
+
   // 사용자 이름 데이터 fetch
   const [userName, setUserName] = useState<string | null>(null);
 
   // 현재 연도, 월 적용 (추후 전역 상태관리로 변경)
-  const [year, setYear] = useState<number>(new Date().getFullYear());
-  const [month, setMonth] = useState<number>(new Date().getMonth() + 1);
+  const [year, setYear] = useState<number>(koreanTime.getFullYear());
+  const [month, setMonth] = useState<number>(koreanTime.getMonth() + 1);
   const [statDetails, setStatDetails] = useState<{
     yearMonth: string;
-    topEmotions: { value: number; key: string }[];
-    topTags: { value: number; key: string }[];
+    topEmotions: Record<string, number>[];
+    topTags: Record<string, number>[];
   } | null>(null);
   const [sortedStatDetails, setSortedStatDetails] = useState<{
-    sortedTopEmotions: { value: number; key: string }[];
-    sortedTopTags: { value: number; key: string }[];
+    sortedTopEmotions: Record<string, number>[];
+    sortedTopTags: Record<string, number>[];
   } | null>(null);
-  const today = String(new Date().getDate()).padStart(2, '0');
+  const today = String(koreanTime.getDate()).padStart(2, '0');
   const lastDayOfMonth = new Date(year, month, 0).getDate();
 
   useEffect(() => {
-    if (isThisMonth) {
-      setYear(new Date().getFullYear());
-      setMonth(new Date().getMonth() + 1);
-    } else {
+    if (!isThisMonth) {
       setYear(
-        new Date().getMonth() === 0
-          ? new Date().getFullYear() - 1
-          : new Date().getFullYear()
+        koreanTime.getMonth() === 0
+          ? koreanTime.getFullYear() - 1
+          : koreanTime.getFullYear()
       );
-      setMonth(new Date().getMonth() === 0 ? 12 : new Date().getMonth());
-    }
-  });
+      setMonth(koreanTime.getMonth() === 0 ? 12 : koreanTime.getMonth());
+    } else return;
+  }, []);
 
   //
   useEffect(() => {
     if (!year || !month) return; // 유효한 값이 설정된 이후에 실행
 
     const fetchMonthlyStat = async () => {
-      const getStatDetails = (monthlyStat: MonthlyStat) => {
-        const yearMonth = monthlyStat.stats.yearMonth;
-        const topEmotions = monthlyStat.stats.topEmotions;
-        const topTags = monthlyStat.stats.topTags;
-        return { yearMonth, topEmotions, topTags };
-      };
-
       try {
-        const res = await axios.get<MonthlyStat>( // GET 요청 제네릭은 호출 결과물인 response.data 타입 지정
+        const res = await axios.get<StatData>(
+          // GET 요청 제네릭은 호출 결과물인 response.data 타입 지정
           `http://localhost:8080/api/reports/summary/${year}/${month}`,
           // `https://dailyemotion.site/api/reports/summary/${year}/${month}`,
           {
@@ -80,9 +78,19 @@ const Report = ({ isThisMonth }: ReportProps) => {
           }
         );
         if (res.data) {
-          const details = getStatDetails(res.data);
-          console.log(details);
-          setStatDetails(details);
+          const selectedStatData = res.data.monthlyStats.find(
+            (stat) =>
+              stat.yearMonth === `${year}-${String(month).padStart(2, '0')}`
+          );
+          if (selectedStatData) {
+            const yearMonth = selectedStatData.stats.yearMonth ?? '';
+            const topEmotions = selectedStatData.stats.topEmotions ?? [];
+            const topTags = selectedStatData.stats.topTags ?? [];
+
+            setStatDetails({ yearMonth, topEmotions, topTags });
+          }
+        } else {
+          setStatDetails(null);
         }
       } catch (err) {
         console.log(`${year}년 ${month}월 통계 데이터 조회 실패: ${err}`);
@@ -96,25 +104,53 @@ const Report = ({ isThisMonth }: ReportProps) => {
   useEffect(() => {
     if (!statDetails) return;
 
-    const translatedTopEmotions = [...statDetails.topEmotions].map(
-      (emotion) => ({
-        value: emotion.value,
-        key: emotionTranslations[emotion.key] || emotion.key,
+    const translatedTopEmotions = statDetails.topEmotions.map(
+      (emotion, index) => ({
+        [emotionTranslations[Object.keys(emotion)[0]]]:
+          Object.values(emotion)[0], // []는 배열 말고도 동적 키를 나타낼 때 쓰이기도 함
       })
     );
 
-    const sortedTopEmotions = translatedTopEmotions.sort(
-      (a, b) => b.value - a.value
-    );
-    const sortedTopTags = [...statDetails.topTags].sort(
-      (a, b) => b.value - a.value
-    );
+    const sortedTopEmotions = [...translatedTopEmotions].sort((a, b) => {
+      const valueA = Object.values(a)[0];
+      const valueB = Object.values(b)[0];
+      return valueB - valueA;
+    });
+
+    const sortedTopTags = [...statDetails.topTags].sort((a, b) => {
+      const valueA = Object.values(a)[0];
+      const valueB = Object.values(b)[0];
+      return valueB - valueA;
+    });
+
+    console.table(sortedTopEmotions);
+    console.table(sortedTopTags);
 
     setSortedStatDetails({
       sortedTopEmotions,
       sortedTopTags,
     });
   }, [statDetails]);
+
+  const calculateEmotionPercentages = (
+    emotionCounts: Record<string, number>
+  ) => {
+    const total = Object.values(emotionCounts).reduce(
+      (acc, count) => acc + count,
+      0
+    );
+
+    if (total === 0) return {};
+
+    return Object.fromEntries(
+      // Object.fromEntries() : 배열 => 객체
+      Object.entries(emotionCounts).map(([Key, count]) => [
+        // Object.entries() : 객체 => 배열
+        Key,
+        parseFloat(((count / total) * 100).toFixed(0)), // parseFloat() : 소수점 숫자 문자열 => 숫자
+      ])
+    );
+  };
 
   return (
     <div>
@@ -132,16 +168,28 @@ const Report = ({ isThisMonth }: ReportProps) => {
             </div>
           </div>
           <div>
-            {sortedStatDetails?.sortedTopEmotions[0].key} 감정을 가장 많이
-            느끼셨네요!
+            {sortedStatDetails && sortedStatDetails.sortedTopEmotions.length > 0
+              ? Object.keys(sortedStatDetails.sortedTopEmotions[0])[0]
+              : null}{' '}
+            감정을 가장 많이 느끼셨네요!
           </div>
           <div>
             {sortedStatDetails?.sortedTopEmotions
               .slice(0, 3)
               .map((emotion, index) => (
                 <div key={index}>
-                  {emotion.key}({emotion.value}%)
+                  {Object.keys(emotion)[0]}({Object.values(emotion)[0]}%)
                 </div>
+              ))}
+          </div>
+          <div>
+            {sortedStatDetails?.sortedTopEmotions
+              .slice(0, 3)
+              .map((emotion, index) => (
+                <>
+                  <div key={index}>{Object.values(emotion)[0]}일</div>
+                  <div key={index}>{Object.keys(emotion)[0]} 감정 기록됨</div>
+                </>
               ))}
           </div>
         </div>
@@ -153,7 +201,7 @@ const Report = ({ isThisMonth }: ReportProps) => {
         <div>
           {sortedStatDetails?.sortedTopTags
             .slice(0, 6)
-            .map((tag) => <div key={tag.key}>{tag.key}</div>)}
+            .map((tag, index) => <div key={index}>{Object.keys(tag)[0]}</div>)}
         </div>
       </div>
     </div>

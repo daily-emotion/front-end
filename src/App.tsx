@@ -7,7 +7,7 @@ import MainPage2 from './pages/MainPage2';
 import DiaryDetail from './pages/viewDiaryPage';
 import CreateDiary from './pages/createDiary';
 import UpdateDiaryPage from './pages/updateDiary';
-
+import ReportPage from './pages/ReportPage';
 
 function App() {
   return (
@@ -17,12 +17,10 @@ function App() {
         <Route path="/oauth/callback" element={<RedirectHandler />} />
         <Route path="/main" element={<MainPage />} />
         <Route path="/main2" element={<MainPage2 />} />
-        <Route
-          path="/diaries/view/:date"
-          element={<DiaryDetail />}
-        />
+        <Route path="/diaries/view/:date" element={<DiaryDetail />} />
         <Route path="/diaries/new/:date" element={<CreateDiary />} />
         <Route path="/diaries/edit/:date" element={<UpdateDiaryPage />} />
+        <Route path="/report" element={<ReportPage />} />
       </Routes>
     </Router>
   );
