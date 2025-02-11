@@ -26,6 +26,8 @@ const CreateDiaryPage: React.FC = () => {
   // image
   const [uploadedImages, setUploadedImages] = useState<File[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // 허용할 이미지 용량
+  const imageMaxSize = 10 * 1024 * 1024; // 10MB
   // imageUrl
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string[]>([]);
   // error
@@ -66,18 +68,15 @@ const CreateDiaryPage: React.FC = () => {
   const handleDeleteTag = (tag: string) => {
     setSelectedTags(selectedTags.filter((t) => t !== tag));
   };
-
+  const handleAddImage = async(file: File) => {
   const handleAddImage = async (file: File) => {
     setUploadedImages((prevImages) => [...prevImages, file]);
 
-    // 허용할 이미지 용량 및 확장자
-    const imageMaxSize = 10 * 1024 * 1024; // 10MB
-    //const allowFileExtension = ["jpeg","jpg","png"];
-
-    // 확장자 확인
-    // if(!allowFileExtension(file)) {
-    //   alert("업로드 가능한 확장자가 아닙니다.[ 가능한 확장자 : ", ${allowFileExtension}, " ] ")
-    // }
+    // 이미지 한 개만 업로드 가능
+    if(uploadedImages.length >= 1){
+      alert('이미지는 한 개만 업로드 할 수 있습니다.')
+      return;
+    }
 
     // 이미지 용량 확인
     if (file.size > imageMaxSize) {
@@ -85,14 +84,19 @@ const CreateDiaryPage: React.FC = () => {
         `업로드 가능한 최대 용량은 10MB입니다. (현재 파일 용량 : ${(file.size / (1024 * 1024)).toFixed(2)}MB)`
       );
       return;
+    } else {
+      // 이미지 주소 변환
+      const imageUrl = URL.createObjectURL(file);
+      setUploadedImageUrl([imageUrl]);
+      setUploadedImages([file]);
     }
 
     // 이미지 업로드 API
     try {
       const imageUrl = await DiaryService.imageUpload(file);
-      if (imageUrl) {
-        setUploadedImageUrl((prevUrls) => [...prevUrls, imageUrl]);
-        setUploadedImages((prevImages) => [...prevImages, file]);
+      if (imageUrl){
+        setUploadedImageUrl([imageUrl]); // 새 이미지 URL로  교체
+        setUploadedImages([file]); // 기존 이미지 대체
       }
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
@@ -100,8 +104,9 @@ const CreateDiaryPage: React.FC = () => {
     }
   };
 
-  const handleDeleteImage = (index: number) => {
-    setUploadedImages((prevImages) => prevImages.filter((_, i) => i !== index));
+  const handleDeleteImage = () => {
+    setUploadedImageUrl([]);
+    setUploadedImages([]);
   };
 
   const handleSubmit = async () => {
@@ -210,20 +215,28 @@ const CreateDiaryPage: React.FC = () => {
       <div>
         <h3>이미지 업로드</h3>
         <MyDropzone addImage={handleAddImage} />
-        <ul>
-          {uploadedImages.map((file, index) => (
-            <li key={index} style={{ display: 'flex', alignItems: 'center' }}>
-              {file.name}
-              {(file.size / (1024 * 1024)).toFixed(2)}MB
-              <button
-                onClick={() => handleDeleteImage(index)}
-                style={{ marginLeft: '10px' }}
-              >
-                삭제
-              </button>
-            </li>
-          ))}
-        </ul>
+
+        {/* 이미지 미리보기 */}
+        {uploadedImageUrl.length > 0 && (
+          <div style={{ marginTop: '10px' }}>
+          <h4>이미지 미리보기</h4>
+          <img 
+            src={uploadedImageUrl[0]} 
+            alt="Uploaded Preview Image" 
+            style={{
+              marginTop: '10px',
+              width: '300px',  // 고정된 너비
+              height: '300px', // 고정된 높이
+              objectFit: 'contain',  // 잘리지 않고 이미지 비율 유지
+              border: '1px solid #ddd', // 테두리 추가 (옵션)
+              borderRadius: '5px' // 모서리 둥글게 (옵션)
+            }} 
+          />
+         <div style={{ textAlign: 'center', marginTop: '10px' }}>
+            <button onClick={handleDeleteImage}>삭제</button>
+          </div>
+        </div>
+        )}
       </div>
 
       <textarea
