@@ -14,11 +14,6 @@ export interface Diary {
   imageUrl?: string;
 }
 
-// 이미지 업로드 응답 타입 정의
-interface ImageUploadResponse {
-  imageUrl: string;
-}
-
 // 토큰 관리
 const token = localStorage.getItem('Authorization');
 
@@ -70,11 +65,7 @@ export const DiaryService = {
       const formData = new FormData();
       formData.append('file', imageFile); // 파일 객체 추가
 
-      formData.forEach((value, key) => {
-        console.log(`${key}: ${value}`);
-      });
-
-      const response = await axios.post<ImageUploadResponse>(
+      const response = await axios.post(
         `${API_BASE_URL}/diaries/images`,
         formData,
         {
@@ -85,8 +76,7 @@ export const DiaryService = {
         }
       );
 
-      console.log('이미지 첨부 : ', response.data);
-      return response.data.imageUrl;
+      return response.data as string;  // 타입을 명식적으로 변환
     } catch {
       console.log('API : 이미지 첨부에 실패하였습니다.');
     }
