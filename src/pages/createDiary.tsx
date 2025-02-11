@@ -68,8 +68,9 @@ const CreateDiaryPage: React.FC = () => {
   const handleDeleteTag = (tag: string) => {
     setSelectedTags(selectedTags.filter((t) => t !== tag));
   };
-
   const handleAddImage = async(file: File) => {
+  const handleAddImage = async (file: File) => {
+    setUploadedImages((prevImages) => [...prevImages, file]);
 
     // 이미지 한 개만 업로드 가능
     if(uploadedImages.length >= 1){
@@ -78,8 +79,10 @@ const CreateDiaryPage: React.FC = () => {
     }
 
     // 이미지 용량 확인
-    if(file.size > imageMaxSize){
-      alert(`업로드 가능한 최대 용량은 10MB입니다. (현재 파일 용량 : ${(file.size / (1024 * 1024)).toFixed(2)}MB)`);
+    if (file.size > imageMaxSize) {
+      alert(
+        `업로드 가능한 최대 용량은 10MB입니다. (현재 파일 용량 : ${(file.size / (1024 * 1024)).toFixed(2)}MB)`
+      );
       return;
     } else {
       // 이미지 주소 변환
@@ -89,13 +92,13 @@ const CreateDiaryPage: React.FC = () => {
     }
 
     // 이미지 업로드 API
-    try{
+    try {
       const imageUrl = await DiaryService.imageUpload(file);
       if (imageUrl){
         setUploadedImageUrl([imageUrl]); // 새 이미지 URL로  교체
         setUploadedImages([file]); // 기존 이미지 대체
       }
-    } catch (error){
+    } catch (error) {
       console.error('이미지 업로드 실패:', error);
       alert('이미지 업로드 중 오류가 발생했습니다.');
     }
@@ -127,15 +130,15 @@ const CreateDiaryPage: React.FC = () => {
         imageUrl: uploadedImageUrl.join(','),
       };
 
-      console.log(`diary: ${JSON.stringify(diary)}`);
+      console.log(`POST 요청 diary : ${JSON.stringify(diary)}`);
 
       // 전달할 API
       const response = await DiaryService.createDiary(diary, diary.date);
 
-      console.log(`response: ${response}`);
+      // console.log(`response: ${response}`);
 
       if (!response) {
-        throw new Error('일기가 등록되지않았습니다.');
+        throw new Error('일기가 등록되지 않았습니다.');
       }
 
       // 일기 저장 후 이동할 경로

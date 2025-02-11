@@ -9,6 +9,8 @@ import '../../styles/components/calendar/Calendar2.css';
 import EmotionIcon from './EmotionIcon';
 import CreateDiaryButton from './CreateDiaryButton';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { CalendarApi } from '@fullcalendar/core/index.js';
 
 interface CalendarProps {
   onViewDiary: () => void;
@@ -20,65 +22,90 @@ type DiaryData = { [key: string]: string }[]; // 배열 안에 여러 객체를 
 
 // React.FC<CalendarProps>는 이 컴포넌트는 함수형, CalendarProps라는 형태의 props를 사용한다는 뜻
 const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
+  const calendarRef = useRef<FullCalendar>(null);
+  const [calendarApi, setCalendarApi] = useState<CalendarApi | null>(null);
+  const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
-  const [currentYear, setCurrentYear] = useState<number>(0);
-  const [currentMonth, setCurrentMonth] = useState<number>(0);
+  console.log(`currentDate: ${currentDate}`);
+  const [currentYear, setCurrentYear] = useState<number>(
+    currentDate ? currentDate.getFullYear() : 0
+  );
+  const [currentMonth, setCurrentMonth] = useState<number>(
+    currentDate ? currentDate.getMonth() + 1 : 0
+  );
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [diaryData, setDiaryData] = useState<DiaryData>([{}]);
-  const calendarRef = useRef<FullCalendar>(null);
-  const calendarApi = calendarRef.current?.getApi();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const currentDate: Date | null = calendarApi?.getDate() ?? null;
+    if (calendarRef.current) {
+      setCalendarApi(calendarRef.current.getApi());
+    }
+  });
+
+  useEffect(() => {
+    if (!calendarApi) return;
+
+    const currentDate: Date = calendarApi?.getDate();
+    setCurrentDate(currentDate);
     console.log(`currentDate: ${currentDate}`);
+
     const currentYear: number = currentDate ? currentDate.getFullYear() : 0;
     const currentMonth: number = currentDate ? currentDate.getMonth() + 1 : 0;
-    setCurrentDate(currentDate);
     setCurrentYear(currentYear);
     setCurrentMonth(currentMonth);
-  }, []);
+  }, [calendarApi]);
+
+  // 일기 더미 데이터 (라이프사이클 콜백 함수 이용하지 않으면 렌더링 무한루프 발생)
+  useEffect(() => {
+    if (!currentDate) return;
+
+    // 해당 월 일기 데이터 받아오기 (useEffect()로 변경 필요)
+
+    const requestYearMonth = `${currentYear}${String(currentMonth).padStart(2, '0')}`;
+    console.log('월 일기 데이터 요청 연도, 월: ', requestYearMonth);
+    const fetchDiaryData = async () => {
+      try {
+        const res = await axios.get<DiaryData>(
+          `http://localhost:8080/api/diaries/monthly/${currentYear}${String(currentMonth).padStart(2, '0')}`,
+          // `https://dailyemotion.site/api/diaries/monthly/${currentYear}${String(currentMonth).padStart(2, '0')}`,
+          {
+            headers: { Authorization: accessToken },
+          }
+        );
+        const newDiaryData: DiaryData = res.data;
+        console.log(
+          `${currentYear}년 ${currentMonth}월의 일기 데이터: ${newDiaryData}`
+        );
+        setDiaryData(newDiaryData);
+      } catch (error) {
+        console.error(
+          '해당 월의 일기 데이터를 불러오는데 실패하였습니다:',
+          error
+        );
+      }
+    };
+
+    fetchDiaryData();
+
+    // setDiaryData([
+    //   { emotion: 'ANGER', date: '2025-01-02' },
+    //   { emotion: 'HAPPINESS', date: '2025-01-03' },
+    //   { emotion: 'SAD', date: '2025-01-04' },
+    // ]);
+  }, [currentDate]);
 
   const handleGoToCreateDiary = (date: string) => {
     console.log(`받아온 날짜: ${date}`);
     setSelectedDate(date);
-    console.log(`상태 변경된 날짜: ${selectedDate}`);
+    console.log(`선택된 날짜: ${selectedDate}`);
     navigate(`/diaries/new/${date}`);
   };
 
   const handleViewDiary = (date: string) => {
     console.log(`받아온 날짜: ${date}`);
     setSelectedDate(date);
-    console.log(`상태 변경된 날짜: ${selectedDate}`);
+    console.log(`선택된 날짜: ${selectedDate}`);
     navigate(`/diaries/view/${date}`);
-  };
-
-  // 일기 더미 데이터 (라이프사이클 콜백 함수 이용하지 않으면 렌더링 무한루프 발생)
-  useEffect(() => {
-    setDiaryData([
-      { emotion: 'ANGER', date: '2025-01-02' },
-      { emotion: 'HAPPINESS', date: '2025-01-03' },
-      { emotion: 'SAD', date: '2025-01-04' },
-    ]);
-  }, []); // 빈 배열: 최초 렌더링 시 한 번만 실행
-
-  // 해당 월 일기 데이터 받아오기
-  const fetchDiaryData = async (year: number, month: number) => {
-    try {
-      const res = await axios.get<DiaryData>(
-        `http://localhost:5173/diaries/monthly/${currentYear}${String(currentMonth).padStart(2, '0')}`,
-        {
-          headers: { Authorization: accessToken },
-        }
-      );
-      const newDiaryData: DiaryData = res.data;
-      // setDiaryData(newDiaryData);
-    } catch (error) {
-      console.error(
-        '해당 월의 일기 데이터를 불러오는데 실패하였습니다:',
-        error
-      );
-    }
   };
 
   return (
@@ -90,6 +117,11 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
         initialView="dayGridMonth"
         selectable={false}
         locale="ko" // 한글 번역 적용
+        datesSet={() => {
+          if (calendarRef.current) {
+            setCalendarApi(calendarRef.current.getApi() as CalendarApi);
+          }
+        }} // 캘린더가 로드될 때 실행
         dayHeaderContent={(info) => {
           // 요일 번역, 글씨 색깔 변경
           const daysInKorean = ['일', '월', '화', '수', '목', '금', '토'];
@@ -111,7 +143,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
             <div>
               <span style={{ color }}>
                 {
-                  info.date.getDate() /* {info.dayNumberText.replace("일", "")} */
+                  info.date.getDate() /* {info.dayNumberText.replace('일', '')} */
                 }
               </span>
             </div>

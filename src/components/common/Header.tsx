@@ -15,9 +15,13 @@ const Header = () => {
         navigate('/');
       } else {
         axios
-          .get<{ name: string }>('http://localhost:8080/api/user/profile', {
-            headers: { Authorization: accessToken },
-          })
+          .get<{ name: string }>(
+            'http://localhost:8080/api/user/profile',
+            // 'https://dailyemotion.site/api/user/profile',
+            {
+              headers: { Authorization: accessToken },
+            }
+          )
           .then((res) => {
             console.log('사용자 정보 (Header): ', res);
             setUserName(res.data.name);
