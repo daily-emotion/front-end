@@ -68,7 +68,6 @@ const CreateDiaryPage: React.FC = () => {
   const handleDeleteTag = (tag: string) => {
     setSelectedTags(selectedTags.filter((t) => t !== tag));
   };
-  const handleAddImage = async(file: File) => {
   const handleAddImage = async (file: File) => {
     setUploadedImages((prevImages) => [...prevImages, file]);
 
