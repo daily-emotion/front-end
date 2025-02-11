@@ -1,7 +1,7 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
 import LoginPage from './pages/LoginPage';
-import RedirectHandler from './pages/RedirectHandler';
+import RedirectHandler from './pages/redirectHandler';
 import MainPage from './pages/MainPage';
 import MainPage2 from './pages/MainPage2';
 import DiaryDetail from './pages/viewDiaryPage';
