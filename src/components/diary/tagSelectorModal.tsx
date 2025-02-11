@@ -17,11 +17,11 @@ const ModalTagSelector: React.FC<ModalTagSelectorProps> = ({
 
   // 태그 선택/해제 토글 함수
   const toggleTag = (tag: string) => {
-    if (localSelectedTags.includes(tag)) {
-      setLocalSelectedTags(localSelectedTags.filter((t) => t !== tag));
-    } else {
-      setLocalSelectedTags([...localSelectedTags, tag]);
-    }
+    setLocalSelectedTags((prevTags)=>
+    prevTags.includes(tag) 
+    ? prevTags.filter((t) => t !== tag) // 이미 선택된 태그는 해제
+    : [...prevTags, tag]                // 선택되지않은 태그는 추가
+    );
   };
 
   return (
@@ -38,14 +38,14 @@ const ModalTagSelector: React.FC<ModalTagSelectorProps> = ({
       zIndex:10000,
     }}>
       <div style={{
-        background: "white",
-        padding: "20px",
-        borderRadius: "8px",
-        width: "300px",
-        textAlign: "center",
+        background: 'white',
+        padding: '20px',
+        borderRadius: '8px',
+        width: '320px',
+        textAlign: 'center',
       }}>
         <h3>태그 선택</h3>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '16px' }}>
           {tags.map((tag) => (
             <button
               key={tag}
@@ -57,13 +57,15 @@ const ModalTagSelector: React.FC<ModalTagSelectorProps> = ({
                 backgroundColor: localSelectedTags.includes(tag) ? '#007BFF' : '#E0E0E0',
                 color: localSelectedTags.includes(tag) ? '#FFFFFF' : '#000000',
                 cursor: 'pointer',
+                transition: 'background-color 0.2s ease',
               }}
             >
               {tag}
             </button>
           ))}
         </div>
-        <div style={{ marginTop: '16px' }}>
+
+        <div style={{ marginTop: '20px' }}>
           <button onClick={() => onSave(localSelectedTags)} style={{ marginRight: '8px' }}>
             저장
           </button>
