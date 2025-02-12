@@ -12,6 +12,7 @@ import { createRoot } from 'react-dom/client';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CalendarApi } from '@fullcalendar/core/index.js';
+import { useCalendarStore } from '../../stores/useCalendarStore';
 
 interface CalendarProps {
   onViewDiary: () => void;
@@ -23,8 +24,9 @@ type DiaryData = { [key: string]: string }[]; // 배열 안에 여러 객체를 
 
 // React.FC<CalendarProps>는 이 컴포넌트는 함수형, CalendarProps라는 형태의 props를 사용한다는 뜻
 const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
+  const { setCalendarRef, setCalendarApi } = useCalendarStore();
   const calendarRef = useRef<FullCalendar>(null);
-  const [calendarApi, setCalendarApi] = useState<CalendarApi | null>(null);
+  const [calendarApi, setCalendarApiLocal] = useState<CalendarApi | null>(null);
   const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
   console.log(`currentDate: ${currentDate}`);
@@ -39,26 +41,28 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
 
   useEffect(() => {
     if (calendarRef.current) {
-      setCalendarApi(calendarRef.current.getApi());
+      const ref = calendarRef;
+      const api = calendarRef.current.getApi();
+      console.log('api 설정값: ', api);
+      setCalendarRef(ref); // 전역 상태 저장
+      setCalendarApi(api); // 전역 상태 저장
+      setCalendarApiLocal(api); // 로컬 상태 저장 (필요할 경우)
     }
-  });
+  }, [calendarRef.current]);
 
   useEffect(() => {
     if (!calendarApi) return;
 
-    const currentDate: Date = calendarApi?.getDate();
-    setCurrentDate(currentDate);
+    const date: Date = calendarApi?.getDate();
+    setCurrentDate(date);
     console.log(`currentDate: ${currentDate}`);
-
-    const currentYear: number = currentDate ? currentDate.getFullYear() : 0;
-    const currentMonth: number = currentDate ? currentDate.getMonth() + 1 : 0;
-    setCurrentYear(currentYear);
-    setCurrentMonth(currentMonth);
+    setCurrentYear(date.getFullYear());
+    setCurrentMonth(date.getMonth() + 1);
   }, [calendarApi]);
 
   // 일기 더미 데이터 (라이프사이클 콜백 함수 이용하지 않으면 렌더링 무한루프 발생)
   useEffect(() => {
-    if (!currentDate) return;
+    if (!currentYear || !currentMonth) return;
 
     // 해당 월 일기 데이터 받아오기 (useEffect()로 변경 필요)
 
@@ -67,7 +71,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     const fetchDiaryData = async () => {
       try {
         const res = await axios.get<DiaryData>(
-          `http://localhost:8080/api/diaries/monthly/${currentYear}${String(currentMonth).padStart(2, '0')}`,
+          `http://localhost:8080/api/diaries/monthly/${requestYearMonth}`,
           // `https://dailyemotion.site/api/diaries/monthly/${currentYear}${String(currentMonth).padStart(2, '0')}`,
           {
             headers: { Authorization: accessToken },
@@ -93,7 +97,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     //   { emotion: 'HAPPINESS', date: '2025-01-03' },
     //   { emotion: 'SAD', date: '2025-01-04' },
     // ]);
-  }, [currentDate]);
+  }, [currentYear, currentMonth]);
 
   const handleGoToCreateDiary = (date: string) => {
     console.log(`받아온 날짜: ${date}`);
