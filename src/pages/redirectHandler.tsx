@@ -14,7 +14,7 @@ const RedirectHandler = () => {
 
     if (accessToken && refreshToken) {
       localStorage.setItem('Authorization', `Bearer ${accessToken}`);
-      localStorage.setItem('Refresh Token', refreshToken);
+      localStorage.setItem('Refresh Token', `Bearer ${refreshToken}`);
       alert('로그인 성공');
       navigate('/main');
     } else {

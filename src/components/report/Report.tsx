@@ -2,7 +2,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 interface ReportProps {
-  isThisMonth: boolean;
+  year: number;
+  month: number;
 }
 
 interface StatData {
@@ -29,7 +30,7 @@ const emotionTranslations: Record<string, string> = {
   SHAME: '수치스러운',
 };
 
-const Report = ({ isThisMonth }: ReportProps) => {
+const Report = ({ year, month }: ReportProps) => {
   // 현재 시간 (한국 기준)
   const now = new Date();
   const koreanTime = new Date(now.getTime() + 9 * 60 * 60 * 1000); // UTC+9 적용
@@ -38,8 +39,6 @@ const Report = ({ isThisMonth }: ReportProps) => {
   const [userName, setUserName] = useState<string | null>(null);
 
   // 현재 연도, 월 적용 (추후 전역 상태관리로 변경)
-  const [year, setYear] = useState<number>(koreanTime.getFullYear());
-  const [month, setMonth] = useState<number>(koreanTime.getMonth() + 1);
   const [statDetails, setStatDetails] = useState<{
     yearMonth: string;
     topEmotions: Record<string, number>[];
@@ -52,27 +51,14 @@ const Report = ({ isThisMonth }: ReportProps) => {
   const today = String(koreanTime.getDate()).padStart(2, '0');
   const lastDayOfMonth = new Date(year, month, 0).getDate();
 
-  useEffect(() => {
-    if (!isThisMonth) {
-      setYear(
-        koreanTime.getMonth() === 0
-          ? koreanTime.getFullYear() - 1
-          : koreanTime.getFullYear()
-      );
-      setMonth(koreanTime.getMonth() === 0 ? 12 : koreanTime.getMonth());
-    } else return;
-  }, []);
-
   //
   useEffect(() => {
-    if (!year || !month) return; // 유효한 값이 설정된 이후에 실행
+    if (!year || !month) return;
 
     const fetchMonthlyStat = async () => {
       try {
         const res = await axios.get<StatData>(
-          // GET 요청 제네릭은 호출 결과물인 response.data 타입 지정
           `http://localhost:8080/api/reports/summary/${year}/${month}`,
-          // `https://dailyemotion.site/api/reports/summary/${year}/${month}`,
           {
             headers: { Authorization: accessToken },
           }
@@ -156,23 +142,25 @@ const Report = ({ isThisMonth }: ReportProps) => {
     <div>
       <div>
         <div>
-          {userName}님의 {isThisMonth ? '이번 달' : '저번 달'} 감정기록
-        </div>
-        <div>
           <div>
             <div>감정 통계</div>
             <div>
               {year}.{String(month).padStart(2, '0')}.01 ~{' '}
               {String(month).padStart(2, '0')}.
-              {isThisMonth ? today : lastDayOfMonth}
+              {new Date(year, month, 0).getDate()}
             </div>
           </div>
-          <div>
-            {sortedStatDetails && sortedStatDetails.sortedTopEmotions.length > 0
-              ? Object.keys(sortedStatDetails.sortedTopEmotions[0])[0]
-              : null}{' '}
-            감정을 가장 많이 느끼셨네요!
-          </div>
+          {sortedStatDetails ? (
+            <div>
+              {sortedStatDetails &&
+              sortedStatDetails.sortedTopEmotions.length > 0
+                ? Object.keys(sortedStatDetails.sortedTopEmotions[0])[0]
+                : null}{' '}
+              감정을 가장 많이 느끼셨네요!
+            </div>
+          ) : (
+            <div> 해당 월에 등록된 일기가 없습니다. </div>
+          )}
           <div>
             {sortedStatDetails?.sortedTopEmotions
               .slice(0, 3)
@@ -195,9 +183,6 @@ const Report = ({ isThisMonth }: ReportProps) => {
         </div>
       </div>
       <div>
-        <div>
-          {userName}님의 {isThisMonth ? '이번 달' : '저번 달'} 태그
-        </div>
         <div>
           {sortedStatDetails?.sortedTopTags
             .slice(0, 6)
