@@ -6,7 +6,7 @@ const CreateDiaryButton = ({
   onGoToCreateDiary: (date: string) => void;
 }) => {
   return (
-    <span onClick={() => onGoToCreateDiary(date)} style={{ color: 'black' }}>
+    <span onClick={() => onGoToCreateDiary(date)} style={{ color: 'blue' }}>
       +
     </span>
   ); // 추후 원 안에 + 들어간 icon으로 변경;
