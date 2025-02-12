@@ -122,7 +122,6 @@ const UpdateDiaryPage: React.FC = () => {
       tag: selectedTags,
       content:content,
       imageUrl: uploadedImageUrl.join(','),
-    };
 
     console.log("수정 후 태그:", selectedTags);
 

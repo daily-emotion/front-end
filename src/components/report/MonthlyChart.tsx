@@ -4,7 +4,17 @@ import { useNavigate } from 'react-router-dom';
 
 const MonthlyChart = () => {
   const navigate = useNavigate();
-  const [userName, setUserName] = useState('');
+
+  // 현재 시간 (한국 기준)
+  const now = new Date();
+  const koreanTime = new Date(now.getTime() + 9 * 60 * 60 * 1000); // UTC+9 적용
+
+  // 사용자 이름 데이터 fetch
+  const [userName, setUserName] = useState<string | null>(null);
+
+  // 현재 연도, 월 적용 (추후 전역 상태관리로 변경)
+  const [year, setYear] = useState<number>(koreanTime.getFullYear());
+  const [month, setMonth] = useState<number>(koreanTime.getMonth() + 1);
   const [yearMonth, setYearMonth] = useState<string>('');
   const [emotionCounts, setEmotionCounts] = useState<Record<string, number>>(
     {}
@@ -14,25 +24,6 @@ const MonthlyChart = () => {
   >({});
 
   const accessToken = localStorage.getItem('Authorization');
-
-  // API 호출 시 요청 목 데이터
-  const year = '2024';
-  const month = '2';
-
-  // API 응답 더미 데이터
-  const emotionCountsMockData = {
-    yearMonth: yearMonth,
-    emotionCounts: {
-      ANGER: 1,
-      FEAR: 2,
-      HAPPINESS: 3,
-      SADNESS: 3,
-      INTEREST: 4,
-      SURPRISE: 5,
-      DISGUST: 6,
-      SHAME: 7,
-    },
-  };
 
   useEffect(() => {
     if (!accessToken) {
@@ -78,7 +69,7 @@ const MonthlyChart = () => {
 
     const fetchEmotionCountsData = async () => {
       try {
-        const response = await axios.get<{
+        const res = await axios.get<{
           yearMonth: string;
           emotionCounts: Record<string, number>;
         }>(
@@ -89,10 +80,10 @@ const MonthlyChart = () => {
           }
         );
 
-        console.log('이번 달 작성된 일기 감정 빈도: ', response.data);
-        setYearMonth(response.data.yearMonth);
-        // const emotionCounts = response.data.emotionCounts;
-        const emotionCounts = emotionCountsMockData.emotionCounts;
+        console.log('이번 달 작성된 일기 감정 빈도: ', res.data);
+        setYearMonth(res.data.yearMonth);
+        const emotionCounts = res.data.emotionCounts;
+        // const emotionCounts = emotionCountsMockData.emotionCounts;
         setEmotionCounts(emotionCounts);
 
         const emotionPercentages = calculateEmotionPercentages(emotionCounts);

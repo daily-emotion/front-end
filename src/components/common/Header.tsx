@@ -38,10 +38,21 @@ const Header = () => {
     fetchUserInfo();
   }, [accessToken, navigate]);
 
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/');
+  };
+
+  const handleGoToReport = () => {
+    navigate('/report');
+  };
+
   return (
     <>
       <div>LOGO</div>
       <div>{userName}</div>
+      <button onClick={handleLogout}>LOGOUT</button>
+      <button onClick={handleGoToReport}>REPORT</button>
     </>
   );
 };
