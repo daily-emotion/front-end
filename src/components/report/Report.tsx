@@ -53,13 +53,14 @@ const Report = ({ isThisMonth }: ReportProps) => {
   const lastDayOfMonth = new Date(year, month, 0).getDate();
 
   useEffect(() => {
-    if (!isThisMonth) {
+    if (isThisMonth === false) {
       setYear(
-        koreanTime.getMonth() === 0
+        koreanTime.getMonth() + 1 === 1
           ? koreanTime.getFullYear() - 1
           : koreanTime.getFullYear()
       );
       setMonth(koreanTime.getMonth() === 0 ? 12 : koreanTime.getMonth());
+      console.log(`지난 달 (${year}년 ${month}월) 반영 완료`);
     } else return;
   }, []);
 
@@ -130,6 +131,12 @@ const Report = ({ isThisMonth }: ReportProps) => {
       sortedTopEmotions,
       sortedTopTags,
     });
+
+    if (isThisMonth) {
+      console.log(`이번 달 데이터: ${sortedStatDetails}`);
+    } else {
+      console.log(`지난 달 데이터: ${sortedStatDetails}`);
+    }
   }, [statDetails]);
 
   const calculateEmotionPercentages = (
@@ -167,12 +174,17 @@ const Report = ({ isThisMonth }: ReportProps) => {
               {isThisMonth ? today : lastDayOfMonth}
             </div>
           </div>
-          <div>
-            {sortedStatDetails && sortedStatDetails.sortedTopEmotions.length > 0
-              ? Object.keys(sortedStatDetails.sortedTopEmotions[0])[0]
-              : null}{' '}
-            감정을 가장 많이 느끼셨네요!
-          </div>
+          {sortedStatDetails ? (
+            <div>
+              {sortedStatDetails &&
+              sortedStatDetails.sortedTopEmotions.length > 0
+                ? Object.keys(sortedStatDetails.sortedTopEmotions[0])[0]
+                : null}{' '}
+              감정을 가장 많이 느끼셨네요!
+            </div>
+          ) : (
+            <div> 해당 월에 등록된 일기가 없습니다. </div>
+          )}
           <div>
             {sortedStatDetails?.sortedTopEmotions
               .slice(0, 3)
