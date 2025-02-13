@@ -65,10 +65,6 @@ const CreateDiaryPage: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  const handleDeleteTag = (tag: string) => {
-    setSelectedTags(selectedTags.filter((t) => t !== tag));
-  };
-
   // 이미지 관련
   const handleAddImage = async (file: File) => {
 
@@ -199,12 +195,6 @@ const CreateDiaryPage: React.FC = () => {
           {selectedTags.map((tag, index) => (
             <li key={index} style={{ display: 'flex', alignItems: 'center' }}>
               {tag}
-              <button
-                onClick={() => handleDeleteTag(tag)}
-                style={{ marginLeft: '10px' }}
-              >
-                삭제
-              </button>
             </li>
           ))}
         </ul>

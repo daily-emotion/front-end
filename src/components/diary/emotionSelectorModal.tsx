@@ -55,8 +55,8 @@ const EmotionSelectorModal: React.FC<EmotionSelectorModalProps> = ({
           textAlign: "center",
         }}
       >
-        <h3>감정 표현 선택</h3>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+        <h3 style={{color : "black"}}>감정 표현 선택</h3>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom : "15px", }}>
           {Object.entries(emotions).map(([emoji, emotion]) => (
             <button
               key={emoji}

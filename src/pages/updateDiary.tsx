@@ -19,10 +19,6 @@ const UpdateDiaryPage: React.FC = () => {
   // 태그
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // 태그 삭제
-  const handleDeleteTag = (tag: string) => {
-    setSelectedTags(selectedTags.filter((t) => t !== tag));
-  }
   //태그 수정
   const handleSaveTags = (updatedTags:string[]) => {
     setSelectedTags(updatedTags); // 선택된 태그 상태 업데이트
@@ -179,7 +175,6 @@ const UpdateDiaryPage: React.FC = () => {
           selectedTags.map((tag, index) => (
             <li key={index} style={{ display: 'flex', alignItems: 'center' }}>
               {tag}
-              <button onClick={() => handleDeleteTag(tag)}>삭제</button>
             </li>
       ))
     ) : (
