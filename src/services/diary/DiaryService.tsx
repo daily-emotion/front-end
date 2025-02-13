@@ -1,9 +1,7 @@
 import axios from 'axios';
 
 // API 기본 URL 설정
-// export const API_BASE_URL = 'https://daily-emotion.site/api';
-export const API_BASE_URL =
-  import.meta.env.VITE_SERVER_URL || 'http://localhost:8080/api';
+export const API_BASE_URL = 'https://daily-emotion.site/api';
 
 // Diary 타입 정의
 export interface Diary {
