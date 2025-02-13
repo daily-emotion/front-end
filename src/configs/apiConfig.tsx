@@ -43,6 +43,7 @@ API.interceptors.response.use(
 
       try {
         const newAccessToken = await refreshAccessToken();
+        console.log(`Access Token 갱신 성공: ${newAccessToken}`);
         localStorage.setItem('Authorization', newAccessToken);
         originalRequest.headers.Authorization = newAccessToken;
         return API(originalRequest);

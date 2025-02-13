@@ -49,10 +49,12 @@ const Report = ({ year, month }: ReportProps) => {
     sortedTopEmotions: Record<string, number>[];
     sortedTopTags: Record<string, number>[];
   } | null>(null);
+  const [emotionPercentages, setEmotionPercentages] = useState<
+    Record<string, number>
+  >({});
   const today = String(koreanTime.getDate()).padStart(2, '0');
   const lastDayOfMonth = new Date(year, month, 0).getDate();
 
-  //
   useEffect(() => {
     if (!year || !month) return;
 
@@ -91,14 +93,7 @@ const Report = ({ year, month }: ReportProps) => {
   useEffect(() => {
     if (!statDetails) return;
 
-    const translatedTopEmotions = statDetails.topEmotions.map(
-      (emotion, index) => ({
-        [emotionTranslations[Object.keys(emotion)[0]]]:
-          Object.values(emotion)[0], // []는 배열 말고도 동적 키를 나타낼 때 쓰이기도 함
-      })
-    );
-
-    const sortedTopEmotions = [...translatedTopEmotions].sort((a, b) => {
+    const sortedTopEmotions = [...statDetails.topEmotions].sort((a, b) => {
       const valueA = Object.values(a)[0];
       const valueB = Object.values(b)[0];
       return valueB - valueA;
@@ -119,25 +114,57 @@ const Report = ({ year, month }: ReportProps) => {
     });
   }, [statDetails]);
 
-  const calculateEmotionPercentages = (
-    emotionCounts: Record<string, number>
-  ) => {
-    const total = Object.values(emotionCounts).reduce(
-      (acc, count) => acc + count,
-      0
-    );
+  useEffect(() => {
+    const calculateEmotionPercentages = (
+      emotionCounts: Record<string, number>
+    ) => {
+      const total = Object.values(emotionCounts).reduce(
+        (acc, count) => acc + count,
+        0
+      );
 
-    if (total === 0) return {};
+      if (total === 0) return {};
 
-    return Object.fromEntries(
-      // Object.fromEntries() : 배열 => 객체
-      Object.entries(emotionCounts).map(([Key, count]) => [
-        // Object.entries() : 객체 => 배열
-        Key,
-        parseFloat(((count / total) * 100).toFixed(0)), // parseFloat() : 소수점 숫자 문자열 => 숫자
-      ])
-    );
-  };
+      return Object.fromEntries(
+        // Object.fromEntries() : 배열 => 객체
+        Object.entries(emotionCounts).map(([Key, count]) => [
+          // Object.entries() : 객체 => 배열
+          Key,
+          parseFloat(((count / total) * 100).toFixed(0)), // parseFloat() : 소수점 숫자 문자열 => 숫자
+        ])
+      );
+    };
+
+    const fetchEmotionCountsData = async () => {
+      try {
+        const res = await axios.get<{
+          yearMonth: string;
+          emotionCounts: Record<string, number>;
+        }>(
+          `${BASE_URL}/reports/emotions/${year}/${month}`,
+          // `https://dailyemotion.site/api/reports/emotions/${year}/${month}`,
+          {
+            headers: { Authorization: accessToken },
+          }
+        );
+
+        console.log('이번 달 작성된 일기 감정 빈도: ', res.data);
+        // setYearMonth(res.data.yearMonth);
+        const emotionCounts = res.data.emotionCounts;
+        // const emotionCounts = emotionCountsMockData.emotionCounts;
+        // setEmotionCounts(emotionCounts);
+
+        const emotionPercentages = calculateEmotionPercentages(emotionCounts);
+        console.log('이번 달 작성된 일기 감정의 백분율: ', emotionPercentages);
+        setEmotionPercentages(emotionPercentages);
+      } catch (err) {
+        console.log(`월별 감정 통계 조회 실패: ${err}`);
+        alert(`월별 일기 감정 통계를 조회하는 데 실패했습니다: ${err}`);
+      }
+    };
+
+    fetchEmotionCountsData();
+  }, [month]);
 
   return (
     <div>
@@ -167,7 +194,8 @@ const Report = ({ year, month }: ReportProps) => {
               .slice(0, 3)
               .map((emotion, index) => (
                 <div key={index}>
-                  {Object.keys(emotion)[0]}({Object.values(emotion)[0]}%)
+                  {emotionTranslations[Object.keys(emotion)[0]]}
+                  {emotionPercentages[Object.keys(emotion)[0]] || 0}%
                 </div>
               ))}
           </div>
@@ -177,7 +205,9 @@ const Report = ({ year, month }: ReportProps) => {
               .map((emotion, index) => (
                 <>
                   <div key={index}>{Object.values(emotion)[0]}일</div>
-                  <div key={index}>{Object.keys(emotion)[0]} 감정 기록됨</div>
+                  <div key={index}>
+                    {Object.keys(emotion)[0] || 0} 감정 기록됨
+                  </div>
                 </>
               ))}
           </div>
