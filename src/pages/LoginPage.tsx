@@ -3,18 +3,18 @@ import '../styles/pages/LoginPage.css';
 
 const LoginPage = () => {
   const handleLoginNaver = () => {
-    window.location.href = `http://localhost:8080/api/oauth2/authorization/naver`;
-    // window.location.href = `https://dailyemotion.site/api/oauth2/authorization/naver`;
+    // window.location.href = `http://localhost:8080/api/oauth2/authorization/naver`;
+    window.location.href = `https://dailyemotion.site/api/oauth2/authorization/naver`;
   };
 
   const handleLoginKakao = () => {
-    window.location.href = `http://localhost:8080/api/oauth2/authorization/kakao`;
-    // window.location.href = `https://dailyemotion.site/api/oauth2/authorization/kakao`;
+    // window.location.href = `http://localhost:8080/api/oauth2/authorization/kakao`;
+    window.location.href = `https://dailyemotion.site/api/oauth2/authorization/kakao`;
   };
 
   const handleLoginGoogle = () => {
-    window.location.href = `http://localhost:8080/api/oauth2/authorization/google`;
-    // window.location.href = `https://dailyemotion.site/api/oauth2/authorization/google`;
+    // window.location.href = `http://localhost:8080/api/oauth2/authorization/google`;
+    window.location.href = `https://dailyemotion.site/api/oauth2/authorization/google`;
   };
 
   return (
