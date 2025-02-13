@@ -27,6 +27,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Check dist folder
+        run: ls -l dist/
+
       # 4. GCP의 기존 파일 삭제
       - name: Remove old files from GCP
         uses: appleboy/ssh-action@master
