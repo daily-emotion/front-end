@@ -194,7 +194,8 @@ const UpdateDiaryPage: React.FC = () => {
       
       {/* 이미지 업로드 */}
       <div>
-        <MyDropzone addImage={handleAddImage}/>
+        {uploadedImageUrl.length === 0 &&  <MyDropzone addImage={handleAddImage}/>}
+       
         {/* 이미지 미리보기 */}
         {uploadedImageUrl.length > 0 && (
           <div style={{ marginTop: '10px' }}>

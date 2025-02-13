@@ -211,7 +211,7 @@ const CreateDiaryPage: React.FC = () => {
 
       <div>
         <h3>이미지 업로드</h3>
-        <MyDropzone addImage={handleAddImage} />
+        {uploadedImageUrl.length === 0 &&  <MyDropzone addImage={handleAddImage}/>}
 
         {/* 이미지 미리보기 */}
         {uploadedImageUrl.length > 0 && (
