@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Calendar from '../components/calendar/Calendar.tsx';
-import Header from '../components/common/Header.tsx';
 import MonthlyChart from '../components/report/MonthlyChart.tsx';
 
 const MainPage = () => {
@@ -27,7 +26,6 @@ const MainPage = () => {
 
   return (
     <>
-      <Header />
       <div style={{ display: 'flex', gap: '16px' }}>
         <Calendar
           onViewDiary={handleViewDiary}

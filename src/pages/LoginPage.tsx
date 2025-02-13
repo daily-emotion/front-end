@@ -1,4 +1,4 @@
-import Logo from '../assets/images/Daily-Emotion-Logo.png';
+import Logo from '../../src/assets/images/logo/Daily-Emotion-Logo.png';
 import { BASE_URL } from '../configs/apiConfig';
 import '../styles/pages/LoginPage.css';
 

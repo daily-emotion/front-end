@@ -14,7 +14,10 @@ const CreateDiaryPage: React.FC = () => {
 
   // date (초기값을 url에 적힌 날짜로 설정)
   const [selectedDate, setSelectedDate] = useState<Date>(
-    new Date(location.pathname.split('/').pop() || '')
+    () => {
+      const dateFromUrl = location.pathname.split('/').pop();
+      return dateFromUrl ? new Date(dateFromUrl) : new Date();
+    }
   );
   // Emotion
   const [selectedEmotion, setSelectedEmotion] = useState<Emotion | null>(null);
@@ -92,18 +95,6 @@ const CreateDiaryPage: React.FC = () => {
         console.log('이미지 URL이 반환되지않았습니다.')
       }
     } catch(error){
-      console.error('이미지 업로드 실패:', error);
-      alert('이미지 업로드 중 오류가 발생했습니다.');
-    }
-
-    // 이미지 업로드 API
-    try {
-      const imageUrl = await DiaryService.imageUpload(file);
-      if (imageUrl){
-        setUploadedImageUrl([imageUrl]); // 새 이미지 URL로  교체
-        setUploadedImages([file]); // 기존 이미지 대체
-      }
-    } catch (error) {
       console.error('이미지 업로드 실패:', error);
       alert('이미지 업로드 중 오류가 발생했습니다.');
     }

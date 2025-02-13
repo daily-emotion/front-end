@@ -1,0 +1,28 @@
+.commonHeader {
+    width: 100%;
+    height: 80px;   /* 헤더 높이 설정 */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;  /* 화면에 고정 */
+    top: 0;
+    left: 0;
+    background-color: white;  /* 헤더 배경색 */
+    z-index: 1000;  /* 다른 요소 위에 표시 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* 헤더 하단 그림자 */
+    padding: 0 50px;
+    box-sizing: border-box;
+}
+  
+.header-logo {
+width: 250px;
+display: flex;
+align-items: center;
+}
+  
+.header-logo > img {
+width: 50px;
+float: left;
+cursor: pointer;
+margin-right: 10px;
+}
