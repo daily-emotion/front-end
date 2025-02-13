@@ -2,7 +2,7 @@ name: daily-emotion-frontend-deploy
 
 on:
   push:
-    branches: [ "dev" , "main"]
+    branches: [ "dev" , "main"]  # 백엔드와 동일하게 dev, main 브랜치에서 동작
 
 jobs:
   deploy:
@@ -25,10 +25,10 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build -- --force  # 강제 빌드 추가
+        run: npm run build
 
       - name: Check dist folder
-        run: ls -R dist/  # 빌드된 파일 로그 확인
+        run: ls -l dist/
 
       # 4. GCP의 기존 파일 삭제
       - name: Remove old files from GCP
@@ -51,18 +51,7 @@ jobs:
           target: "/var/www/dailyemotion"
           strip_components: 1
 
-      # 6. GCP에서 업로드된 파일 확인
-      - name: Verify uploaded files on GCP
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.GCP_HOST }}
-          username: ${{ secrets.GCP_USERNAME }}
-          key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
-          script: |
-            echo "Checking uploaded files..."
-            ls -R /var/www/dailyemotion
-
-      # 7. Nginx 재시작
+      # 6. Nginx 재시작
       - name: Restart Nginx
         uses: appleboy/ssh-action@master
         with:
