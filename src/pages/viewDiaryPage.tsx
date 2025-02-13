@@ -24,7 +24,8 @@ const DiaryDetail: React.FC = () => {
       setLoading(true);
       try {
         const data = await DiaryService.getDiaryByDate(date!); // ! 을 붙인 이유는 절대 undefined가 올 수 없음을 알려준다.
-        setDiary(data || null); // undefined일 경우 null로 처리
+        setDiary(data!);
+        console.log("조회 페이지 태그:", data?.tag);
         setError(null);
       } catch (err) {
         console.error('Error fetching diary:', err); // 오류 로그 출력

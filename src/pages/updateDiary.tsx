@@ -5,6 +5,7 @@ import EmotionSelectorModal from "../components/diary/emotionSelectorModal";
 import { Emotion, EmotionKey, emotions } from "../contants/emtionsContants";
 import ModalTagSelector from "../components/diary/tagSelectorModal";
 import { tags } from "../contants/tagsContants";
+import MyDropzone from "../components/diary/addImage";
 
 const UpdateDiaryPage: React.FC = () => {
   const { date } = useParams<{ date: string }>();
@@ -16,7 +17,6 @@ const UpdateDiaryPage: React.FC = () => {
   const [isEmotionModalOpen, setIsEmotionModalOpen] = useState(false);
 
   // 태그
-  const [tag, setTag] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   // 태그 삭제
@@ -26,12 +26,59 @@ const UpdateDiaryPage: React.FC = () => {
   //태그 수정
   const handleSaveTags = (updatedTags:string[]) => {
     setSelectedTags(updatedTags); // 선택된 태그 상태 업데이트
-    setTag(updatedTags); // 전체 태그 상태 업데이트
     setIsModalOpen(false);
   }
 
   // 이미지
-  // const [image,setImage] = useState<string>("");
+   const [uploadedImages, setUploadedImages] = useState<File[]>([]);
+   const imageMaxSize = 10 * 1024 * 1024; // 10MB
+   const [uploadedImageUrl, setUploadedImageUrl] = useState<string[]>([]);
+   const handleAddImage = async (file : File) => {
+    // 이미지 한 개만 업로드 가능
+    if(uploadedImages.length >= 1){
+      alert('이미지는 한 개만 업로드 할 수 있습니다.')
+      return;
+    }
+
+    // 이미지 용량 확인
+    if (file.size > imageMaxSize) {
+      alert(
+        `업로드 가능한 최대 용량은 10MB입니다. (현재 파일 용량 : ${(file.size / (1024 * 1024)).toFixed(2)}MB)`
+      );
+      return;
+    } 
+
+    try{
+      // 이미지 주소 변환
+      const imageUrl = await DiaryService.imageUpload(file);
+      if(imageUrl) {
+        setUploadedImageUrl([imageUrl]);
+        setUploadedImages([file]);
+      } else {
+        console.log('이미지 URL이 반환되지않았습니다.')
+      }
+    } catch(error){
+      console.error('이미지 업로드 실패:', error);
+      alert('이미지 업로드 중 오류가 발생했습니다.');
+    }
+
+    // 이미지 업로드 API
+    try {
+      const imageUrl = await DiaryService.imageUpload(file);
+      if (imageUrl){
+        setUploadedImageUrl([imageUrl]); // 새 이미지 URL로  교체
+        setUploadedImages([file]); // 기존 이미지 대체
+      }
+    } catch (error) {
+      console.error('이미지 업로드 실패:', error);
+      alert('이미지 업로드 중 오류가 발생했습니다.');
+    }
+   }
+
+   const handleDeleteImage = () => {
+    setUploadedImageUrl([]);
+    setUploadedImages([]);
+  };
 
   // 내용
   const [content, setContent] = useState<string>("");
@@ -55,9 +102,8 @@ const UpdateDiaryPage: React.FC = () => {
           if (data) {
             setContent(data.content || "");
             setEmotion(data.emotion);
-            setTag(data.tag || []);
             setSelectedTags(data.tag || []);
-            // setImage(data.imageUrl||"");
+            if(data.imageUrl) {setUploadedImageUrl([data.imageUrl]);}
           }
         } catch (err) {
           console.error("Error fetching diary:", err);
@@ -71,10 +117,13 @@ const UpdateDiaryPage: React.FC = () => {
   const handleUpdate = async () => {
     if (!date) return;
 
-    const updatedDiary: Partial<Diary> = {
-      emotion,
-      tag,
-    };
+    const updatedDiary:Diary = {
+      emotion : selectedEmotion ?? emotion,
+      tag: selectedTags,
+      content:content,
+      imageUrl: uploadedImageUrl.join(','),
+
+    console.log("수정 후 태그:", selectedTags);
 
     try {
       await DiaryService.updateDiary(date, updatedDiary);
@@ -148,7 +197,31 @@ const UpdateDiaryPage: React.FC = () => {
       </div>
       
       {/* 이미지 업로드 */}
-
+      <div>
+        <MyDropzone addImage={handleAddImage}/>
+        {/* 이미지 미리보기 */}
+        {uploadedImageUrl.length > 0 && (
+          <div style={{ marginTop: '10px' }}>
+          <h4>이미지 미리보기</h4>
+          <img 
+            src={uploadedImageUrl[0]} 
+            alt="Uploaded Preview Image" 
+            style={{
+              marginTop: '10px',
+              width: '300px',  // 고정된 너비
+              height: '300px', // 고정된 높이
+              objectFit: 'contain',  // 잘리지 않고 이미지 비율 유지
+              border: '1px solid #ddd', // 테두리 추가 (옵션)
+              borderRadius: '5px' // 모서리 둥글게 (옵션)
+            }} 
+          />
+         <div style={{ textAlign: 'center', marginTop: '10px' }}>
+            <button onClick={handleDeleteImage}>삭제</button>
+          </div>
+        </div>
+        )}
+      </div>
+      
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}

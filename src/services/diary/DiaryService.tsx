@@ -94,9 +94,17 @@ export const DiaryService = {
   },
 
   // 일기 수정
-  updateDiary: async (date: string, updateDiary: Partial<Diary>) => {
+  updateDiary: async (date: string, updateDiary: Diary) => {
     // Partial<Diary> : Diary 타입의 모든 속성을 필수에서 선택으로 변경됨
     try {
+      const diaryData = {
+        emotion : updateDiary.emotion,
+        tag : updateDiary.tag,
+        content : updateDiary.content || '',
+        imageUrl : updateDiary.imageUrl || '',
+      }
+      console.log("API로 보낼 태그 데이터:", diaryData.tag);
+
       const response = await axios.put(
         `${BASE_URL}/diaries/${date}`,
         updateDiary,
@@ -109,8 +117,9 @@ export const DiaryService = {
       );
       console.log('수정 : ', response.data);
       return response.data;
-    } catch {
+    } catch (error){
       console.log('API : 일기 수정에 실패하였습니다.');
+      throw error;  // 에러를 던져서 catch 블록에서 처리할 수 있게 만듦
     }
   },
 
