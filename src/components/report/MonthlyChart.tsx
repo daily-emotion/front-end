@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCalendarStore } from '../../stores/useCalendarStore';
+import { BASE_URL } from '../../configs/apiConfig';
 
 const MonthlyChart = () => {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ const MonthlyChart = () => {
       navigate('/');
     } else {
       axios
-        .get<{ name: string }>('http://localhost:8080/api/user/profile', {
+        .get<{ name: string }>(`${BASE_URL}/user/profile`, {
           headers: { Authorization: accessToken },
         })
         .then((res) => {
@@ -89,7 +90,7 @@ const MonthlyChart = () => {
           yearMonth: string;
           emotionCounts: Record<string, number>;
         }>(
-          `http://localhost:8080/api/reports/emotions/${year}/${month}`,
+          `${BASE_URL}/reports/emotions/${year}/${month}`,
           // `https://dailyemotion.site/api/reports/emotions/${year}/${month}`,
           {
             headers: { Authorization: accessToken },

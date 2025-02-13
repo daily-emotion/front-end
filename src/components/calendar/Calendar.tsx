@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CalendarApi } from '@fullcalendar/core/index.js';
 import { useCalendarStore } from '../../stores/useCalendarStore';
+import { BASE_URL } from '../../configs/apiConfig';
 
 interface CalendarProps {
   onViewDiary: () => void;
@@ -59,7 +60,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     const fetchDiaryData = async () => {
       try {
         const res = await axios.get<DiaryData>(
-          `http://localhost:8080/api/diaries/monthly/${year}${String(month).padStart(2, '0')}`,
+          `${BASE_URL}/diaries/monthly/${year}${String(month).padStart(2, '0')}`,
           { headers: { Authorization: accessToken } }
         );
         setDiaryData(res.data); // 데이터를 가져오자마자 diaryData 업데이트

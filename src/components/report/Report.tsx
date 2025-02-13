@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { BASE_URL } from '../../configs/apiConfig';
 
 interface ReportProps {
   year: number;
@@ -58,7 +59,7 @@ const Report = ({ year, month }: ReportProps) => {
     const fetchMonthlyStat = async () => {
       try {
         const res = await axios.get<StatData>(
-          `http://localhost:8080/api/reports/summary/${year}/${month}`,
+          `${BASE_URL}/reports/summary/${year}/${month}`,
           {
             headers: { Authorization: accessToken },
           }

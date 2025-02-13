@@ -1,15 +1,18 @@
 import axios from 'axios';
 import { refreshAccessToken } from '../services/auth/tokenService';
 
+// export const BASE_URL = 'http://localhost:8080/api';
+export const BASE_URL = 'https://dailyemotion.site/api';
+
 // Axios 인스턴스 생성
-const api = axios.create({
-  baseURL: 'http://localhost:8080/api',
+const API = axios.create({
+  baseURL: BASE_URL,
   // baseURL: 'https://dailyemotion.site/api',
   withCredentials: true, // 쿠키 전송을 위해 필요 (옵션)
 });
 
 // Axios 요청 인터셉터 설정 (모든 요청에 Access Token 자동 추가)
-api.interceptors.request.use(
+API.interceptors.request.use(
   // use()는 인터셉터를 추가하는 메서드
   (config) => {
     // 요청이 서버로 전송되기 전에 실행되는 함수
@@ -24,7 +27,7 @@ api.interceptors.request.use(
 );
 
 // Axios 응답 인터셉터
-api.interceptors.response.use(
+API.interceptors.response.use(
   (response) => response, // 정상 응답일 경우 그대로 반환
   async (error) => {
     // 에러가 발생한 경우 실행됨
@@ -42,7 +45,7 @@ api.interceptors.response.use(
         const newAccessToken = await refreshAccessToken();
         localStorage.setItem('Authorization', newAccessToken);
         originalRequest.headers.Authorization = newAccessToken;
-        return api(originalRequest);
+        return API(originalRequest);
       } catch (refreshError) {
         console.error(`Access Token 갱신 실패: ${refreshError}`); // Refresh Token 만료 시
         localStorage.clear(); // 로그아웃 처리 기능 (기존 토큰 모두 제거)
@@ -56,4 +59,4 @@ api.interceptors.response.use(
   }
 );
 
-export default api;
+export default API;
