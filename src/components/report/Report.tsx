@@ -154,9 +154,9 @@ const Report = ({ year, month }: ReportProps) => {
         // const emotionCounts = emotionCountsMockData.emotionCounts;
         // setEmotionCounts(emotionCounts);
 
-        const emotionPercentages = calculateEmotionPercentages(emotionCounts);
+        const emotionPcts = calculateEmotionPercentages(emotionCounts);
+        setEmotionPercentages(emotionPcts);
         console.log('이번 달 작성된 일기 감정의 백분율: ', emotionPercentages);
-        setEmotionPercentages(emotionPercentages);
       } catch (err) {
         console.log(`월별 감정 통계 조회 실패: ${err}`);
         alert(`월별 일기 감정 통계를 조회하는 데 실패했습니다: ${err}`);
