@@ -11,6 +11,7 @@ import CreateDiaryButton from './CreateDiaryButton';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CalendarApi } from '@fullcalendar/core/index.js';
+import { BASE_URL } from '../../configs/apiConfig';
 
 interface CalendarProps {
   onViewDiary: () => void;
@@ -66,7 +67,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     const fetchDiaryData = async () => {
       try {
         const res = await axios.get<DiaryData>(
-          `http://localhost:8080/api/diaries/monthly/${currentYear}${String(currentMonth).padStart(2, '0')}`,
+          `${BASE_URL}/diaries/monthly/${currentYear}${String(currentMonth).padStart(2, '0')}`,
           // `https://dailyemotion.site/api/diaries/monthly/${currentYear}${String(currentMonth).padStart(2, '0')}`,
           {
             headers: { Authorization: accessToken },

@@ -8,10 +8,11 @@ import '@fullcalendar/common/main.css';
 import '../../styles/components/calendar/Calendar.css';
 import EmotionIcon from './EmotionIcon';
 import CreateDiaryButton from './CreateDiaryButton';
-import { createRoot } from 'react-dom/client';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CalendarApi } from '@fullcalendar/core/index.js';
+import { useCalendarStore } from '../../stores/useCalendarStore';
+import { BASE_URL } from '../../configs/apiConfig';
 
 interface CalendarProps {
   onViewDiary: () => void;
@@ -23,8 +24,9 @@ type DiaryData = { [key: string]: string }[]; // 배열 안에 여러 객체를 
 
 // React.FC<CalendarProps>는 이 컴포넌트는 함수형, CalendarProps라는 형태의 props를 사용한다는 뜻
 const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
+  const { setCalendarRef, setCalendarApi } = useCalendarStore();
   const calendarRef = useRef<FullCalendar>(null);
-  const [calendarApi, setCalendarApi] = useState<CalendarApi | null>(null);
+  const [calendarApi, setCalendarApiLocal] = useState<CalendarApi | null>(null);
   const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
   console.log(`currentDate: ${currentDate}`);
@@ -39,26 +41,43 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
 
   useEffect(() => {
     if (calendarRef.current) {
-      setCalendarApi(calendarRef.current.getApi());
+      const ref = calendarRef;
+      const api = calendarRef.current.getApi();
+      console.log('api 설정값: ', api);
+      setCalendarRef(ref); // 전역 상태 저장
+      setCalendarApi(api); // 전역 상태 저장
+      setCalendarApiLocal(api); // 로컬 상태 저장 (필요할 경우)
     }
-  });
+  }, [calendarRef.current]);
 
   useEffect(() => {
     if (!calendarApi) return;
 
-    const currentDate: Date = calendarApi?.getDate();
-    setCurrentDate(currentDate);
-    console.log(`currentDate: ${currentDate}`);
+    const date = calendarApi.getDate();
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
 
-    const currentYear: number = currentDate ? currentDate.getFullYear() : 0;
-    const currentMonth: number = currentDate ? currentDate.getMonth() + 1 : 0;
-    setCurrentYear(currentYear);
-    setCurrentMonth(currentMonth);
-  }, [calendarApi]);
+    const fetchDiaryData = async () => {
+      try {
+        const res = await axios.get<DiaryData>(
+          `${BASE_URL}/diaries/monthly/${year}${String(month).padStart(2, '0')}`,
+          { headers: { Authorization: accessToken } }
+        );
+        setDiaryData(res.data); // 데이터를 가져오자마자 diaryData 업데이트
+      } catch (error) {
+        console.error(
+          '해당 월의 일기 데이터를 불러오는데 실패하였습니다:',
+          error
+        );
+      }
+    };
+
+    fetchDiaryData();
+  }, [calendarApi]); // calendarApi가 변경될 때마다 실행
 
   // 일기 더미 데이터 (라이프사이클 콜백 함수 이용하지 않으면 렌더링 무한루프 발생)
   useEffect(() => {
-    if (!currentDate) return;
+    if (!currentYear || !currentMonth) return;
 
     // 해당 월 일기 데이터 받아오기 (useEffect()로 변경 필요)
 
@@ -67,7 +86,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     const fetchDiaryData = async () => {
       try {
         const res = await axios.get<DiaryData>(
-          `http://localhost:8080/api/diaries/monthly/${currentYear}${String(currentMonth).padStart(2, '0')}`,
+          `https://dailyemotion.site/api/diaries/monthly/${requestYearMonth}`,
           // `https://dailyemotion.site/api/diaries/monthly/${currentYear}${String(currentMonth).padStart(2, '0')}`,
           {
             headers: { Authorization: accessToken },
@@ -93,7 +112,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     //   { emotion: 'HAPPINESS', date: '2025-01-03' },
     //   { emotion: 'SAD', date: '2025-01-04' },
     // ]);
-  }, [currentDate]);
+  }, [currentYear, currentMonth]);
 
   const handleGoToCreateDiary = (date: string) => {
     console.log(`받아온 날짜: ${date}`);
@@ -127,48 +146,58 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
           // 요일 번역, 글씨 색깔 변경
           const daysInKorean = ['일', '월', '화', '수', '목', '금', '토'];
           const day = info.date.getDay();
-          const isSunday = day === 0; // if (day === 0) { isSunday = true; } else { isSunday = false; }
-          const isSaturday = day === 6; // if (day === 6) { isSaturday = true; } else { isSaturday = false; }
-          const color = isSunday ? 'red' : isSaturday ? 'blue' : 'black';
-
+          const color = day === 0 ? 'red' : day === 6 ? 'blue' : 'black';
           return <span style={{ color }}>{daysInKorean[day]}</span>;
         }}
         dayCellContent={(info) => {
           // 날짜 글씨 색깔 변경
           const day = info.date.getDay();
-          const isSunday = day === 0;
-          const isSaturday = day === 6;
-          const color = isSunday ? 'red' : isSaturday ? 'blue' : 'black';
+          const color = day === 0 ? 'red' : day === 6 ? 'blue' : 'black';
 
           return (
             <div>
-              <span style={{ color }}>
-                {
-                  info.date.getDate() /* {info.dayNumberText.replace("일", "")} */
-                }
-              </span>
+              <span style={{ color }}>{info.date.getDate()}</span>
             </div>
           );
         }}
-        dayCellDidMount={(info) => {
-          // 셀 안에 있는 날짜 추출
-          const date = info.date.toISOString().split('T')[0]; // timezone이 한국으로 설정되어 있어서 이 코드에서 변환하지 않아도 됨
-          const matchingEntry = diaryData.find((entry) => entry.date === date);
-          console.log('일기 작성된 날짜: ', matchingEntry);
-          // info: 특정 dayCell 하나에 대한 정보 전체. info.el은 그 셀 전체를 나타내는 DOM 요소
-          const eventContainer = info.el.querySelector(
-            '.fc-daygrid-day-events'
-          );
-          if (eventContainer) {
-            const element = document.createElement('div'); // 새로운 컨테이너 생성
-            eventContainer.appendChild(element);
+        events={(fetchInfo, successCallback) => {
+          const startDate = new Date(fetchInfo.start);
+          const endDate = new Date(fetchInfo.end);
+          const events = [];
 
-            const root = createRoot(element); // createRoot를 사용하여 React 컴포넌트 렌더링
-            root.render(
-              matchingEntry ? (
+          // 캘린더에 표시될 모든 날짜를 반복하며 이벤트 생성
+          for (
+            let date = new Date(startDate);
+            date <= endDate;
+            date.setDate(date.getDate() + 1)
+          ) {
+            const formattedDate = date.toISOString().split('T')[0];
+
+            const matchingEntry = diaryData.find(
+              (entry) => entry.date === formattedDate
+            );
+
+            events.push({
+              title: '',
+              start: formattedDate,
+              extendedProps: {
+                emotion: matchingEntry ? matchingEntry.emotion : null,
+              },
+            });
+          }
+
+          successCallback(events);
+        }}
+        eventContent={(eventInfo) => {
+          const emotion = eventInfo.event.extendedProps.emotion;
+          const date = eventInfo.event.startStr; // 이벤트의 시작 날짜
+
+          return (
+            <div className="custom-event">
+              {emotion ? (
                 <EmotionIcon
                   date={date}
-                  emotion={matchingEntry.emotion}
+                  emotion={emotion}
                   onViewDiary={handleViewDiary}
                 />
               ) : (
@@ -176,9 +205,9 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
                   date={date}
                   onGoToCreateDiary={handleGoToCreateDiary}
                 />
-              )
-            );
-          }
+              )}
+            </div>
+          );
         }}
       />
     </div>

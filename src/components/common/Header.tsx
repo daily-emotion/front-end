@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../../configs/apiConfig';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Header = () => {
       } else {
         axios
           .get<{ name: string }>(
-            'http://localhost:8080/api/user/profile',
+            `${BASE_URL}/user/profile`,
             // 'https://dailyemotion.site/api/user/profile',
             {
               headers: { Authorization: accessToken },

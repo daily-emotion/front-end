@@ -1,20 +1,29 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCalendarStore } from '../../stores/useCalendarStore';
+import { BASE_URL } from '../../configs/apiConfig';
 
 const MonthlyChart = () => {
   const navigate = useNavigate();
 
-  // 현재 시간 (한국 기준)
+  // 현재 시간 (한국 기준 - 전역 상태관리 적용 안될 경우)
   const now = new Date();
   const koreanTime = new Date(now.getTime() + 9 * 60 * 60 * 1000); // UTC+9 적용
+
+  // 현재 시간 (FullCalendar 일시 적용)
+  const { calendarApi } = useCalendarStore();
 
   // 사용자 이름 데이터 fetch
   const [userName, setUserName] = useState<string | null>(null);
 
   // 현재 연도, 월 적용 (추후 전역 상태관리로 변경)
-  const [year, setYear] = useState<number>(koreanTime.getFullYear());
-  const [month, setMonth] = useState<number>(koreanTime.getMonth() + 1);
+  const [year, setYear] = useState<number>(
+    calendarApi?.getDate().getFullYear() ?? koreanTime.getFullYear()
+  );
+  const [month, setMonth] = useState<number>(
+    (calendarApi?.getDate().getMonth() ?? koreanTime.getMonth()) + 1
+  );
   const [yearMonth, setYearMonth] = useState<string>('');
   const [emotionCounts, setEmotionCounts] = useState<Record<string, number>>(
     {}
@@ -26,12 +35,20 @@ const MonthlyChart = () => {
   const accessToken = localStorage.getItem('Authorization');
 
   useEffect(() => {
+    if (calendarApi) {
+      console.log('캘린더 API 변경 감지: ', calendarApi.getDate());
+      setYear(calendarApi?.getDate().getFullYear());
+      setMonth(calendarApi?.getDate().getMonth() + 1);
+    }
+  }, [calendarApi]);
+
+  useEffect(() => {
     if (!accessToken) {
       alert('로그인 상태가 아닙니다. 로그인 후 이용해주세요.');
       navigate('/');
     } else {
       axios
-        .get<{ name: string }>('http://localhost:8080/api/user/profile', {
+        .get<{ name: string }>(`${BASE_URL}/user/profile`, {
           headers: { Authorization: accessToken },
         })
         .then((res) => {
@@ -73,7 +90,7 @@ const MonthlyChart = () => {
           yearMonth: string;
           emotionCounts: Record<string, number>;
         }>(
-          `http://localhost:8080/api/reports/emotions/${year}/${month}`,
+          `${BASE_URL}/reports/emotions/${year}/${month}`,
           // `https://dailyemotion.site/api/reports/emotions/${year}/${month}`,
           {
             headers: { Authorization: accessToken },
@@ -96,7 +113,7 @@ const MonthlyChart = () => {
     };
 
     fetchEmotionCountsData();
-  }, [yearMonth]);
+  }, [month]);
 
   const emotionTranslations: Record<string, string> = {
     HAPPINESS: '행복한',

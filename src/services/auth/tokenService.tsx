@@ -1,10 +1,11 @@
 import axios from 'axios';
+import { BASE_URL } from '../../configs/apiConfig';
 
 // Refresh Token 요청 함수
 export const refreshAccessToken = async () => {
   try {
     const response = await axios.post(
-      'http://localhost:8080/api/user/token/refresh',
+      `${BASE_URL}/user/token/refresh`,
       // 'https://dailyemotion.site/api/user/token/refresh',
       {},
       {
