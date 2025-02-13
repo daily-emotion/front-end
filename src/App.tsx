@@ -8,10 +8,12 @@ import DiaryDetail from './pages/viewDiaryPage';
 import CreateDiary from './pages/createDiary';
 import UpdateDiaryPage from './pages/updateDiary';
 import ReportPage from './pages/ReportPage';
+import Header from './components/common/Header';
 
 function App() {
   return (
     <Router>
+      {location.pathname !== '/' && <Header />}
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/oauth/callback" element={<RedirectHandler />} />
