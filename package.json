@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "start": "vite",
-    "build": "npx vite optimize & vite build --force",
+    "build": "npx vite optimize & vite build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
     "preview": "vite preview"
