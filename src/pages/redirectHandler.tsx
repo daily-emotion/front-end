@@ -15,11 +15,11 @@ const RedirectHandler = () => {
     if (accessToken && refreshToken) {
       localStorage.setItem('Authorization', `Bearer ${accessToken}`);
       localStorage.setItem('Refresh Token', `Bearer ${refreshToken}`);
-      alert('로그인 성공');
+      console.log('로그인 성공');
       navigate('/main');
     } else {
       console.error('No Tokens Received');
-      alert('로그인에 실패하였습니다');
+      console.log('로그인에 실패하였습니다');
     }
   });
 
