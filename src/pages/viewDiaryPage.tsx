@@ -77,7 +77,11 @@ const DiaryDetail: React.FC = () => {
             <strong>내용:</strong> {diary.content || '내용이 없습니다.'}
           </p>
           <p>
-            <strong>태그:</strong> {diary.tag?.join(', ') || '태그가 없습니다.'}
+            <strong>태그:</strong> {diary.tag?.length > 0
+              ? diary.tag.map((t) => `#${t}`).join(', ')
+              : '태그가 없습니다.'
+            }
+            {/* #{diary.tag?.join(', ') || '태그가 없습니다.'} */}
           </p>
           {diary.imageUrl ? (
             <div>
