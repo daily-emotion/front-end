@@ -185,7 +185,7 @@ const CreateDiaryPage: React.FC = () => {
         <ul>
           {selectedTags.map((tag, index) => (
             <li key={index} style={{ display: 'flex', alignItems: 'center' }}>
-              {tag}
+              #{tag}
             </li>
           ))}
         </ul>
