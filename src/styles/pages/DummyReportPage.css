@@ -1,0 +1,116 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.card-wrapper {
+  display: flex;
+  gap: 40px;
+}
+
+.emotion-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 450px;
+  border: 1px solid #e0e0e0; /* 실선 추가 */
+}
+
+.header-section {
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 흐릿한 그림자 */
+  padding: 10px;
+}
+
+.header {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+}
+
+.chart {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 70%;
+  height: 100%;
+  background-color: #e9ecef;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.progress-bar span {
+  display: block;
+  border-radius: 10px;
+}
+
+.progress-bar .happy {
+  background-color: #f8c6c6;
+}
+
+.progress-bar .neutral {
+  background-color: #ffc107;
+}
+
+.progress-bar .sad {
+  background-color: #6c757d;
+}
+
+.stats-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 30%;
+}
+
+.keywords-section {
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 흐릿한 그림자 */
+  padding: 10px;
+}
+
+.keywords {
+  display: flex;
+  flex-direction: column;
+}
+
+.keywords-left,
+.keywords-right {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.keyword-item {
+  display: flex;
+  justify-content: space-between;
+  background-color: #f1f3f5;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.keywords h3 {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+}
