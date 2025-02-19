@@ -5,6 +5,7 @@ import { BASE_URL } from '../../configs/apiConfig';
 interface ReportProps {
   year: number;
   month: number;
+  title: string;
 }
 
 interface StatData {
@@ -31,7 +32,7 @@ const emotionTranslations: Record<string, string> = {
   SHAME: '수치스러운',
 };
 
-const Report = ({ year, month }: ReportProps) => {
+const Report = ({ year, month, title }: ReportProps) => {
   // 현재 시간 (한국 기준)
   const now = new Date();
   const koreanTime = new Date(now.getTime() + 9 * 60 * 60 * 1000); // UTC+9 적용
@@ -165,59 +166,100 @@ const Report = ({ year, month }: ReportProps) => {
     fetchEmotionCountsData();
   }, [month]);
 
+  const tags =
+    sortedStatDetails?.sortedTopTags
+      .slice(0, 6)
+      .map((tag) => Object.keys(tag)[0]) || []; // 태그가 없으면 빈 배열 반환
+
   return (
-    <div>
-      <div>
-        <div>
-          <div>
-            <div>감정 통계</div>
+    <div className="emotion-card">
+      <div className="header-section">
+        <div className="chart">
+          <div className="progress-bar">
             <div>
-              {year}.{String(month).padStart(2, '0')}.01 ~{' '}
-              {String(month).padStart(2, '0')}.
-              {new Date(year, month, 0).getDate()}
+              <div>감정 통계</div>
+              <div>
+                {year}.{String(month).padStart(2, '0')}.01 ~{' '}
+                {String(month).padStart(2, '0')}.
+                {new Date(year, month, 0).getDate()}
+              </div>
             </div>
-          </div>
-          {sortedStatDetails ? (
+            {sortedStatDetails ? (
+              <div>
+                {sortedStatDetails &&
+                sortedStatDetails.sortedTopEmotions.length > 0
+                  ? Object.keys(sortedStatDetails.sortedTopEmotions[0])[0]
+                  : null}{' '}
+                감정을 가장 많이 느끼셨네요!
+              </div>
+            ) : (
+              <div> 해당 월에 등록된 일기가 없습니다. </div>
+            )}
             <div>
-              {sortedStatDetails &&
-              sortedStatDetails.sortedTopEmotions.length > 0
-                ? Object.keys(sortedStatDetails.sortedTopEmotions[0])[0]
-                : null}{' '}
-              감정을 가장 많이 느끼셨네요!
-            </div>
-          ) : (
-            <div> 해당 월에 등록된 일기가 없습니다. </div>
-          )}
-          <div>
-            {sortedStatDetails?.sortedTopEmotions
-              .slice(0, 3)
-              .map((emotion, index) => (
-                <div key={index}>
-                  {emotionTranslations[Object.keys(emotion)[0]]}
-                  {emotionPercentages[Object.keys(emotion)[0]] || 0}%
-                </div>
-              ))}
-          </div>
-          <div>
-            {sortedStatDetails?.sortedTopEmotions
-              .slice(0, 3)
-              .map((emotion, index) => (
-                <>
-                  <div key={index}>{Object.values(emotion)[0]}일</div>
+              {sortedStatDetails?.sortedTopEmotions
+                .slice(0, 3)
+                .map((emotion, index) => (
                   <div key={index}>
-                    {Object.keys(emotion)[0] || 0} 감정 기록됨
+                    {emotionTranslations[Object.keys(emotion)[0]]}
+                    {emotionPercentages[Object.keys(emotion)[0]] || 0}%
                   </div>
-                </>
-              ))}
+                ))}
+            </div>
+            <div className="stats-summary">
+              <div className="stat">
+                {sortedStatDetails?.sortedTopEmotions
+                  .slice(0, 3)
+                  .map((emotion, index) => (
+                    <>
+                      <div key={index}>{Object.values(emotion)[0]}일</div>
+                      <div key={index}>
+                        {Object.keys(emotion)[0] || 0} 감정 기록됨
+                      </div>
+                    </>
+                  ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div>
-        <div>
+      <div className="keywords-section">
+        <h3>{title}의 키워드</h3>
+        <div className="keywords">
+          <div className="keywords-left">
+            {Array.from({ length: 3 }, (_, i) => {
+              const tag = tags[i]; // 1~3등 키워드 가져오기
+              return (
+                <div key={i} className="keyword-item">
+                  {tag ? (
+                    <span># {tag}</span>
+                  ) : (
+                    <span># {i + 1}등 키워드</span> // 기본값 출력
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="keywords-left">
+            {Array.from({ length: 3 }, (_, i) => {
+              const tag = tags[i]; // 1~3등 키워드 가져오기
+              return (
+                <div key={i} className="keyword-item">
+                  {tag ? (
+                    <span># {tag}</span>
+                  ) : (
+                    <span># {i + 4}등 키워드</span> // 기본값 출력
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        {/* <div>
           {sortedStatDetails?.sortedTopTags
             .slice(0, 6)
             .map((tag, index) => <div key={index}>{Object.keys(tag)[0]}</div>)}
-        </div>
+        </div> */}
       </div>
     </div>
   );
