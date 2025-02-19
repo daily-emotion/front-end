@@ -68,7 +68,7 @@ const LoginPage = () => {
           나만의 감정을 기록해보세요!
         </h3>
         <div className="button-group">
-          <button onClick={handleLoginNaver}>
+          <button className="login-button" onClick={handleLoginNaver}>
             <img
               src={NaverLoginLogo}
               style={{
@@ -79,7 +79,7 @@ const LoginPage = () => {
               }}
             />
           </button>
-          <button onClick={handleLoginKakao}>
+          <button className="login-button" onClick={handleLoginKakao}>
             <img
               src={KakaoLoginLogo}
               style={{
@@ -90,7 +90,7 @@ const LoginPage = () => {
               }}
             />
           </button>
-          <button onClick={handleLoginGoogle}>
+          <button className="login-button" onClick={handleLoginGoogle}>
             <img
               src={GoogleLoginLogo}
               style={{

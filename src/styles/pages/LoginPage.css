@@ -15,7 +15,7 @@ h1 {
   gap: 10px;
 }
 
-button {
+.login-button {
   padding: 10px 20px;
   background-color: #fafafa;
   background-size: cover;
