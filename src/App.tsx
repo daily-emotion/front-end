@@ -17,16 +17,18 @@ function Layout() {
   return (
     <>
       {(location.pathname !== '/' && location.pathname !== '/oauth/callback') && <Header />}
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/oauth/callback" element={<RedirectHandler />} />
-        <Route path="/main" element={<MainPage />} />
-        <Route path="/main2" element={<MainPage2 />} />
-        <Route path="/diaries/view/:date" element={<DiaryDetail />} />
-        <Route path="/diaries/new/:date" element={<CreateDiary />} />
-        <Route path="/diaries/edit/:date" element={<UpdateDiaryPage />} />
-        <Route path="/report" element={<ReportPage />} />
-      </Routes>
+      <main className='content'>
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/oauth/callback" element={<RedirectHandler />} />
+          <Route path="/main" element={<MainPage />} />
+          <Route path="/main2" element={<MainPage2 />} />
+          <Route path="/diaries/view/:date" element={<DiaryDetail />} />
+          <Route path="/diaries/new/:date" element={<CreateDiary />} />
+          <Route path="/diaries/edit/:date" element={<UpdateDiaryPage />} />
+          <Route path="/report" element={<ReportPage />} />
+        </Routes>
+      </main>
     </>
   );
 }

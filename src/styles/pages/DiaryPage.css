@@ -1,0 +1,159 @@
+.diary-container{
+    width: 100%;
+    height: 100vh;
+    max-width: none;
+    padding: 20px;
+    margin: 0 auto;
+    background-image: url(../../assets/backImage/background-Image.png);
+    background-size: 100% auto;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.diary-content{
+    background-color: white;
+    width: 600px;
+    margin: 20px auto;
+
+    border: 1px solid #ccccccad;
+    border-radius: 20px;
+}
+
+.diary-date{
+    border-bottom: 1px solid #ccc;
+}
+
+.diary-date > h2 {
+    text-align: center;
+    margin-left: 30px;
+    font-weight: bold;
+}
+
+/* 두번째 영역 (날짜, 태그, 이미지, 감정 */
+.content-container{
+    margin: 30px 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 왼쪽 영역 */
+.content-left{
+    width: 45%;
+}
+
+/* 오른쪽 영역 */
+.content-right{
+    width: 50%;
+    margin: 0 10px
+}
+
+/* 태그 */
+.content-tag{
+    width: 100%;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+}
+
+.content-tag>p{
+    font-weight: bold;
+    font-size: 18px;
+    text-align: left;
+    
+    margin: 0;
+    padding: 10px;
+}
+
+.content-tag>ul{
+    display: inline-block;
+    padding-left: 0;
+    margin: 0;
+}
+
+.content-tag li {
+    display: inline-block;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 30px;
+    margin: 5px;
+    background-color: white;
+}
+
+/* 오른쪽 아래 영역 */
+.content-right-bottom{
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 이미지 업로드 */
+.content-image{
+    width: 48%;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column
+}
+
+.content-image>p{
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+    
+    margin: 0;
+    padding: 10px;
+}
+
+.content-image > div {
+    border: none;
+}
+
+.diary-image > img {
+    width: 100%; /* 부모 컨테이너에 맞춤 */
+    height: 70px; /* 원하는 높이 설정 */
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* 넘치는 부분 자르기 */
+    object-fit: contain;
+    opacity: 0.6;
+}
+
+.diary-image-delete > button{
+    padding: 5px 10px;
+    margin-bottom: 8px;
+}
+
+/* 감정 표현 */
+.content-emotion {
+    width: 48%;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.emotion-emoji {
+    font-size: 50px;
+}
+
+.content-emotion>p{
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+    margin: 0;
+    padding: 10px;
+}
+.emotion-emoji > svg{
+    font-size: 60px;
+    color: #ccc;
+    padding: 20px;
+}
+
+.emotion-select-button{
+    padding: 5px 10px;
+    margin-bottom: 8px;
+}

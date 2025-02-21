@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Emotion, EmotionKey, emotions } from "../../contants/emtionsContants";
-
+import '../../styles/Modal/EmotionModal.css'
 
 
 interface EmotionSelectorModalProps {
@@ -32,53 +32,24 @@ const EmotionSelectorModal: React.FC<EmotionSelectorModalProps> = ({
   };
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 10000,
-      }}
-    >
-      <div
-        style={{
-          background: "white",
-          padding: "20px",
-          borderRadius: "8px",
-          width: "300px",
-          textAlign: "center",
-        }}
-      >
-        <h3 style={{color : "black"}}>감정 표현 선택</h3>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom : "15px", }}>
+    <div className="emotion-modal-overlay">
+      <div className="emotion-modal-container">
+        <h3 className="emotion-modal-title">감정 추가</h3>
+        <p className="emotion-modal-content">오늘의 감정을 기록해보세요!</p>
+        <div className="emotion-buttons-container">
           {Object.entries(emotions).map(([emoji, emotion]) => (
             <button
               key={emoji}
               onClick={() => selectEmotion(emoji as EmotionKey)}
-              style={{
-                padding: "8px 16px",
-                border: "none",
-                borderRadius: "20px",
-                backgroundColor: currentEmotion === emotion ? "#007BFF" : "#E0E0E0",
-                color: currentEmotion === emotion ? "#FFFFFF" : "#000000",
-                cursor: "pointer",
-              }}
+              className={`emotion-button ${currentEmotion === emotion ? "selected" : ""}`}
             >
               {emoji}
             </button>
           ))}
         </div>
 
-        <div>
-          <button onClick={handleSave} style={{ marginRight: "10px" }}>
-            저장
-          </button>
+        <div className="emotion-modal-buttons">
+          <button onClick={handleSave}>저장</button>
           <button onClick={onClose}>취소</button>
         </div>
       </div>
