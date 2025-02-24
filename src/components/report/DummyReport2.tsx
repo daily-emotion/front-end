@@ -1,96 +1,34 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { BASE_URL } from '../../configs/apiConfig';
-
+import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import EmotionStatsHeaderIconImage from '../../assets/images/ReportPage/ReportPage_EmotionStats_Header_Icon.png';
 import TagStatsRightHeaderIconImage from '../../assets/images/ReportPage/ReportPage_TagStats_Header_Right_Icon.png';
+import HappynessEmoji from '../../assets/images/emotions/HAPPYNESS.png';
 
-import HAPPNESSEMOJI from '../../assets/images/emotions/HAPPYNESS.png';
-import ANGEREMOJI from '../../assets/images/emotions/ANGER.png';
-import DISGUSTEMOJI from '../../assets/images/emotions/DISGUST.png';
-import FEAREMOJI from '../../assets/images/emotions/FEAR.png';
-import INTERESTEMOJI from '../../assets/images/emotions/INTEREST.png';
-import SADNESSEMOJI from '../../assets/images/emotions/SADNESS.png';
-import SHAMEEMOJI from '../../assets/images/emotions/SHAME.png';
-import SURPRISEEMOJI from '../../assets/images/emotions/SURPRISE.png';
-
-interface ReportProps {
-  year: number;
-  month: number;
+interface DummyReportProps {
   title: string;
+  date: string;
+  happyDays: number;
+  sadDays: number;
+  neutralDays: number;
+  keywords: string[];
 }
 
-interface StatData {
-  monthlyStats: {
-    yearMonth: string;
-    stats: {
-      yearMonth: string;
-      topEmotions: Record<string, number>[];
-      topTags: Record<string, number>[];
-    };
-  }[];
-}
+const DummyReport: React.FC<DummyReportProps> = ({
+  title,
+  date,
+  happyDays,
+  sadDays,
+  neutralDays,
+  keywords,
+}) => {
+  const totalDays = happyDays + sadDays + neutralDays;
+  const data = [
+    { name: '행복한', value: happyDays, color: '#ff3fa4' }, // 핑크
+    { name: '슬픈', value: sadDays, color: '#6c757d' }, // 회색
+    { name: '불만', value: neutralDays, color: '#ff0000' }, // 빨강
+  ];
 
-const accessToken = localStorage.getItem('Authorization');
-
-const emotionTranslations: Record<string, string> = {
-  HAPPINESS: '행복한',
-  SADNESS: '슬픈',
-  ANGER: '화난',
-  DISGUST: '혐오스러운',
-  FEAR: '무서운',
-  SURPRISE: '놀라운',
-  INTEREST: '궁금한',
-  SHAME: '수치스러운',
-};
-
-const emotionColors: Record<string, string> = {
-  HAPPINESS: '#ff66b2', // 핑크 (행복한)
-  SADNESS: '#4c4c6d', // 회색 (슬픈)
-  ANGER: '#ff1a1a', // 빨강 (분노)
-  FEAR: '#6600cc', // 보라 (무서운)
-  SURPRISE: '#ff9900', // 주황 (놀란)
-  INTEREST: '#ffcc00', // 노랑 (궁금한)
-  DISGUST: '#00b300', // 초록 (혐오스러운)
-  SHAME: '#0080ff', // 파랑 (수치스러운)
-};
-
-const emotionIcons: Record<string, string> = {
-  HAPPINESS: HAPPNESSEMOJI,
-  SADNESS: SADNESSEMOJI,
-  ANGER: ANGEREMOJI,
-  DISGUST: DISGUSTEMOJI,
-  FEAR: FEAREMOJI,
-  SURPRISE: SURPRISEEMOJI,
-  INTEREST: INTERESTEMOJI,
-  SHAME: SHAMEEMOJI,
-};
-
-const Report = ({ year, month, title }: ReportProps) => {
-  // 현재 시간 (한국 기준)
-  const now = new Date();
-  const koreanTime = new Date(now.getTime() + 9 * 60 * 60 * 1000); // UTC+9 적용
-
-  // 사용자 이름 데이터 fetch
-  const [userName, setUserName] = useState<string | null>(null);
-
-  // 현재 연도, 월 적용 (추후 전역 상태관리로 변경)
-  const [statDetails, setStatDetails] = useState<{
-    yearMonth: string;
-    topEmotions: Record<string, number>[];
-    topTags: Record<string, number>[];
-  } | null>(null);
-  const [sortedStatDetails, setSortedStatDetails] = useState<{
-    yearMonth: string;
-    sortedTopEmotions: Record<string, number>[];
-    sortedTopTags: Record<string, number>[];
-  } | null>(null);
-  const [emotionPercentages, setEmotionPercentages] = useState<
-    Record<string, number>
-  >({});
-  const today = String(koreanTime.getDate()).padStart(2, '0');
-  const lastDayOfMonth = new Date(year, month, 0).getDate();
+  const maxValue = Math.max(...data.map((d) => d.value)); // 최대 value 찾기
 
   const lightenRGBA = (hex: string, alpha: number) => {
     let r = parseInt(hex.substring(1, 3), 16);
@@ -99,126 +37,6 @@ const Report = ({ year, month, title }: ReportProps) => {
 
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   };
-
-  const maxValue = Math.max(
-    ...(sortedStatDetails?.sortedTopEmotions.map((d) => d.value) || [])
-  ); // 최대 value 찾기
-
-  useEffect(() => {
-    if (!year || !month) return;
-
-    const fetchMonthlyStat = async () => {
-      try {
-        const res = await axios.get<StatData>(
-          `${BASE_URL}/reports/summary/${year}/${month}`,
-          {
-            headers: { Authorization: accessToken },
-          }
-        );
-        if (res.data) {
-          const selectedStatData = res.data.monthlyStats.find(
-            (stat) =>
-              stat.yearMonth === `${year}-${String(month).padStart(2, '0')}`
-          );
-          if (selectedStatData) {
-            const yearMonth = selectedStatData.stats.yearMonth ?? '';
-            const topEmotions = selectedStatData.stats.topEmotions ?? [];
-            const topTags = selectedStatData.stats.topTags ?? [];
-
-            setStatDetails({ yearMonth, topEmotions, topTags });
-          }
-        } else {
-          setStatDetails(null);
-        }
-      } catch (err) {
-        console.log(`${year}년 ${month}월 통계 데이터 조회 실패: ${err}`);
-        alert(`${year}년 ${month}월 통계 데이터 조회 실패: ${err}`);
-      }
-    };
-
-    fetchMonthlyStat();
-  }, [year, month]);
-
-  useEffect(() => {
-    if (!statDetails) return;
-
-    const sortedTopEmotions = [...statDetails.topEmotions].sort((a, b) => {
-      const valueA = Object.values(a)[0];
-      const valueB = Object.values(b)[0];
-      return valueB - valueA;
-    });
-
-    const sortedTopTags = [...statDetails.topTags].sort((a, b) => {
-      const valueA = Object.values(a)[0];
-      const valueB = Object.values(b)[0];
-      return valueB - valueA;
-    });
-
-    console.table(sortedTopEmotions);
-    console.table(sortedTopTags);
-
-    setSortedStatDetails({
-      yearMonth: statDetails.yearMonth,
-      sortedTopEmotions,
-      sortedTopTags,
-    });
-  }, [statDetails]);
-
-  useEffect(() => {
-    const calculateEmotionPercentages = (
-      emotionCounts: Record<string, number>
-    ) => {
-      const total = Object.values(emotionCounts).reduce(
-        (acc, count) => acc + count,
-        0
-      );
-
-      if (total === 0) return {};
-
-      return Object.fromEntries(
-        // Object.fromEntries() : 배열 => 객체
-        Object.entries(emotionCounts).map(([Key, count]) => [
-          // Object.entries() : 객체 => 배열
-          Key,
-          parseFloat(((count / total) * 100).toFixed(0)), // parseFloat() : 소수점 숫자 문자열 => 숫자
-        ])
-      );
-    };
-
-    const fetchEmotionCountsData = async () => {
-      try {
-        const res = await axios.get<{
-          yearMonth: string;
-          emotionCounts: Record<string, number>;
-        }>(
-          `${BASE_URL}/reports/emotions/${year}/${month}`,
-          // `https://dailyemotion.site/api/reports/emotions/${year}/${month}`,
-          {
-            headers: { Authorization: accessToken },
-          }
-        );
-
-        console.log('이번 달 작성된 일기 감정 빈도: ', res.data);
-        // setYearMonth(res.data.yearMonth);
-        const emotionCounts = res.data.emotionCounts;
-        // const emotionCounts = emotionCountsMockData.emotionCounts;
-        // setEmotionCounts(emotionCounts);
-
-        const emotionPcts = calculateEmotionPercentages(emotionCounts);
-        setEmotionPercentages(emotionPcts);
-        console.log('이번 달 작성된 일기 감정의 백분율: ', emotionPercentages);
-      } catch (err) {
-        console.log(`월별 감정 통계 조회 실패: ${err}`);
-      }
-    };
-
-    fetchEmotionCountsData();
-  }, [month]);
-
-  const tags =
-    sortedStatDetails?.sortedTopTags
-      .slice(0, 6)
-      .map((tag) => Object.keys(tag)[0]) || []; // 태그가 없으면 빈 배열 반환
 
   return (
     <div className="emotion-card">
@@ -260,7 +78,7 @@ const Report = ({ year, month, title }: ReportProps) => {
               <ResponsiveContainer width={160} height={160}>
                 <PieChart>
                   <Pie
-                    data={sortedStatDetails?.sortedTopEmotions || []} // 차트에 들어갈 데이터
+                    data={data} // 차트에 들어갈 데이터
                     cx="50%" // 차트를 컨테이너 중앙에 배치 (X축)
                     cy="50%" // 차트를 컨테이너 중앙에 배치 (Y축)
                     innerRadius={50} // 도넛 차트로 만들기 위한 내부 반지름
@@ -269,19 +87,14 @@ const Report = ({ year, month, title }: ReportProps) => {
                     stroke="none"
                     // paddingAngle={5} // 각 섹션 사이의 간격 추가
                   >
-                    {sortedStatDetails?.sortedTopEmotions.map(
-                      (entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={emotionColors[Object.keys(entry)[0]]}
-                        />
-                      )
-                    )}
+                    {data.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
                   </Pie>
 
                   {/* 바깥쪽 원 */}
                   <Pie
-                    data={sortedStatDetails?.sortedTopEmotions || []} // 차트에 들어갈 데이터
+                    data={data} // 차트에 들어갈 데이터
                     cx="50%" // 차트를 컨테이너 중앙에 배치 (X축)
                     cy="50%" // 차트를 컨테이너 중앙에 배치 (Y축)
                     innerRadius={70} // 도넛 차트로 만들기 위한 내부 반지름
@@ -290,26 +103,21 @@ const Report = ({ year, month, title }: ReportProps) => {
                     stroke="none"
                     // paddingAngle={5} // 각 섹션 사이의 간격 추가
                   >
-                    {sortedStatDetails?.sortedTopEmotions.map(
-                      (entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={
-                            entry.value === maxValue
-                              ? lightenRGBA(
-                                  emotionColors[Object.keys(entry)[0]],
-                                  0.2
-                                )
-                              : 'rgba(0, 0, 0, 0)'
-                          }
-                        />
-                      )
-                    )}
+                    {data.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={
+                          entry.value === maxValue
+                            ? lightenRGBA(entry.color, 0.2)
+                            : 'rgba(0, 0, 0, 0)'
+                        }
+                      />
+                    ))}
                   </Pie>
 
                   {/* 안쪽 원 */}
                   <Pie
-                    data={sortedStatDetails?.sortedTopEmotions || []} // 차트에 들어갈 데이터
+                    data={data} // 차트에 들어갈 데이터
                     cx="50%" // 차트를 컨테이너 중앙에 배치 (X축)
                     cy="50%" // 차트를 컨테이너 중앙에 배치 (Y축)
                     innerRadius={45} // 도넛 차트로 만들기 위한 내부 반지름
@@ -318,35 +126,21 @@ const Report = ({ year, month, title }: ReportProps) => {
                     stroke="none"
                     // paddingAngle={5} // 각 섹션 사이의 간격 추가
                   >
-                    {sortedStatDetails?.sortedTopEmotions.map(
-                      (entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={
-                            entry.value === maxValue
-                              ? lightenRGBA(
-                                  emotionColors[Object.keys(entry)[0]],
-                                  0.2
-                                )
-                              : 'rgba(0, 0, 0, 0)'
-                          }
-                        />
-                      )
-                    )}
+                    {data.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={
+                          entry.value === maxValue
+                            ? lightenRGBA(entry.color, 0.2)
+                            : 'rgba(0, 0, 0, 0)'
+                        }
+                      />
+                    ))}
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
               <div className="progress-center-emotion">
-                <img
-                  src={
-                    sortedStatDetails?.sortedTopEmotions?.[0]
-                      ? emotionIcons[
-                          Object.keys(sortedStatDetails.sortedTopEmotions[0])[0]
-                        ]
-                      : ''
-                  }
-                  alt="Emotion Icon"
-                />
+                <img src={HappynessEmoji} alt="Emotion Icon" />
               </div>
             </div>
             <div>
@@ -401,15 +195,7 @@ const Report = ({ year, month, title }: ReportProps) => {
                         key={index}
                       >
                         <img
-                          src={
-                            sortedStatDetails?.sortedTopEmotions?.[index]
-                              ? emotionIcons[
-                                  Object.keys(
-                                    sortedStatDetails.sortedTopEmotions[index]
-                                  )[0]
-                                ]
-                              : ''
-                          }
+                          src={HappynessEmoji}
                           alt={`기록 ${index + 1}위 감정`}
                           style={{ width: '18px', height: 'auto' }}
                         />
@@ -560,4 +346,4 @@ const Report = ({ year, month, title }: ReportProps) => {
   );
 };
 
-export default Report;
+export default DummyReport2;
