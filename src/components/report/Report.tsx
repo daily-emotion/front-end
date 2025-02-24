@@ -514,9 +514,6 @@ const Report = ({ year, month, title }: ReportProps) => {
                   ) : (
                     <>사용된 키워드가 없습니다.</>
                   )}
-                  <strong>#인간관계</strong> 키워드를
-                  <br />
-                  가장 많이 사용했습니다.
                 </div>
               </div>
             </div>
