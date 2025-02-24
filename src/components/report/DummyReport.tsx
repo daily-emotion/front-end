@@ -1,6 +1,8 @@
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import ReportPageHeaderIconImage from '../../assets/images/ReportPage/Group 13902.png';
+import EmotionStatsHeaderIconImage from '../../assets/images/ReportPage/ReportPage_EmotionStats_Header_Icon.png';
+import TagStatsRightHeaderIconImage from '../../assets/images/ReportPage/ReportPage_TagStats_Header_Right_Icon.png';
+import HappynessEmoji from '../../assets/images/emotions/HAPPYNESS.png';
 
 interface DummyReportProps {
   title: string;
@@ -26,17 +28,27 @@ const DummyReport: React.FC<DummyReportProps> = ({
     { name: '불만', value: neutralDays, color: '#ff0000' }, // 빨강
   ];
 
+  const maxValue = Math.max(...data.map((d) => d.value)); // 최대 value 찾기
+
+  const lightenRGBA = (hex: string, alpha: number) => {
+    let r = parseInt(hex.substring(1, 3), 16);
+    let g = parseInt(hex.substring(3, 5), 16);
+    let b = parseInt(hex.substring(5, 7), 16);
+
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
+
   return (
     <div className="emotion-card">
       <div className="emotion-chart-container">
-        <div className="header">
+        <div className="emotion-chart-header">
           <div className="header-icon">
             <span className="icon-background"></span>{' '}
             {/* 배경을 나타내는 span */}
             <img
               className="icon-image"
-              src={ReportPageHeaderIconImage}
-              alt="통계 페이지 헤더 아이콘 그림"
+              src={EmotionStatsHeaderIconImage}
+              alt="감정 통계 페이지 헤더 아이콘 그림"
             />
           </div>
           <span>{title}</span>
@@ -68,17 +80,63 @@ const DummyReport: React.FC<DummyReportProps> = ({
                     innerRadius={50} // 도넛 차트로 만들기 위한 내부 반지름
                     outerRadius={70} // 외부 반지름 설정
                     dataKey="value" // 데이터에서 'value' 값을 기준으로 크기 설정
-                    paddingAngle={5} // 각 섹션 사이의 간격 추가
+                    stroke="none"
+                    // paddingAngle={5} // 각 섹션 사이의 간격 추가
                   >
                     {data.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
+
+                  {/* 바깥쪽 원 */}
+                  <Pie
+                    data={data} // 차트에 들어갈 데이터
+                    cx="50%" // 차트를 컨테이너 중앙에 배치 (X축)
+                    cy="50%" // 차트를 컨테이너 중앙에 배치 (Y축)
+                    innerRadius={70} // 도넛 차트로 만들기 위한 내부 반지름
+                    outerRadius={75} // 외부 반지름 설정
+                    dataKey="value" // 데이터에서 'value' 값을 기준으로 크기 설정
+                    stroke="none"
+                    // paddingAngle={5} // 각 섹션 사이의 간격 추가
+                  >
+                    {data.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={
+                          entry.value === maxValue
+                            ? lightenRGBA(entry.color, 0.2)
+                            : 'rgba(0, 0, 0, 0)'
+                        }
+                      />
+                    ))}
+                  </Pie>
+
+                  {/* 안쪽 원 */}
+                  <Pie
+                    data={data} // 차트에 들어갈 데이터
+                    cx="50%" // 차트를 컨테이너 중앙에 배치 (X축)
+                    cy="50%" // 차트를 컨테이너 중앙에 배치 (Y축)
+                    innerRadius={45} // 도넛 차트로 만들기 위한 내부 반지름
+                    outerRadius={50} // 외부 반지름 설정
+                    dataKey="value" // 데이터에서 'value' 값을 기준으로 크기 설정
+                    stroke="none"
+                    // paddingAngle={5} // 각 섹션 사이의 간격 추가
+                  >
+                    {data.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={
+                          entry.value === maxValue
+                            ? lightenRGBA(entry.color, 0.2)
+                            : 'rgba(0, 0, 0, 0)'
+                        }
+                      />
+                    ))}
+                  </Pie>
                 </PieChart>
               </ResponsiveContainer>
               <div className="progress-center-emotion">
-                😊 {/* 이모티콘 대신 이미지 사용 가능 */}
-                {/* <img src="/path/to/image.png" alt="Emotion Icon" /> */}
+                <img src={HappynessEmoji} alt="Emotion Icon" />
               </div>
               {/* <div className="progress-bar">
                 <div
@@ -141,44 +199,134 @@ const DummyReport: React.FC<DummyReportProps> = ({
             <div className="stats-container">
               <div className="stat">
                 <p className="stat-emotion-count">{happyDays}일</p>
-                <p className="stat-emotion-record">{`😊`} 행복한 감정 기록됨</p>
+                <div className="stat-emotion-record-container">
+                  <img
+                    src={HappynessEmoji}
+                    alt="기록 순위 1위 감정"
+                    style={{ width: '18px', height: 'auto' }}
+                  />
+                  <p className="stat-emotion-record">행복한 감정 기록됨</p>
+                </div>
               </div>
               <div className="stat">
                 <p className="stat-emotion-count">{sadDays}일</p>
-                <p className="stat-emotion-record">{`😊`} 슬픈 감정 기록됨</p>
+                <div className="stat-emotion-record-container">
+                  <img
+                    src={HappynessEmoji}
+                    alt="기록 순위 2위 감정"
+                    style={{ width: '18px', height: 'auto' }}
+                  />
+                  <p className="stat-emotion-record">행복한 감정 기록됨</p>
+                </div>
               </div>
               <div className="stat">
                 <p className="stat-emotion-count">{neutralDays}일</p>
-                <p className="stat-emotion-record">{`😊`} 불만 감정 기록됨</p>
+                <div className="stat-emotion-record-container">
+                  <img
+                    src={HappynessEmoji}
+                    alt="기록 순위 3위 감정"
+                    style={{ width: '18px', height: 'auto' }}
+                  />
+                  <p className="stat-emotion-record">행복한 감정 기록됨</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="keywords-section">
+      <div className="keywords-section" style={{}}>
         <div
-          className="header"
+          className="keywords-section-header"
           style={{
-            fontSize: '24px',
             borderBottom: 'none',
             display: 'flex',
-            flexDirection: 'column', // ✅ 요소들을 세로로 정렬
-            alignItems: 'flex-start', // ✅ 왼쪽 정렬
-            gap: '0px',
+            flexDirection: 'row', // ✅ 좌우 배치
+            alignItems: 'flex-start', // ✅ 수직 정렬
+            justifyContent: 'space-between', // ✅ 양쪽 정렬
+            width: '100%', // ✅ 전체 너비 설정
           }}
         >
-          <span>{title}의 키워드</span>
-          <span
+          <div
+            className="keywords-section-Left-Header"
             style={{
-              color: '#38383899',
-              fontSize: '12px',
-              textAlign: 'left',
+              borderBottom: 'none',
+              flex: 6, // ✅ 60% 차지
+              fontSize: '24px',
+              display: 'flex',
+              flexDirection: 'column', // ✅ 요소들을 세로로 정렬
+              alignItems: 'flex-start', // ✅ 왼쪽 정렬
+              gap: '0px',
             }}
           >
-            다이어리를 작성하면서 많이 사용한 키워드 6가지입니다. <br />
-            키워드와 함께기록했던 감정도 확인해보세요!
-          </span>
+            <span>{title}의 키워드</span>
+            <span
+              style={{
+                color: '#38383899',
+                fontSize: '12px',
+                textAlign: 'left',
+              }}
+            >
+              다이어리를 작성하면서 많이 사용한 키워드 6가지입니다. <br />
+              키워드와 함께기록했던 감정도 확인해보세요!
+            </span>
+          </div>
+          <div
+            className="keywords-section-Right-Header"
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end', // ✅ 오른쪽 정렬
+              alignItems: 'center', // ✅ 수직 중앙 정렬
+              flex: 4, // ✅ 40% 차지
+              padding: '10px 20px',
+            }}
+          >
+            <div className="speech-container">
+              {/* 아이콘 */}
+              <div
+                className="header-icon"
+                style={{
+                  position: 'relative',
+                  width: '28px',
+                  height: '28px',
+                }}
+              >
+                <span
+                  className="icon-background"
+                  style={{
+                    backgroundColor: '#DDF4FC',
+                    width: '28px',
+                    height: '28px',
+                    display: 'block',
+                    borderRadius: '50%',
+                    position: 'absolute',
+                    top: '0',
+                    left: '0',
+                  }}
+                ></span>
+                <img
+                  className="icon-image"
+                  src={TagStatsRightHeaderIconImage}
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                  }}
+                  alt="태그 통계 페이지 헤더 아이콘 그림"
+                />
+              </div>
+
+              {/* 말풍선 */}
+              <div className="speech-bubble">
+                <strong>#인간관계</strong> 키워드를
+                <br />
+                가장 많이 사용했습니다.
+              </div>
+            </div>
+          </div>
         </div>
         <div className="keywords">
           <div className="keywords-left">
