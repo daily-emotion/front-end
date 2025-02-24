@@ -385,7 +385,7 @@ const Report = ({ year, month, title }: ReportProps) => {
                         }}
                       ></span>
                       <span>
-                        {emotionTranslations[Object.keys(emotion)[0]]}
+                        {emotionTranslations[Object.keys(emotion)[0]]}{' '}
                         {emotionPercentages[Object.keys(emotion)[0]] || 0}%
                       </span>
                     </div>
@@ -395,55 +395,39 @@ const Report = ({ year, month, title }: ReportProps) => {
           </div>
           <div className="stats-summary">
             <div className="stats-container">
-              <div className="stat">
-                {sortedStatDetails?.sortedTopEmotions
-                  .slice(0, 3)
-                  .map((emotion, index) => (
-                    <>
-                      <p className="stat-emotion-count" key={index}>
-                        {Object.values(emotion)[0]}일
+              {sortedStatDetails?.sortedTopEmotions
+                .slice(0, 3)
+                .map((emotion, index) => (
+                  <div className="stat">
+                    <p className="stat-emotion-count" key={index}>
+                      {Object.values(emotion)[0]}일
+                    </p>
+                    <div className="stat-emotion-record-container" key={index}>
+                      <img
+                        src={
+                          sortedStatDetails?.sortedTopEmotions?.[index]
+                            ? emotionIcons[
+                                Object.keys(
+                                  sortedStatDetails.sortedTopEmotions[index]
+                                )[0]
+                              ]
+                            : ''
+                        }
+                        alt={`기록 ${index + 1}위 감정`}
+                        style={{ width: '18px', height: 'auto' }}
+                      />
+                      <p className="stat-emotion-record">
+                        {emotionTranslations[Object.keys(emotion)[0] || 0]} 감정
+                        기록됨
                       </p>
-                      <div
-                        className="stat-emotion-record-container"
-                        key={index}
-                      >
-                        <img
-                          src={
-                            sortedStatDetails?.sortedTopEmotions?.[index]
-                              ? emotionIcons[
-                                  Object.keys(
-                                    sortedStatDetails.sortedTopEmotions[index]
-                                  )[0]
-                                ]
-                              : ''
-                          }
-                          alt={`기록 ${index + 1}위 감정`}
-                          style={{ width: '18px', height: 'auto' }}
-                        />
-                        <p className="stat-emotion-record">
-                          {emotionTranslations[Object.keys(emotion)[0] || 0]}{' '}
-                          감정 기록됨
-                        </p>
-                      </div>
-                    </>
-                  ))}
-              </div>
+                    </div>
+                  </div>
+                ))}
             </div>
           </div>
         </div>
-
-        <div className="keywords-section" style={{}}>
-          <div
-            className="keywords-section-header"
-            style={{
-              borderBottom: 'none',
-              display: 'flex',
-              flexDirection: 'row', // ✅ 좌우 배치
-              alignItems: 'flex-start', // ✅ 수직 정렬
-              justifyContent: 'space-between', // ✅ 양쪽 정렬
-              width: '100%', // ✅ 전체 너비 설정
-            }}
-          >
+        <div className="keywords-section">
+          <div className="keywords-section-header">
             <div
               className="keywords-section-Left-Header"
               style={{
@@ -518,9 +502,18 @@ const Report = ({ year, month, title }: ReportProps) => {
 
                 {/* 말풍선 */}
                 <div className="speech-bubble">
-                  <strong>#인간관계</strong> 키워드를
-                  <br />
-                  가장 많이 사용했습니다.
+                  {sortedStatDetails?.sortedTopTags?.[0] ? (
+                    <>
+                      <strong>
+                        {Object.keys(sortedStatDetails?.sortedTopTags[0])[0]}
+                      </strong>{' '}
+                      키워드를
+                      <br />
+                      가장 많이 사용했습니다.
+                    </>
+                  ) : (
+                    <>사용된 키워드가 없습니다.</>
+                  )}
                 </div>
               </div>
             </div>

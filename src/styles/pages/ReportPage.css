@@ -170,6 +170,7 @@ body {
   justify-content: space-around; /* 요소들을 일정 간격으로 배치 */
   align-items: center; /* 세로 중앙 정렬 */
   margin-bottom: 10px;
+  gap: 5px;
 }
 
 .emotion-dot {
@@ -253,6 +254,15 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 흐릿한 그림자 */
   border-radius: 20px;
   padding: 10px;
+}
+
+.keywords-section-header {
+  border-bottom: none;
+  display: flex;
+  flex-direction: row; /* ✅ 좌우 배치 */
+  align-items: flex-start; /* ✅ 수직 정렬 */
+  justify-content: space-between; /* ✅ 양쪽 정렬 */
+  width: 100%; /* ✅ 전체 너비 설정 */
 }
 
 .speech-bubble-container {

@@ -187,7 +187,7 @@ body {
   align-items: center; /* 세로 중앙 정렬 */
   font-size: 14px;
   font-weight: bold;
-  gap: 3px; /* 도트와 텍스트 사이 간격 */
+  gap: 5px; /* 도트와 텍스트 사이 간격 */
 }
 
 .stats-summary {
