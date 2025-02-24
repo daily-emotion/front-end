@@ -18,9 +18,11 @@ const ReportPage = () => {
   return (
     <>
       <Header />
-      <div>
-        <Report year={lastYear} month={lastMonth} title={`지난 달`} />
-        <Report year={thisYear} month={thisMonth} title={`이번 달`} />
+      <div className="container">
+        <div className="card-wrapper">
+          <Report year={lastYear} month={lastMonth} title={`지난 달`} />
+          <Report year={thisYear} month={thisMonth} title={`이번 달`} />
+        </div>
       </div>
     </>
   );

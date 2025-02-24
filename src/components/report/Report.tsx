@@ -357,7 +357,11 @@ const Report = ({ year, month, title }: ReportProps) => {
                     <span style={{ color: '#ff3fa4' }}>
                       {sortedStatDetails &&
                       sortedStatDetails.sortedTopEmotions.length > 0
-                        ? Object.keys(sortedStatDetails.sortedTopEmotions[0])[0]
+                        ? emotionTranslations[
+                            Object.keys(
+                              sortedStatDetails.sortedTopEmotions[0]
+                            )[0]
+                          ]
                         : null}{' '}
                       감정
                     </span>
@@ -375,7 +379,10 @@ const Report = ({ year, month, title }: ReportProps) => {
                     <div className="emotion-percentage" key={index}>
                       <span
                         className="emotion-dot"
-                        style={{ backgroundColor: '#ff3fa4' }}
+                        style={{
+                          backgroundColor:
+                            emotionColors[Object.keys(emotion)[0]],
+                        }}
                       ></span>
                       <span>
                         {emotionTranslations[Object.keys(emotion)[0]]}
@@ -414,7 +421,8 @@ const Report = ({ year, month, title }: ReportProps) => {
                           style={{ width: '18px', height: 'auto' }}
                         />
                         <p className="stat-emotion-record">
-                          {Object.keys(emotion)[0] || 0} 감정 기록됨
+                          {emotionTranslations[Object.keys(emotion)[0] || 0]}{' '}
+                          감정 기록됨
                         </p>
                       </div>
                     </>
