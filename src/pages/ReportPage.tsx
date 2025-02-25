@@ -1,5 +1,6 @@
 import Report from '../components/report/Report';
 import Header from '../components/common/Header';
+import '../styles/pages/ReportPage.css';
 
 const ReportPage = () => {
   // 현재 시간 (한국 기준)
@@ -17,9 +18,11 @@ const ReportPage = () => {
   return (
     <>
       <Header />
-      <div>
-        <Report year={lastYear} month={lastMonth} />
-        <Report year={thisYear} month={thisMonth} />
+      <div className="container">
+        <div className="card-wrapper">
+          <Report year={lastYear} month={lastMonth} title={`지난 달`} />
+          <Report year={thisYear} month={thisMonth} title={`이번 달`} />
+        </div>
       </div>
     </>
   );

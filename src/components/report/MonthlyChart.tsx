@@ -108,7 +108,6 @@ const MonthlyChart = () => {
         setEmotionPercentages(emotionPercentages);
       } catch (err) {
         console.log(`월별 감정 통계 조회 실패: ${err}`);
-        alert(`월별 일기 감정 통계를 조회하는 데 실패했습니다: ${err}`);
       }
     };
 
