@@ -1,0 +1,86 @@
+/* 모달 배경 스타일 */
+.emotion-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+/* 모달 컨테이너 스타일 */
+.emotion-modal-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    text-align: center;
+}
+
+/* 제목 스타일 */
+.emotion-modal-title {
+    color: black;
+    margin: 0;
+    text-align: left;
+}
+
+.emotion-modal-content{
+    margin: 0 0 35px 0;
+    text-align: left;
+}
+
+/* 감정 선택 버튼 컨테이너 */
+.emotion-buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 23px;
+    margin-bottom: 35px;
+}
+
+/* 감정 버튼 스타일 */
+.emotion-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 10px;
+    background-color: #E0E0E0;
+    color: #000000;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 50px;
+}
+
+/* 선택된 감정 버튼 스타일 */
+.emotion-button.selected {
+    background-color: #007BFF;
+    color: #FFFFFF;
+}
+
+/* 버튼 컨테이너 */
+.emotion-modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* 저장 및 취소 버튼 */
+.emotion-modal-buttons button {
+    width: 150px;
+    height: 40px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    background-color: #E0E0E0;
+    color: black;
+    transition: background-color 0.3s ease;
+    font-size: 18px;
+}
+
+.emotion-modal-buttons button:hover {
+    background-color: #007BFF;
+}

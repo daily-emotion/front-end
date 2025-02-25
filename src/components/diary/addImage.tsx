@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 // Props 인터페이스 정의
 interface MyDropzoneProps {
@@ -28,14 +29,18 @@ const MyDropzone: React.FC<MyDropzoneProps> = ({ addImage }) => {
     <div
       {...getRootProps()}
       style={{
-        border: '2px dashed #cccccc',
-        padding: '20px',
+        border: 'none',
+        marginTop: '40px',
         textAlign: 'center',
         cursor: 'pointer',
       }}
     >
       <input {...getInputProps()} />
-      <p>사진 추가</p>
+      <AddPhotoAlternateIcon style={{
+        color:"#ccc",
+        fontSize : "70px",
+        transition: "color 0.2s",
+      }}/>
     </div>
   );
 };

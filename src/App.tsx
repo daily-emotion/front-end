@@ -25,18 +25,20 @@ function Layout() {
       {location.pathname !== '/' &&
         location.pathname !== '/oauth/callback' &&
         location.pathname !== '/dummyreport' && <Header />}
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/oauth/callback" element={<RedirectHandler />} />
-        <Route path="/main" element={<MainPage />} />
-        <Route path="/main2" element={<MainPage2 />} />
-        <Route path="/diaries/view/:date" element={<DiaryDetail />} />
-        <Route path="/diaries/new/:date" element={<CreateDiary />} />
-        <Route path="/diaries/edit/:date" element={<UpdateDiaryPage />} />
-        <Route path="/report" element={<ReportPage />} />
+        <main className='content'>
+          <Routes>
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/oauth/callback" element={<RedirectHandler />} />
+            <Route path="/main" element={<MainPage />} />
+            <Route path="/main2" element={<MainPage2 />} />
+            <Route path="/diaries/view/:date" element={<DiaryDetail />} />
+            <Route path="/diaries/new/:date" element={<CreateDiary />} />
+            <Route path="/diaries/edit/:date" element={<UpdateDiaryPage />} />
+            <Route path="/report" element={<ReportPage />} />
 
-        <Route path="/dummyreport" element={<DummyReportPage />} />
-      </Routes>
+            <Route path="/dummyreport" element={<DummyReportPage />} />
+          </Routes>
+      </main>
     </>
   );
 }

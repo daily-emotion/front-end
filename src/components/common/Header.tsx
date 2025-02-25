@@ -5,6 +5,7 @@ import { BASE_URL } from '../../configs/apiConfig';
 import '../../styles/common/header.css';
 // 로고 이미지
 import mainLogo from '../../assets/images/logo/mainLogo.png';
+import { logout } from '../../services/diary/DiaryService';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -48,8 +49,16 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    localStorage.clear();
-    navigate('/');
+    logout().then(() => {
+      alert("로그아웃되었습니다.");
+      localStorage.clear();
+      navigate('/');
+    }).catch((err) => {
+      console.error("로그아웃 실패", err);
+      alert("로그아웃 중 문제가 발생하였습니다.");
+      localStorage.clear(); //서버에서 로그아웃에 실패하더라도 클라에서 토큰 삭제
+      navigate('/');
+    })
   };
 
   const handleGoToReport = () => {
