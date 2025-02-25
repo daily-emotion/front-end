@@ -34,7 +34,7 @@ const CreateDiaryPage: React.FC = () => {
   // image
   const [uploadedImages, setUploadedImages] = useState<File[]>([]);
   // 허용할 이미지 용량
-  const imageMaxSize = 10 * 1024 * 1024; // 10MB
+  const imageMaxSize = 5 * 1024 * 1024; // 10MB
   // imageUrl
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string[]>([]);
   // error
@@ -84,7 +84,7 @@ const CreateDiaryPage: React.FC = () => {
     // 이미지 용량 확인
     if (file.size > imageMaxSize) {
       alert(
-        `업로드 가능한 최대 용량은 10MB입니다. (현재 파일 용량 : ${(file.size / (1024 * 1024)).toFixed(2)}MB)`
+        `업로드 가능한 최대 용량은 5MB입니다. (현재 파일 용량 : ${(file.size / (1024 * 1024)).toFixed(2)}MB)`
       );
       return;
     } 
@@ -105,8 +105,15 @@ const CreateDiaryPage: React.FC = () => {
   };
 
   const handleDeleteImage = () => {
-    setUploadedImageUrl([]);
-    setUploadedImages([]);
+
+    const deleteOk = window.confirm("이미지를 삭제하시겠습니까?");
+    if (deleteOk) {
+      alert("삭제되었습니다.")
+      setUploadedImageUrl([]);
+      setUploadedImages([]);
+    } else {
+      alert("이미지 삭제를 취소하였습니다."); 
+    }
   };
 
   const handleSubmit = async () => {
@@ -153,11 +160,13 @@ const CreateDiaryPage: React.FC = () => {
   return (
     <>
     <div className='diary-container'>
+      {/* 배경에 아이콘 추가 */}
+      <div className="diary-icon-third"></div>
+
       <div className='diary-content'>
         <div className='diary-date'>
           <h2>
-            {selectedDate.getMonth() + 1}월 {selectedDate.getDate()}일{' '}
-            {getDayName(selectedDate)}요일
+            {`${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}월 ${selectedDate.getDate().toString().padStart(2, '0')}일 ${getDayName(selectedDate)}요일`}
           </h2>
         </div>
 
@@ -167,30 +176,39 @@ const CreateDiaryPage: React.FC = () => {
           </div>
 
           <div className='content-right'>
-            <div className='content-tag'>
-              <p>해시태그 추가</p>
-              <ul>
-                {selectedTags.map((tag, index) => (
-                  <li key={index}>
-                    #{tag}
-                  </li>
-                ))}
-              </ul>
-              <IconButton 
-                color="primary" 
-                onClick={() => setIsModalOpen(true)}
-                aria-label="태그 추가"
-              >
-                <AddIcon />
-              </IconButton>
-              {isModalOpen && (
-                <ModalTagSelector
-                  tags={[...tags]}
-                  selectedTags={selectedTags}
-                  onClose={() => setIsModalOpen(false)}
-                  onSave={handleSaveTags}
-                />
-              )}
+            <div className='content-tag-area'>
+              <div className='content-tag-title'>
+                <p>해시태그 추가</p>
+                <IconButton 
+                  className='tag-add-button'
+                  color="primary" 
+                  onClick={() => setIsModalOpen(true)}
+                  aria-label="태그 추가"
+                >
+                  <AddIcon />
+                </IconButton>
+              </div>
+                <div className='content-tag-list'>
+                  {selectedTags.length === 0 ? (
+                    <p>태그를 선택해주세요</p>
+                  ) : (
+                    <ul>
+                      {selectedTags.map((tag, index) => (
+                        <li key={index}>
+                          #{tag}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+                {isModalOpen && (
+                  <ModalTagSelector
+                    tags={[...tags]}
+                    selectedTags={selectedTags}
+                    onClose={() => setIsModalOpen(false)}
+                    onSave={handleSaveTags}
+                  />
+                )}
             </div>
 
             <div className='content-right-bottom'>
@@ -204,21 +222,19 @@ const CreateDiaryPage: React.FC = () => {
                     <img 
                       src={uploadedImageUrl[0]} 
                       alt="Uploaded Preview Image" 
+                      onClick={handleDeleteImage}
                     />
-                    <div className='diary-image-delete'>
-                      <button onClick={handleDeleteImage}>삭제</button>
-                    </div>
                   </div>
                 )}
               </div>
 
               <div className='content-emotion'>
                 <p>감정 추가</p>
-                <span className="emotion-emoji">
+                <span className="emotion-emoji" onClick={() => setIsEmotionModalOpen(true)}>
                   {selectedEmotion ? (
                     getEmojiFromEmotion(selectedEmotion)
                   ) : (
-                    <SentimentSatisfiedAltIcon onClick={() => setIsEmotionModalOpen(true)}/>
+                    <SentimentSatisfiedAltIcon/>
                   )}
                 </span>
               </div>
@@ -235,8 +251,7 @@ const CreateDiaryPage: React.FC = () => {
         
         <div className='content-text'>
           <textarea
-            placeholder="일기 내용을 입력하세요"
-            style={{ width: '100%', height: '100px', marginTop: '20px' }}
+            placeholder="내용을 입력해주세요"
             value={content}
             onChange={(e) => setContent(e.target.value)}
           ></textarea>

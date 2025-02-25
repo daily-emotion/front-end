@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { refreshAccessToken } from '../services/auth/tokenService';
 
-export const BASE_URL = 'http://localhost:8080/api';
-// export const BASE_URL = 'https://dailyemotion.site/api';
+// export const BASE_URL = 'http://localhost:8080/api';
+export const BASE_URL = 'https://dailyemotion.site/api';
 
 // Axios 인스턴스 생성
 const API = axios.create({

@@ -30,7 +30,7 @@ const MyDropzone: React.FC<MyDropzoneProps> = ({ addImage }) => {
       {...getRootProps()}
       style={{
         border: 'none',
-        padding: '20px',
+        marginTop: '40px',
         textAlign: 'center',
         cursor: 'pointer',
       }}
@@ -39,6 +39,7 @@ const MyDropzone: React.FC<MyDropzoneProps> = ({ addImage }) => {
       <AddPhotoAlternateIcon style={{
         color:"#ccc",
         fontSize : "70px",
+        transition: "color 0.2s",
       }}/>
     </div>
   );

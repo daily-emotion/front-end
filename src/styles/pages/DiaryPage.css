@@ -1,6 +1,6 @@
 .diary-container{
     width: 100%;
-    height: 100vh;
+    height: 100%;
     max-width: none;
     padding: 20px;
     margin: 0 auto;
@@ -8,6 +8,54 @@
     background-size: 100% auto;
     background-position: center;
     background-repeat: no-repeat;
+    /* 아이콘 추가 */
+    position: relative;
+}
+
+/* 첫 번째 아이콘 */
+.diary-container::before {
+    content: "";
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background-image: url(../../assets/images/diary/diary_icon1.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    top: 50px;
+    left: 200px;
+    z-index: 10;
+    opacity: 0.5;
+}
+
+/* 두 번째 아이콘 */
+.diary-container::after {
+    content: "";
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background-image: url(../../assets/images/diary/diary_icon2.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: scaleX(-1);
+    top: 300px;  /* 원하는 위치 */
+    right: 100px;
+    z-index: 10;
+    opacity: 0.5;
+}
+
+/* 세 번째 아이콘 (추가적인 div 사용) */
+.diary-icon-third {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background-image: url(../../assets/images/diary/diary_icon3.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    bottom: 30px;
+    left: 520px;
+    transform: translateX(-50%);
+    z-index: -1;
+    opacity: 0.5;
 }
 
 .diary-content{
@@ -24,7 +72,7 @@
 }
 
 .diary-date > h2 {
-    text-align: center;
+    text-align: left;
     margin-left: 30px;
     font-weight: bold;
 }
@@ -34,110 +82,182 @@
     margin: 30px 15px;
     display: flex;
     justify-content: space-between;
+    gap: 10px;
 }
 
 /* 왼쪽 영역 */
 .content-left{
-    width: 45%;
+    width: 44%;
+}
+
+/* 달력 */
+.react-datepicker{
+    height: 100%;
+    background-color: rgb(250, 250, 250);
+    border: none;
+}
+
+.react-datepicker__header {
+    padding: 5px 0;
+    background-color: rgb(250, 250, 250);
+}
+
+/* 달 타이틀 */
+h2.react-datepicker__current-month{
+    padding-top: 10px;
+}
+
+.react-datepicker__navigation{
+    top: 10px;
+}
+
+.react-datepicker__day-names{
+    margin-top: 10px;
+}
+
+/* 달력 일자 영역 */
+.react-datepicker__month{
+    padding-top: 10px;
 }
 
 /* 오른쪽 영역 */
 .content-right{
-    width: 50%;
-    margin: 0 10px
+    width: 55%;
 }
 
-/* 태그 */
-.content-tag{
-    width: 100%;
-    background-color: #f0f0f0;
+/* 해시태그 영역 */
+.content-tag-area {
+    display: flex;
+    align-items: flex-start;
+    background-color: rgb(250, 250, 250);
     border-radius: 10px;
-}
-
-.content-tag>p{
-    font-weight: bold;
-    font-size: 18px;
-    text-align: left;
-    
-    margin: 0;
     padding: 10px;
+    position: relative;
+    overflow-y: auto;
+    flex-direction: column;
 }
 
-.content-tag>ul{
-    display: inline-block;
-    padding-left: 0;
+/* "해시태그 추가" 텍스트와 + 버튼 정렬 */
+.content-tag-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: bold;
+    font-size: 20px; /* 제목 느낌의 글씨 크기 */
+    padding: 10px;
+    height: 30px;
+}
+
+.content-tag-title > p {
+    margin-right: 10px;
+}
+
+.content-tag-title svg {
+    background-color: rgb(18, 76, 109);
+    border-radius: 50px;
+    color: white;
+}
+
+/* + 버튼 스타일 */
+.tag-add-button {
+    margin-left: 8px;
+}
+
+/* + 버튼 호버 효과 */
+.tag-add-button:hover {
+    background-color: #ddd;
+}
+
+/* 해시태그 목록을 오른쪽 정렬 */
+.content-tag-list>ul {
+    padding: 0;
     margin: 0;
+    height: 40px;
 }
 
-.content-tag li {
-    display: inline-block;
+/* 개별 해시태그 스타일 */
+.content-tag-list li {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     border: 1px solid #ccc;
-    padding: 5px 10px;
+    padding: 5px 12px;
     border-radius: 30px;
-    margin: 5px;
     background-color: white;
+    font-size: 16px;
+    white-space: nowrap;
+    margin-right: 5px;
+}
+
+.content-tag-list > p {
+    margin: 5px 0 10px 10px;
+    text-align: center;
+    color: #999;
 }
 
 /* 오른쪽 아래 영역 */
 .content-right-bottom{
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
-/* 이미지 업로드 */
-.content-image{
+/* 이미지 업로드와 감정 선택 영역 크기 동일하게 맞추기 */
+.content-image, .content-emotion {
     width: 48%;
-    background-color: #f0f0f0;
+    height: 150px; /* 동일한 높이 설정 */
+    background-color: rgb(250, 250, 250);
     border-radius: 10px;
-    margin-top: 10px;
     display: flex;
-    flex-direction: column
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* 내부 아이콘 및 이미지 정렬 */
+    position: relative; /* 내부 요소 위치 고정 */
+    min-height: 150px; /* 내부 요소가 추가될 공간 확보 */
+    margin-top: 10px;
 }
 
-.content-image>p{
+/* 이미지 업로드 & 감정 추가 텍스트 고정 */
+.content-image > p,
+.content-emotion > p {
     font-weight: bold;
     font-size: 18px;
     text-align: center;
-    
     margin: 0;
     padding: 10px;
+    position: absolute; /* 내부 요소와 관계없이 고정 */
+    top: 10px; /* 항상 동일한 위치 */
 }
 
 .content-image > div {
     border: none;
 }
 
-.diary-image > img {
-    width: 100%; /* 부모 컨테이너에 맞춤 */
-    height: 70px; /* 원하는 높이 설정 */
-    background-color: #f0f0f0;
-    border-radius: 10px;
-    margin-bottom: 10px;
+.diary-image {
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden; /* 넘치는 부분 자르기 */
+    margin-top: 40px; /* p 태그와 겹치지 않도록 조정 */
+}
+
+/* 이미지 아이콘 및 업로드 후 미리보기 */
+.diary-image > img {
+    width: 80px;
+    height: 80px;
     object-fit: contain;
-    opacity: 0.6;
+    opacity: 1;
 }
 
-.diary-image-delete > button{
-    padding: 5px 10px;
-    margin-bottom: 8px;
-}
-
-/* 감정 표현 */
-.content-emotion {
-    width: 48%;
-    background-color: #f0f0f0;
-    border-radius: 10px;
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-}
-
+/* 감정 추가 아이콘과 이모지 크기 및 정렬 */
 .emotion-emoji {
-    font-size: 50px;
+    font-size: 54px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    margin-top: 40px; /* p 태그와 겹치지 않도록 조정 */
 }
 
 .content-emotion>p{
@@ -150,10 +270,55 @@
 .emotion-emoji > svg{
     font-size: 60px;
     color: #ccc;
-    padding: 20px;
 }
 
 .emotion-select-button{
     padding: 5px 10px;
     margin-bottom: 8px;
+}
+
+/* 일기 입력 영역 */
+.content-text {
+    width: 93%;
+    height: 300px;
+    margin: 20px auto;
+
+}
+
+.content-text > textarea {
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+    padding: 5px;
+    box-sizing: border-box;
+    border: 2px solid rgb(243, 243, 243);
+    border-radius: 10px;
+    resize: none;
+    color: rgb(132, 132, 132);
+}
+
+.content-text > textarea:focus{
+    outline: none;
+}
+
+/* 하단 버튼 영역(취소/등록) */
+.diary-buttons{
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.diary-buttons>button{
+    width: 45%;
+    border-radius: 50px;
+}
+
+.diary-buttons>button:first-child{
+    margin-right: 10px;
+    background-color: rgb(247, 247, 247);
+}
+
+.diary-buttons>button:last-child{
+    background-color: rgb(18, 76, 109);
+    color: white;
 }
