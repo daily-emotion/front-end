@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL } from '../../configs/apiConfig';
+import API, { BASE_URL } from '../../configs/apiConfig';
 
 // Diary 타입 정의
 export interface Diary {
@@ -138,4 +138,22 @@ export const DiaryService = {
       console.log('API : 일기 삭제에 실패하였습니다.');
     }
   },
+};
+
+// 로그아웃
+export const logout = async () => {
+  try {
+    // 최신 토큰 가져오기
+    const accessToken = localStorage.getItem('Authorization');
+    const refreshToken = localStorage.getItem('RefreshToken');
+
+    await API.post(`${BASE_URL}/logout`,{},{
+      headers : {
+        Authorization: `Bearer ${accessToken}`,
+        RefreshToken : `Bearer ${refreshToken}`,
+      },
+    });
+  } catch (error) {
+    console.error('로그아웃 실패', error);
+  } 
 };

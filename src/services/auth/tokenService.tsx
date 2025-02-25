@@ -10,7 +10,7 @@ export const refreshAccessToken = async () => {
       {},
       {
         headers: {
-          RefreshToken: localStorage.getItem('Refresh Token'),
+          RefreshToken: localStorage.getItem('RefreshToken'),
           Authorization: localStorage.getItem('Authorization'),
         },
       }
