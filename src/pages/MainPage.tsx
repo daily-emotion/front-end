@@ -26,7 +26,7 @@ const MainPage = () => {
 
   return (
     <>
-      <div style={{ display: 'flex', gap: '16px' }}>
+      <div style={{ display: 'flex', gap: '16px', color:'black' }}>
         <Calendar
           onViewDiary={handleViewDiary}
           onGoToCreateDiary={handleGoToCreateDiary}

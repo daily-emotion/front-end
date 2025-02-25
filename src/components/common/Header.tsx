@@ -6,6 +6,7 @@ import '../../styles/common/header.css';
 // 로고 이미지
 import mainLogo from '../../assets/images/logo/mainLogo.png';
 import { logout } from '../../services/diary/DiaryService';
+import { Button } from '@mui/material';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ const Header = () => {
             style={{ width: '50px' }}
             onClick={NavigateMain}
           />
-          <h4 onClick={NavigateMain} style={{ cursor: 'pointer' }}>
+          <h4 onClick={NavigateMain}>
             Daily-Emotion
           </h4>
         </div>
@@ -82,13 +83,13 @@ const Header = () => {
           <h3>{userName} 님</h3>
         </div>
         <div className="mainMenu">
-          <button
+          <Button
             onClick={handleLogout}
             style={{ width: '100px', marginRight: '15px' }}
           >
             LOGOUT
-          </button>
-          <button onClick={handleGoToReport}>REPORT</button>
+          </Button>
+          <Button onClick={handleGoToReport}>REPORT</Button>
         </div>
       </div>
     </>
