@@ -1,11 +1,6 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 20px;
-  background-color: #f8f9fa;
-}
-
 .container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
   display: flex; /* 내부 요소들을 플렉스 컨테이너로 설정 */
   justify-content: center; /* 자식 요소들을 수평 중앙 정렬 */
   align-items: flex-start; /* 자식 요소들을 상단 정렬 */
