@@ -277,6 +277,7 @@ const Report = ({ year, month, title }: ReportProps) => {
                         outerRadius={70} // 외부 반지름 설정
                         dataKey="value" // 데이터에서 'value' 값을 기준으로 크기 설정
                         stroke="none"
+                        isAnimationActive={false}
                         // paddingAngle={5} // 각 섹션 사이의 간격 추가
                       >
                         {sortedStatDetails?.sortedTopEmotions.map(
@@ -298,6 +299,7 @@ const Report = ({ year, month, title }: ReportProps) => {
                         outerRadius={75} // 외부 반지름 설정
                         dataKey="value" // 데이터에서 'value' 값을 기준으로 크기 설정
                         stroke="none"
+                        isAnimationActive={false}
                         // paddingAngle={5} // 각 섹션 사이의 간격 추가
                       >
                         {sortedStatDetails?.sortedTopEmotions.map(
@@ -326,6 +328,7 @@ const Report = ({ year, month, title }: ReportProps) => {
                         outerRadius={50} // 외부 반지름 설정
                         dataKey="value" // 데이터에서 'value' 값을 기준으로 크기 설정
                         stroke="none"
+                        isAnimationActive={false}
                         // paddingAngle={5} // 각 섹션 사이의 간격 추가
                       >
                         {sortedStatDetails?.sortedTopEmotions.map(
