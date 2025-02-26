@@ -279,7 +279,8 @@ const Report = ({ year, month, title }: ReportProps) => {
                         cy="50%" // 차트를 컨테이너 중앙에 배치 (Y축)
                         innerRadius={50} // 도넛 차트로 만들기 위한 내부 반지름
                         outerRadius={70} // 외부 반지름 설정
-                        dataKey="value" // 데이터에서 'value' 값을 기준으로 크기 설정
+                        // dataKey="value" // 데이터에서 'value' 값을 기준으로 크기 설정
+                        dataKey={(entry) => entry.value} // 🚀 함수형 dataKey 사용
                         stroke="none"
                         isAnimationActive={false}
                         // paddingAngle={5} // 각 섹션 사이의 간격 추가
