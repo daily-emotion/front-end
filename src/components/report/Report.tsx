@@ -94,18 +94,6 @@ const Report = ({ year, month, title }: ReportProps) => {
   const lastDayOfMonth = new Date(year, month, 0).getDate();
   const [isReady, setIsReady] = useState(false);
 
-  const lightenRGBA = (hex: string, alpha: number) => {
-    let r = parseInt(hex.substring(1, 3), 16);
-    let g = parseInt(hex.substring(3, 5), 16);
-    let b = parseInt(hex.substring(5, 7), 16);
-
-    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-  };
-
-  const maxValue = Math.max(
-    ...(sortedStatDetails?.sortedTopEmotions.map((d) => d.value) || [])
-  ); // 최대 value 찾기
-
   useEffect(() => {
     if (sortedStatDetails) {
       setTimeout(() => setIsReady(true), 0);
@@ -237,6 +225,16 @@ const Report = ({ year, month, title }: ReportProps) => {
       const key = Object.keys(entry)[0]; // 감정 키 가져오기 (예: "HAPPINESS")
       return { name: key, value: entry[key] }; // 올바른 구조로 변환
     }) || [];
+
+  const lightenRGBA = (hex: string, alpha: number) => {
+    let r = parseInt(hex.substring(1, 3), 16);
+    let g = parseInt(hex.substring(3, 5), 16);
+    let b = parseInt(hex.substring(5, 7), 16);
+
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
+
+  const maxValue = Math.max(...(pieData.map((d) => d.value) || [])); // 최대 value 찾기
 
   return (
     <div className="emotion-card">
