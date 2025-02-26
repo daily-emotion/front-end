@@ -92,6 +92,7 @@ const Report = ({ year, month, title }: ReportProps) => {
   >({});
   const today = String(koreanTime.getDate()).padStart(2, '0');
   const lastDayOfMonth = new Date(year, month, 0).getDate();
+  const [isReady, setIsReady] = useState(false);
 
   const lightenRGBA = (hex: string, alpha: number) => {
     let r = parseInt(hex.substring(1, 3), 16);
@@ -104,6 +105,12 @@ const Report = ({ year, month, title }: ReportProps) => {
   const maxValue = Math.max(
     ...(sortedStatDetails?.sortedTopEmotions.map((d) => d.value) || [])
   ); // 최대 value 찾기
+
+  useEffect(() => {
+    if (sortedStatDetails) {
+      setTimeout(() => setIsReady(true), 0);
+    }
+  }, [sortedStatDetails]);
 
   useEffect(() => {
     if (!year || !month) return;
@@ -258,97 +265,106 @@ const Report = ({ year, month, title }: ReportProps) => {
               <button className="view-report-btn">View Report</button>
             </div>
             <div className="progress-container">
-              <ResponsiveContainer width={160} height={160}>
-                <PieChart>
-                  <Pie
-                    data={sortedStatDetails?.sortedTopEmotions || []} // 차트에 들어갈 데이터
-                    cx="50%" // 차트를 컨테이너 중앙에 배치 (X축)
-                    cy="50%" // 차트를 컨테이너 중앙에 배치 (Y축)
-                    innerRadius={50} // 도넛 차트로 만들기 위한 내부 반지름
-                    outerRadius={70} // 외부 반지름 설정
-                    dataKey="value" // 데이터에서 'value' 값을 기준으로 크기 설정
-                    stroke="none"
-                    // paddingAngle={5} // 각 섹션 사이의 간격 추가
-                  >
-                    {sortedStatDetails?.sortedTopEmotions.map(
-                      (entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={emotionColors[Object.keys(entry)[0]]}
-                        />
-                      )
-                    )}
-                  </Pie>
+              {isReady ? (
+                <>
+                  <ResponsiveContainer width={160} height={160}>
+                    <PieChart>
+                      <Pie
+                        data={sortedStatDetails?.sortedTopEmotions || []} // 차트에 들어갈 데이터
+                        cx="50%" // 차트를 컨테이너 중앙에 배치 (X축)
+                        cy="50%" // 차트를 컨테이너 중앙에 배치 (Y축)
+                        innerRadius={50} // 도넛 차트로 만들기 위한 내부 반지름
+                        outerRadius={70} // 외부 반지름 설정
+                        dataKey="value" // 데이터에서 'value' 값을 기준으로 크기 설정
+                        stroke="none"
+                        // paddingAngle={5} // 각 섹션 사이의 간격 추가
+                      >
+                        {sortedStatDetails?.sortedTopEmotions.map(
+                          (entry, index) => (
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={emotionColors[Object.keys(entry)[0]]}
+                            />
+                          )
+                        )}
+                      </Pie>
 
-                  {/* 바깥쪽 원 */}
-                  <Pie
-                    data={sortedStatDetails?.sortedTopEmotions || []} // 차트에 들어갈 데이터
-                    cx="50%" // 차트를 컨테이너 중앙에 배치 (X축)
-                    cy="50%" // 차트를 컨테이너 중앙에 배치 (Y축)
-                    innerRadius={70} // 도넛 차트로 만들기 위한 내부 반지름
-                    outerRadius={75} // 외부 반지름 설정
-                    dataKey="value" // 데이터에서 'value' 값을 기준으로 크기 설정
-                    stroke="none"
-                    // paddingAngle={5} // 각 섹션 사이의 간격 추가
-                  >
-                    {sortedStatDetails?.sortedTopEmotions.map(
-                      (entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={
-                            entry.value === maxValue
-                              ? lightenRGBA(
-                                  emotionColors[Object.keys(entry)[0]],
-                                  0.2
-                                )
-                              : 'rgba(0, 0, 0, 0)'
-                          }
-                        />
-                      )
-                    )}
-                  </Pie>
+                      {/* 바깥쪽 원 */}
+                      <Pie
+                        data={sortedStatDetails?.sortedTopEmotions || []} // 차트에 들어갈 데이터
+                        cx="50%" // 차트를 컨테이너 중앙에 배치 (X축)
+                        cy="50%" // 차트를 컨테이너 중앙에 배치 (Y축)
+                        innerRadius={70} // 도넛 차트로 만들기 위한 내부 반지름
+                        outerRadius={75} // 외부 반지름 설정
+                        dataKey="value" // 데이터에서 'value' 값을 기준으로 크기 설정
+                        stroke="none"
+                        // paddingAngle={5} // 각 섹션 사이의 간격 추가
+                      >
+                        {sortedStatDetails?.sortedTopEmotions.map(
+                          (entry, index) => (
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={
+                                entry.value === maxValue
+                                  ? lightenRGBA(
+                                      emotionColors[Object.keys(entry)[0]],
+                                      0.2
+                                    )
+                                  : 'rgba(0, 0, 0, 0)'
+                              }
+                            />
+                          )
+                        )}
+                      </Pie>
 
-                  {/* 안쪽 원 */}
-                  <Pie
-                    data={sortedStatDetails?.sortedTopEmotions || []} // 차트에 들어갈 데이터
-                    cx="50%" // 차트를 컨테이너 중앙에 배치 (X축)
-                    cy="50%" // 차트를 컨테이너 중앙에 배치 (Y축)
-                    innerRadius={45} // 도넛 차트로 만들기 위한 내부 반지름
-                    outerRadius={50} // 외부 반지름 설정
-                    dataKey="value" // 데이터에서 'value' 값을 기준으로 크기 설정
-                    stroke="none"
-                    // paddingAngle={5} // 각 섹션 사이의 간격 추가
-                  >
-                    {sortedStatDetails?.sortedTopEmotions.map(
-                      (entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={
-                            entry.value === maxValue
-                              ? lightenRGBA(
-                                  emotionColors[Object.keys(entry)[0]],
-                                  0.2
-                                )
-                              : 'rgba(0, 0, 0, 0)'
-                          }
-                        />
-                      )
-                    )}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="progress-center-emotion">
-                <img
-                  src={
-                    sortedStatDetails?.sortedTopEmotions?.[0]
-                      ? emotionIcons[
-                          Object.keys(sortedStatDetails.sortedTopEmotions[0])[0]
-                        ]
-                      : ''
-                  }
-                  alt="Emotion Icon"
-                />
-              </div>
+                      {/* 안쪽 원 */}
+                      <Pie
+                        data={sortedStatDetails?.sortedTopEmotions || []} // 차트에 들어갈 데이터
+                        cx="50%" // 차트를 컨테이너 중앙에 배치 (X축)
+                        cy="50%" // 차트를 컨테이너 중앙에 배치 (Y축)
+                        innerRadius={45} // 도넛 차트로 만들기 위한 내부 반지름
+                        outerRadius={50} // 외부 반지름 설정
+                        dataKey="value" // 데이터에서 'value' 값을 기준으로 크기 설정
+                        stroke="none"
+                        // paddingAngle={5} // 각 섹션 사이의 간격 추가
+                      >
+                        {sortedStatDetails?.sortedTopEmotions.map(
+                          (entry, index) => (
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={
+                                entry.value === maxValue
+                                  ? lightenRGBA(
+                                      emotionColors[Object.keys(entry)[0]],
+                                      0.2
+                                    )
+                                  : 'rgba(0, 0, 0, 0)'
+                              }
+                            />
+                          )
+                        )}
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+
+                  <div className="progress-center-emotion">
+                    <img
+                      src={
+                        sortedStatDetails?.sortedTopEmotions?.[0]
+                          ? emotionIcons[
+                              Object.keys(
+                                sortedStatDetails.sortedTopEmotions[0]
+                              )[0]
+                            ]
+                          : ''
+                      }
+                      alt="Emotion Icon"
+                    />
+                  </div>
+                </>
+              ) : (
+                <div>로딩 중...</div>
+              )}
             </div>
             <div>
               {/* 감정 요약 문구 */}
