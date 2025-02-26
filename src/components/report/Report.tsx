@@ -235,7 +235,7 @@ const Report = ({ year, month, title }: ReportProps) => {
   };
 
   const maxValue = Math.max(...(pieData.map((d) => d.value) || [])); // 최대 value 찾기
-  console.log(maxValue);
+  console.log(`maxValue: ${maxValue}`);
 
   return (
     <div className="emotion-card">
@@ -316,7 +316,7 @@ const Report = ({ year, month, title }: ReportProps) => {
                             key={`cell-${index}`}
                             fill={
                               entry.value === maxValue
-                                ? lightenRGBA(emotionColors[entry.name[0]], 0.2)
+                                ? lightenRGBA(emotionColors[entry.name], 0.2)
                                 : 'rgba(0, 0, 0, 0)'
                             }
                           />
@@ -339,7 +339,7 @@ const Report = ({ year, month, title }: ReportProps) => {
                             key={`cell-${index}`}
                             fill={
                               entry.value === maxValue
-                                ? lightenRGBA(emotionColors[entry.name[0]], 0.2)
+                                ? lightenRGBA(emotionColors[entry.name], 0.2)
                                 : 'rgba(0, 0, 0, 0)'
                             }
                           />
@@ -524,7 +524,7 @@ const Report = ({ year, month, title }: ReportProps) => {
                 {sortedStatDetails?.sortedTopTags?.[0] ? (
                   <>
                     <strong>
-                      {Object.keys(sortedStatDetails?.sortedTopTags[0])[0]}
+                      #{Object.keys(sortedStatDetails?.sortedTopTags[0])[0]}
                     </strong>{' '}
                     키워드를
                     <br />
