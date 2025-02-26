@@ -109,6 +109,10 @@ const Report = ({ year, month, title }: ReportProps) => {
   useEffect(() => {
     if (sortedStatDetails) {
       setTimeout(() => setIsReady(true), 0);
+      console.log(
+        '🚀 배포 환경 sortedTopEmotions:',
+        sortedStatDetails.sortedTopEmotions
+      );
     }
   }, [sortedStatDetails]);
 
