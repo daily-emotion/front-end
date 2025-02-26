@@ -19,6 +19,11 @@ width: 250px;
 display: flex;
 align-items: center;
 }
+
+.header-logo > h4 {
+    color: black;
+    cursor: pointer;
+}
   
 .header-logo > img {
 width: 50px;
