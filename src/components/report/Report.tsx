@@ -232,6 +232,12 @@ const Report = ({ year, month, title }: ReportProps) => {
       .slice(0, 6)
       .map((tag) => Object.keys(tag)[0]) || []; // 태그가 없으면 빈 배열 반환
 
+  const pieData =
+    sortedStatDetails?.sortedTopEmotions?.map((entry) => {
+      const key = Object.keys(entry)[0]; // 감정 키 가져오기 (예: "HAPPINESS")
+      return { name: key, value: entry[key] }; // 올바른 구조로 변환
+    }) || [];
+
   return (
     <div className="emotion-card">
       <div className="emotion-chart-container">
@@ -274,7 +280,7 @@ const Report = ({ year, month, title }: ReportProps) => {
                   <ResponsiveContainer width={160} height={160}>
                     <PieChart>
                       <Pie
-                        data={sortedStatDetails?.sortedTopEmotions || []} // 차트에 들어갈 데이터
+                        data={pieData} // 차트에 들어갈 데이터
                         cx="50%" // 차트를 컨테이너 중앙에 배치 (X축)
                         cy="50%" // 차트를 컨테이너 중앙에 배치 (Y축)
                         innerRadius={50} // 도넛 차트로 만들기 위한 내부 반지름
@@ -297,7 +303,7 @@ const Report = ({ year, month, title }: ReportProps) => {
 
                       {/* 바깥쪽 원 */}
                       <Pie
-                        data={sortedStatDetails?.sortedTopEmotions || []} // 차트에 들어갈 데이터
+                        data={pieData || []} // 차트에 들어갈 데이터
                         cx="50%" // 차트를 컨테이너 중앙에 배치 (X축)
                         cy="50%" // 차트를 컨테이너 중앙에 배치 (Y축)
                         innerRadius={70} // 도넛 차트로 만들기 위한 내부 반지름
@@ -326,7 +332,7 @@ const Report = ({ year, month, title }: ReportProps) => {
 
                       {/* 안쪽 원 */}
                       <Pie
-                        data={sortedStatDetails?.sortedTopEmotions || []} // 차트에 들어갈 데이터
+                        data={pieData || []} // 차트에 들어갈 데이터
                         cx="50%" // 차트를 컨테이너 중앙에 배치 (X축)
                         cy="50%" // 차트를 컨테이너 중앙에 배치 (Y축)
                         innerRadius={45} // 도넛 차트로 만들기 위한 내부 반지름
