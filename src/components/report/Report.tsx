@@ -2,7 +2,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { BASE_URL } from '../../configs/apiConfig';
 
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import * as Recharts from 'recharts';
+const { PieChart, Pie, Cell, ResponsiveContainer } = Recharts;
 import EmotionStatsHeaderIconImage from '../../assets/images/ReportPage/ReportPage_EmotionStats_Header_Icon.png';
 import TagStatsRightHeaderIconImage from '../../assets/images/ReportPage/ReportPage_TagStats_Header_Right_Icon.png';
 
@@ -426,134 +427,134 @@ const Report = ({ year, month, title }: ReportProps) => {
             </div>
           </div>
         </div>
-        <div className="keywords-section">
-          <div className="keywords-section-header">
-            <div
-              className="keywords-section-Left-Header"
+      </div>
+      <div className="keywords-section">
+        <div className="keywords-section-header">
+          <div
+            className="keywords-section-Left-Header"
+            style={{
+              borderBottom: 'none',
+              flex: 6, // ✅ 60% 차지
+              fontSize: '24px',
+              display: 'flex',
+              flexDirection: 'column', // ✅ 요소들을 세로로 정렬
+              alignItems: 'flex-start', // ✅ 왼쪽 정렬
+              gap: '0px',
+            }}
+          >
+            <span>{title}의 키워드</span>
+            <span
               style={{
-                borderBottom: 'none',
-                flex: 6, // ✅ 60% 차지
-                fontSize: '24px',
-                display: 'flex',
-                flexDirection: 'column', // ✅ 요소들을 세로로 정렬
-                alignItems: 'flex-start', // ✅ 왼쪽 정렬
-                gap: '0px',
+                color: '#38383899',
+                fontSize: '12px',
+                textAlign: 'left',
               }}
             >
-              <span>{title}의 키워드</span>
-              <span
+              다이어리를 작성하면서 많이 사용한 키워드 6가지입니다. <br />
+              키워드와 함께기록했던 감정도 확인해보세요!
+            </span>
+          </div>
+          <div
+            className="keywords-section-Right-Header"
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end', // ✅ 오른쪽 정렬
+              alignItems: 'center', // ✅ 수직 중앙 정렬
+              flex: 4, // ✅ 40% 차지
+              padding: '10px 20px',
+            }}
+          >
+            <div className="speech-bubble-container">
+              {/* 아이콘 */}
+              <div
+                className="header-icon"
                 style={{
-                  color: '#38383899',
-                  fontSize: '12px',
-                  textAlign: 'left',
+                  position: 'relative',
+                  width: '28px',
+                  height: '28px',
                 }}
               >
-                다이어리를 작성하면서 많이 사용한 키워드 6가지입니다. <br />
-                키워드와 함께기록했던 감정도 확인해보세요!
-              </span>
-            </div>
-            <div
-              className="keywords-section-Right-Header"
-              style={{
-                display: 'flex',
-                justifyContent: 'flex-end', // ✅ 오른쪽 정렬
-                alignItems: 'center', // ✅ 수직 중앙 정렬
-                flex: 4, // ✅ 40% 차지
-                padding: '10px 20px',
-              }}
-            >
-              <div className="speech-bubble-container">
-                {/* 아이콘 */}
-                <div
-                  className="header-icon"
+                <span
+                  className="icon-background"
                   style={{
-                    position: 'relative',
+                    backgroundColor: '#DDF4FC',
                     width: '28px',
                     height: '28px',
+                    display: 'block',
+                    borderRadius: '50%',
+                    position: 'absolute',
+                    top: '0',
+                    left: '0',
                   }}
-                >
-                  <span
-                    className="icon-background"
-                    style={{
-                      backgroundColor: '#DDF4FC',
-                      width: '28px',
-                      height: '28px',
-                      display: 'block',
-                      borderRadius: '50%',
-                      position: 'absolute',
-                      top: '0',
-                      left: '0',
-                    }}
-                  ></span>
-                  <img
-                    className="icon-image"
-                    src={TagStatsRightHeaderIconImage}
-                    style={{
-                      width: '20px',
-                      height: '20px',
-                      position: 'absolute',
-                      top: '50%',
-                      left: '50%',
-                      transform: 'translate(-50%, -50%)',
-                    }}
-                    alt="태그 통계 페이지 헤더 아이콘 그림"
-                  />
-                </div>
+                ></span>
+                <img
+                  className="icon-image"
+                  src={TagStatsRightHeaderIconImage}
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                  }}
+                  alt="태그 통계 페이지 헤더 아이콘 그림"
+                />
+              </div>
 
-                {/* 말풍선 */}
-                <div className="speech-bubble">
-                  {sortedStatDetails?.sortedTopTags?.[0] ? (
-                    <>
-                      <strong>
-                        {Object.keys(sortedStatDetails?.sortedTopTags[0])[0]}
-                      </strong>{' '}
-                      키워드를
-                      <br />
-                      가장 많이 사용했습니다.
-                    </>
-                  ) : (
-                    <>사용된 키워드가 없습니다.</>
-                  )}
-                </div>
+              {/* 말풍선 */}
+              <div className="speech-bubble">
+                {sortedStatDetails?.sortedTopTags?.[0] ? (
+                  <>
+                    <strong>
+                      {Object.keys(sortedStatDetails?.sortedTopTags[0])[0]}
+                    </strong>{' '}
+                    키워드를
+                    <br />
+                    가장 많이 사용했습니다.
+                  </>
+                ) : (
+                  <>사용된 키워드가 없습니다.</>
+                )}
               </div>
             </div>
           </div>
-          <div className="keywords">
-            <div className="keywords-left">
-              {Array.from({ length: 3 }, (_, i) => {
-                const tag = tags[i]; // 1~3등 키워드 가져오기
-                return (
-                  <div
-                    key={i}
-                    className={`keyword-item ${tag ? 'has-keyword' : ''}`}
-                  >
-                    {tag ? (
-                      <span># {tag}</span>
-                    ) : (
-                      <span># {i + 1}등 키워드</span> // 기본값 출력
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+        </div>
+        <div className="keywords">
+          <div className="keywords-left">
+            {Array.from({ length: 3 }, (_, i) => {
+              const tag = tags[i]; // 1~3등 키워드 가져오기
+              return (
+                <div
+                  key={i}
+                  className={`keyword-item ${tag ? 'has-keyword' : ''}`}
+                >
+                  {tag ? (
+                    <span># {tag}</span>
+                  ) : (
+                    <span># {i + 1}등 키워드</span> // 기본값 출력
+                  )}
+                </div>
+              );
+            })}
+          </div>
 
-            <div className="keywords-right">
-              {Array.from({ length: 3 }, (_, i) => {
-                const tag = tags[3 + i]; // 4~6등 키워드 가져오기
-                return (
-                  <div
-                    key={i}
-                    className={`keyword-item ${tag ? 'has-keyword' : ''}`}
-                  >
-                    {tag ? (
-                      <span># {tag}</span>
-                    ) : (
-                      <span># {i + 4}등 키워드</span> // 기본값 출력
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+          <div className="keywords-right">
+            {Array.from({ length: 3 }, (_, i) => {
+              const tag = tags[3 + i]; // 4~6등 키워드 가져오기
+              return (
+                <div
+                  key={i}
+                  className={`keyword-item ${tag ? 'has-keyword' : ''}`}
+                >
+                  {tag ? (
+                    <span># {tag}</span>
+                  ) : (
+                    <span># {i + 4}등 키워드</span> // 기본값 출력
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
