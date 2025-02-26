@@ -288,7 +288,7 @@ const Report = ({ year, month, title }: ReportProps) => {
                         // dataKey="value" // 데이터에서 'value' 값을 기준으로 크기 설정
                         dataKey={(entry) => entry.value} // 🚀 함수형 dataKey 사용
                         stroke="none"
-                        isAnimationActive={false}
+
                         // paddingAngle={5} // 각 섹션 사이의 간격 추가
                       >
                         {sortedStatDetails?.sortedTopEmotions.map(
@@ -303,14 +303,13 @@ const Report = ({ year, month, title }: ReportProps) => {
 
                       {/* 바깥쪽 원 */}
                       <Pie
-                        data={pieData || []} // 차트에 들어갈 데이터
+                        data={pieData} // 차트에 들어갈 데이터
                         cx="50%" // 차트를 컨테이너 중앙에 배치 (X축)
                         cy="50%" // 차트를 컨테이너 중앙에 배치 (Y축)
                         innerRadius={70} // 도넛 차트로 만들기 위한 내부 반지름
                         outerRadius={75} // 외부 반지름 설정
-                        dataKey="value" // 데이터에서 'value' 값을 기준으로 크기 설정
+                        dataKey={(entry) => entry.value} // 🚀 함수형 dataKey 사용
                         stroke="none"
-                        isAnimationActive={false}
                         // paddingAngle={5} // 각 섹션 사이의 간격 추가
                       >
                         {sortedStatDetails?.sortedTopEmotions.map(
@@ -332,14 +331,13 @@ const Report = ({ year, month, title }: ReportProps) => {
 
                       {/* 안쪽 원 */}
                       <Pie
-                        data={pieData || []} // 차트에 들어갈 데이터
+                        data={pieData} // 차트에 들어갈 데이터
                         cx="50%" // 차트를 컨테이너 중앙에 배치 (X축)
                         cy="50%" // 차트를 컨테이너 중앙에 배치 (Y축)
                         innerRadius={45} // 도넛 차트로 만들기 위한 내부 반지름
                         outerRadius={50} // 외부 반지름 설정
-                        dataKey="value" // 데이터에서 'value' 값을 기준으로 크기 설정
+                        dataKey={(entry) => entry.value} // 🚀 함수형 dataKey 사용
                         stroke="none"
-                        isAnimationActive={false}
                         // paddingAngle={5} // 각 섹션 사이의 간격 추가
                       >
                         {sortedStatDetails?.sortedTopEmotions.map(
