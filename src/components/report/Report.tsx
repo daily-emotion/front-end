@@ -235,6 +235,7 @@ const Report = ({ year, month, title }: ReportProps) => {
   };
 
   const maxValue = Math.max(...(pieData.map((d) => d.value) || [])); // 최대 value 찾기
+  console.log(maxValue);
 
   return (
     <div className="emotion-card">
@@ -310,21 +311,16 @@ const Report = ({ year, month, title }: ReportProps) => {
                         stroke="none"
                         // paddingAngle={5} // 각 섹션 사이의 간격 추가
                       >
-                        {sortedStatDetails?.sortedTopEmotions.map(
-                          (entry, index) => (
-                            <Cell
-                              key={`cell-${index}`}
-                              fill={
-                                entry.value === maxValue
-                                  ? lightenRGBA(
-                                      emotionColors[Object.keys(entry)[0]],
-                                      0.2
-                                    )
-                                  : 'rgba(0, 0, 0, 0)'
-                              }
-                            />
-                          )
-                        )}
+                        {pieData.map((entry, index) => (
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={
+                              entry.value === maxValue
+                                ? lightenRGBA(emotionColors[entry.name[0]], 0.2)
+                                : 'rgba(0, 0, 0, 0)'
+                            }
+                          />
+                        ))}
                       </Pie>
 
                       {/* 안쪽 원 */}
@@ -338,21 +334,16 @@ const Report = ({ year, month, title }: ReportProps) => {
                         stroke="none"
                         // paddingAngle={5} // 각 섹션 사이의 간격 추가
                       >
-                        {sortedStatDetails?.sortedTopEmotions.map(
-                          (entry, index) => (
-                            <Cell
-                              key={`cell-${index}`}
-                              fill={
-                                entry.value === maxValue
-                                  ? lightenRGBA(
-                                      emotionColors[Object.keys(entry)[0]],
-                                      0.2
-                                    )
-                                  : 'rgba(0, 0, 0, 0)'
-                              }
-                            />
-                          )
-                        )}
+                        {pieData.map((entry, index) => (
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={
+                              entry.value === maxValue
+                                ? lightenRGBA(emotionColors[entry.name[0]], 0.2)
+                                : 'rgba(0, 0, 0, 0)'
+                            }
+                          />
+                        ))}
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
