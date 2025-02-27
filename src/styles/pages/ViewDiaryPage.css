@@ -1,0 +1,151 @@
+.diary-container {
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-image: url(../../assets/backImage/background-Image.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* 첫 번째 아이콘 */
+.diary-container::before {
+    content: "";
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background-image: url(../../assets/images/diary/diary_icon1.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    top: 50px;
+    left: 200px;
+    z-index: 10;
+    opacity: 0.5;
+}
+
+/* 두 번째 아이콘 */
+.diary-container::after {
+    content: "";
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background-image: url(../../assets/images/diary/diary_icon2.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: scaleX(-1);
+    top: 300px;  /* 원하는 위치 */
+    right: 100px;
+    z-index: 10;
+    opacity: 0.5;
+}
+
+/* 세 번째 아이콘 (추가적인 div 사용) */
+.diary-icon-third {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background-image: url(../../assets/images/diary/diary_icon3.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    bottom: 30px;
+    left: 520px;
+    transform: translateX(-50%);
+    z-index: -1;
+    opacity: 0.5;
+}
+
+.view-container {
+    width: 700px;
+    max-width: 90%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ccccccad;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.view-title{
+    border-bottom: 1px solid #ccc;
+    padding: 0 20px 0 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.view-title-date{
+    text-align: left;
+    margin: 10px 0;
+}
+
+.view-title-button button{
+    font-size: 16px;
+}
+
+/* 이미지 */
+.view-image-container{
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 25px;
+    position: relative;
+}
+
+.view-image-container > img{
+    width: 600px;
+    height: 250px;
+    object-fit: scale-down;
+    border-radius: 15px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.view-image-container > p {
+    position: absolute;
+    top: -20px;
+    left: 30px;
+    font-size: 32px;
+    background-color: rgba(0, 0, 0, 0.261);
+    padding: 10px 20px;
+    border-radius: 15px;
+}
+
+/* 일기 내용 */
+.view-content-container{
+    width: 85%;
+    margin: 0 auto;
+    text-align: justify;
+}
+
+.view-content-container > p {
+    text-decoration: underline;
+    text-underline-offset : 10px;
+    line-height: 40px;
+    text-decoration-color: #ccc;
+}
+
+/* 태그 */
+.view-tag-container {
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    padding: 20px 20px; /* 적절한 패딩 추가 */
+    text-align: left;
+    background-color: rgb(250, 250, 250);
+    border-radius: 10px;
+}
+
+.view-tag-container p {
+    margin: 0; /* 기본 마진 제거 */
+}
+
+.view-tag-container span {
+    background-color: white; /* 배경색 추가 (선택 사항) */
+    padding: 5px 10px; /* 내부 여백 */
+    border-radius: 15px; /* 둥근 모서리 */
+    font-size: 16px; /* 글자 크기 조정 */
+    margin-right: 10px;
+    border: 1px solid rgb(226, 226, 226);
+}
