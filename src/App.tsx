@@ -26,7 +26,7 @@ function Layout() {
       {location.pathname !== '/' &&
         location.pathname !== '/oauth/callback' &&
         location.pathname !== '/dummyreport' && <Header />}
-      <main className="content">
+      <div className="content">
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/oauth/callback" element={<RedirectHandler />} />
@@ -39,7 +39,7 @@ function Layout() {
           <Route path="/charttest" element={<ChartTestPage />} />
           <Route path="/dummyreport" element={<DummyReportPage />} />
         </Routes>
-      </main>
+      </div>
     </>
   );
 }
