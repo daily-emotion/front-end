@@ -6,10 +6,21 @@ import { Emotion, EmotionKey, emotions } from "../contants/emtionsContants";
 import ModalTagSelector from "../components/diary/tagSelectorModal";
 import { tags } from "../contants/tagsContants";
 import MyDropzone from "../components/diary/addImage";
+import '../styles/pages/DiaryPage.css'
+import DatePicker from "react-datepicker";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from '@mui/icons-material/Add';
 
 const UpdateDiaryPage: React.FC = () => {
   const { date } = useParams<{ date: string }>();
   
+  // date (초기값을 url에 적힌 날짜로 설정)
+  const [selectedDate] = useState<Date>(
+    () => {
+      const dateFromUrl = location.pathname.split('/').pop();
+      return dateFromUrl ? new Date(dateFromUrl) : new Date();
+    }
+  );
 
   // 감정표현
   const [emotion, setEmotion] = useState<string>("");
@@ -132,107 +143,123 @@ const UpdateDiaryPage: React.FC = () => {
     }
   };
 
+  // 영어로 된 요일을 한국어로 번역
+  const getDayName = (date: Date): string => {
+    const days = ['일', '월', '화', '수', '목', '금', '토'];
+    return days[date.getDay()];
+  };
+
+  // 날짜 변환
+  const formatDate = (dateString : string) => {
+    const dateObj = new Date(dateString);
+    return `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}월 ${dateObj.getDate().toString().padStart(2, '0')}일 ${getDayName(dateObj)}요일`;
+  };
+
   return (
-    <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
-      <h2>일기 수정</h2>
+    <>
+      <div className='diary-container'>
+        {/* 배경에 아이콘 추가 */}
+        <div className="diary-icon-third"></div>
 
-      {/* 날짜 제목 */}
-      <div>
-        <h3>{date}</h3>
-      </div>
-      {/* 감정 표현 */}
-      <div>
-        <h3>감정 표현:</h3>
-          <div>
-            <span style={{ fontSize: '22px' }}>
-              {emotion ? getEmojiFromEmotion(emotion as Emotion) : 
-              emotion ? getEmojiFromEmotion(emotion as Emotion): " 감정을 선택해주세요"}
-            </span>
-            <button
-              onClick={() => setIsEmotionModalOpen(true)}
-              style={{ marginLeft: '10px' }}
-            >
-              감정 선택
-            </button>
+        <div className='diary-content'>
+          <div className='diary-date'>
+            <h2>{formatDate(date ?? '')}</h2>
           </div>
-          {isEmotionModalOpen && (
-            <EmotionSelectorModal
-              selectedEmotion={selectedEmotion ?? (emotion as Emotion)}
-              onSelect={(newEmotion) => {
-                setSelectedEmotion(newEmotion); // 새로운 선택된 감정 저장
-                setEmotion(newEmotion); // 수정된 감정을 상태에 반영
-                setIsEmotionModalOpen(false); // 모달 닫기
-              }}
-              onClose={() => setIsEmotionModalOpen(false)}
-            />
-          )}
-        </div>
-      {/* 태그 모달 */}
-      <div>
-        <h3>선택한 태그 : </h3>
-        <ul>
-        {selectedTags.length > 0 ? (
-          selectedTags.map((tag, index) => (
-            <li key={index} style={{ display: 'flex', alignItems: 'center' }}>
-              {tag}
-            </li>
-      ))
-    ) : (
-      <p>선택된 태그가 없습니다.</p>
-    )}
-        </ul>
-        <button onClick={() => setIsModalOpen(true)}>태그 수정</button>
-        {isModalOpen && (
-          <ModalTagSelector 
-            tags={[...tags]} // 기존 태그 목록 전달
-            selectedTags={selectedTags} // 이미 선택된 태그 전달
-            onClose={() => setIsModalOpen(false)}
-            onSave={handleSaveTags}
-          />
-        )}
-      </div>
-      
-      {/* 이미지 업로드 */}
-      <div>
-        {uploadedImageUrl.length === 0 &&  <MyDropzone addImage={handleAddImage}/>}
-       
-        {/* 이미지 미리보기 */}
-        {uploadedImageUrl.length > 0 && (
-          <div style={{ marginTop: '10px' }}>
-          <h4>이미지 미리보기</h4>
-          <img 
-            src={uploadedImageUrl[0]} 
-            alt="Uploaded Preview Image" 
-            style={{
-              marginTop: '10px',
-              width: '300px',  // 고정된 너비
-              height: '300px', // 고정된 높이
-              objectFit: 'contain',  // 잘리지 않고 이미지 비율 유지
-              border: '1px solid #ddd', // 테두리 추가 (옵션)
-              borderRadius: '5px' // 모서리 둥글게 (옵션)
-            }} 
-          />
-         <div style={{ textAlign: 'center', marginTop: '10px' }}>
-            <button onClick={handleDeleteImage}>삭제</button>
-          </div>
-        </div>
-        )}
-      </div>
-      
-      <textarea
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        placeholder="내용을 입력하세요"
-        style={{ width: "100%", height: "100px" }}
-      ></textarea>
+          
+          <div className='content-container'>
+            <div className='content-left'>
+                <DatePicker selected={selectedDate} inline />
+            </div>
 
-      <div style={{ marginTop: "20px" }}>
-        <button onClick={handleUpdate} style={{ marginRight: "10px" }}>
-          수정 완료
-        </button>
-        <button onClick={() => navigate(`/diaries/view/${date}`)}>취소</button>
+            <div className='content-right'>
+              <div className='content-tag-area'>
+                <div className='content-tag-title'>
+                  <p>해시태그 추가</p>
+                  <IconButton 
+                      className='tag-add-button'
+                      color="primary" 
+                      onClick={() => setIsModalOpen(true)}
+                      aria-label="태그 추가"
+                    >
+                      <AddIcon />
+                    </IconButton>
+                </div>
+                <div className='content-tag-list'>
+                  {selectedTags.length === 0 ? (
+                    <p>태그를 선택해주세요</p>
+                  ) : (
+                    <ul>
+                      {selectedTags.map((tag, index) => (
+                        <li key={index}>
+                          #{tag}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+                {isModalOpen && (
+                  <ModalTagSelector
+                    tags={[...tags]}
+                    selectedTags={selectedTags}
+                    onClose={() => setIsModalOpen(false)}
+                    onSave={handleSaveTags}
+                  />
+                )}
+              </div>
+
+              <div className='content-right-bottom'>
+                <div className='content-image'>
+                  <p>이미지 업로드</p>
+                  {uploadedImageUrl.length === 0 &&  <MyDropzone addImage={handleAddImage}/>}
+
+                  {/* 이미지 미리보기 */}
+                  {uploadedImageUrl.length > 0 && (
+                    <div className='diary-image'>
+                      <img 
+                        src={uploadedImageUrl[0]} 
+                        alt="Uploaded Preview Image" 
+                        onClick={handleDeleteImage}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div className='content-emotion'>
+                  <p>감정 추가</p>
+                  <span className="emotion-emoji" onClick={() => setIsEmotionModalOpen(true)}>
+                    {emotion ? getEmojiFromEmotion(emotion as Emotion) : 
+                    emotion ? getEmojiFromEmotion(emotion as Emotion): " 감정을 선택해주세요"}
+                  </span>
+                </div>
+                {isEmotionModalOpen && (
+                  <EmotionSelectorModal
+                    selectedEmotion={selectedEmotion}
+                    onSelect={(emotion) => {
+                      setSelectedEmotion(emotion);
+                      setEmotion(emotion);
+                    }}
+                    onClose={() => setIsEmotionModalOpen(false)}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+          
+          <div className='content-text'>
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="내용을 입력하세요"
+            ></textarea>
+          </div>
+
+          <div className="diary-buttons">
+            <button onClick={() => navigate(`/diaries/view/${date}`)}>취소</button>
+            <button onClick={handleUpdate}>수정</button>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
