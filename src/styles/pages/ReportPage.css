@@ -18,7 +18,7 @@
   padding: 20px;
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
   width: 600px;
-  border: 1px solid #dadada; /* 실선 추가 */
+  border: 1px solid #f0e4cb; /* 실선 추가 */
 }
 
 .emotion-chart-container {
@@ -32,7 +32,7 @@
 .keywords-section-Left-Header {
   font-size: 28px;
   font-weight: bold;
-  border-bottom: 1px solid #dadada;
+  border-bottom: 1px solid #dadada80;
   padding: 10px 20px;
   display: flex;
   align-items: center;
@@ -74,7 +74,7 @@
 .chart-main {
   display: flex; /* 내부 요소들을 플렉스 컨테이너로 설정 */
   flex-direction: column; /* 내부 요소를 세로 방향으로 정렬 */
-  border-right: 1px solid #dadada;
+  border-right: 1px solid #dadada80;
   width: 65%; /* 차트 부분이 전체 너비의 70% 차지 */
   padding: 20px;
 }
@@ -178,7 +178,7 @@
 }
 
 .emotion-percentage {
-  border: 1px solid #dadada;
+  border: 1px solid #dadada80;
   border-radius: 10px;
   padding: 5px 10px;
   display: flex; /* 아이템을 가로 정렬 */

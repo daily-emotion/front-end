@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useCalendarStore } from '../../stores/useCalendarStore';
 import { BASE_URL } from '../../configs/apiConfig';
 
+import EmotionStatsHeaderIconImage from '../../assets/images/ReportPage/ReportPage_EmotionStats_Header_Icon.png';
+
 const MonthlyChart = () => {
   const navigate = useNavigate();
 
@@ -133,28 +135,88 @@ const MonthlyChart = () => {
   );
 
   return (
-    <div className="chart-container">
-      <div className="userName-container">
-        <h2>{userName}님의 이번달은?</h2>
+    <>
+      <div className="chart-container">
+        <div className="userName-container">
+          <h2>{userName}님의 이번달은?</h2>
+        </div>
+        <div>
+          <div>{yearMonth}</div>
+          <h3>가장 많이 느꼈던 감정</h3>
+          {sortedEmotions.map(([key, value]) => (
+            <div key={key}>
+              {emotionTranslations[key] || key} ({value || 0}%)
+            </div>
+          ))}
+        </div>
+        <div>
+          {emotions.map((key) => (
+            <div key={key}>
+              {emotionTranslations[key]} {emotionCounts[key] || 0}일{' '}
+              {emotionPercentages[key] || 0}%
+            </div>
+          ))}
+        </div>
       </div>
-      <div>
-        <div>{yearMonth}</div>
-        <h3>가장 많이 느꼈던 감정</h3>
-        {sortedEmotions.map(([key, value]) => (
-          <div key={key}>
-            {emotionTranslations[key] || key} ({value || 0}%)
+
+      <div className="emotion-chart-container">
+        <div className="emotion-chart-header">
+          <div className="header-icon">
+            <span className="icon-background"></span>{' '}
+            {/* 배경을 나타내는 span */}
+            <img
+              className="icon-image"
+              src={EmotionStatsHeaderIconImage}
+              alt="감정 통계 페이지 헤더 아이콘 그림"
+            />
           </div>
-        ))}
-      </div>
-      <div>
-        {emotions.map((key) => (
-          <div key={key}>
-            {emotionTranslations[key]} {emotionCounts[key] || 0}일{' '}
-            {emotionPercentages[key] || 0}%
+          <span>{userName}의 이번 달은?</span>
+        </div>
+        <div className="chart-section">
+          <div className="chart-main">
+            <div className="chart-top">
+              <div className="chart-header">
+                <h3 style={{ margin: '0px' }}>감정 통계</h3>
+                <p
+                  style={{
+                    margin: '0px',
+                    color: '#1c1f3793',
+                    fontSize: '12px',
+                  }}
+                >
+                  {year}.{String(month).padStart(2, '0')}.01 ~{' '}
+                  {String(month).padStart(2, '0')}.
+                  {new Date(year, month, 0).getDate()}
+                </p>
+              </div>
+              <button className="view-report-btn">View Report</button>
+            </div>
           </div>
-        ))}
+        </div>
       </div>
-    </div>
+      <div className="chart-container">
+        <div className="userName-container">
+          <h2>{userName}님의 이번달은?</h2>
+        </div>
+        <div>
+          <div>{yearMonth}</div>
+          <h3>가장 많이 느꼈던 감정</h3>
+          {sortedEmotions.map(([key, value]) => (
+            <div key={key}>
+              {emotionTranslations[key] || key} ({value || 0}%)
+            </div>
+          ))}
+        </div>
+        <div>
+          {emotions.map((key) => (
+            <div key={key}>
+              {emotionTranslations[key]} {emotionCounts[key] || 0}일{' '}
+              {emotionPercentages[key] || 0}%
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 };
 

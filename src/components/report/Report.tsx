@@ -47,7 +47,7 @@ const emotionTranslations: Record<string, string> = {
 };
 
 const emotionColors: Record<string, string> = {
-  HAPPINESS: '#ff66b2', // 핑크 (행복한)
+  HAPPINESS: '#FD1F9B', // 핑크 (행복한)
   SADNESS: '#4c4c6d', // 회색 (슬픈)
   ANGER: '#ff1a1a', // 빨강 (분노)
   FEAR: '#6600cc', // 보라 (무서운)
