@@ -159,35 +159,24 @@ const MonthlyChart = () => {
 
     const fetchEmotionCountsData = async () => {
       try {
-        // const res = await axios.get<{
-        //   yearMonth: string;
-        //   emotionCounts: Record<string, number>;
-        // }>(
-        //   `${BASE_URL}/reports/emotions/${year}/${month}`,
-        //   // `https://dailyemotion.site/api/reports/emotions/${year}/${month}`,
-        //   {
-        //     headers: { Authorization: accessToken },
-        //   }
-        // );
+        const res = await axios.get<{
+          yearMonth: string;
+          emotionCounts: Record<string, number>;
+        }>(
+          `${BASE_URL}/reports/emotions/${year}/${month}`,
+          // `https://dailyemotion.site/api/reports/emotions/${year}/${month}`,
+          {
+            headers: { Authorization: accessToken },
+          }
+        );
 
-        // console.log('이번 달 작성된 일기 감정 빈도: ', res.data);
-        // setYearMonth(res.data.yearMonth);
-        // const emotionCounts = res.data.emotionCounts;
-        // // const emotionCounts = emotionCountsMockData.emotionCounts;
-
-        const dummyEmotionCounts = {
-          FEAR: 1,
-          HAPPINESS: 3,
-          SADNESS: 2,
-          INTEREST: 1,
-          ANGER: 1,
-          SURPRISE: 1,
-        };
-
-        setEmotionCounts(dummyEmotionCounts);
-        console.log('이번 달 작성된 일기 감정 빈도: ', emotionCounts);
-
-        const emotionPercentages = calculateEmotionPercentages(emotionCounts);
+        console.log('이번 달 작성된 일기 감정 빈도: ', res.data);
+        setYearMonth(res.data.yearMonth);
+        setEmotionCounts(res.data.emotionCounts);
+        console.log('이번 달 작성된 일기 감정 빈도: ', res.data.emotionCounts);
+        const emotionPercentages = calculateEmotionPercentages(
+          res.data.emotionCounts
+        );
         console.log('이번 달 작성된 일기 감정의 백분율: ', emotionPercentages);
         setEmotionPercentages(emotionPercentages);
       } catch (err) {
