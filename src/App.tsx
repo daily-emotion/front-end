@@ -40,7 +40,7 @@ function Layout() {
 
           <Route path="/dummymonthlychart" element={<DummyMonthlyChart />} />
         </Routes>
-      </main>
+      </div>
     </>
   );
 }

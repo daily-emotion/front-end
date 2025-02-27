@@ -258,8 +258,8 @@ const CreateDiaryPage: React.FC = () => {
         </div>
 
         <div className="diary-buttons">
-          <button onClick={() => navigate('/main')}>취소하기</button>
-          <button onClick={handleSubmit}>등록하기</button>
+          <button onClick={() => navigate('/main')}>취소</button>
+          <button onClick={handleSubmit}>등록</button>
         </div>
 
         {error && <p style={{ color: 'red' }}>{error}</p>}
