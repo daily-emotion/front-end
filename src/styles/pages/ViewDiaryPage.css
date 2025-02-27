@@ -94,7 +94,15 @@
     position: relative;
 }
 
-.view-image-container > img{
+/* 이미지가 있는 경우 */
+.view-image-container.has-image {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 25px;
+    position: relative;
+}
+
+.view-image-container.has-image > img {
     width: 600px;
     height: 250px;
     object-fit: scale-down;
@@ -102,12 +110,29 @@
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
 }
 
-.view-image-container > p {
+.view-image-container.has-image > p {
     position: absolute;
     top: -20px;
     left: 30px;
     font-size: 32px;
     background-color: rgba(0, 0, 0, 0.261);
+    padding: 10px 20px;
+    border-radius: 15px;
+}
+
+/* 이미지가 없는 경우 */
+.view-image-container.no-image {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100px; /* 적절한 높이 설정 */
+    margin-bottom: 10px;
+    left: 15px;
+}
+
+.view-image-container.no-image > p {
+    font-size: 50px;
+    background-color: rgba(0, 0, 0, 0.1);
     padding: 10px 20px;
     border-radius: 15px;
 }

@@ -96,12 +96,9 @@ const DiaryDetail: React.FC = () => {
                 </div>
               </div>
 
-              <div className='view-image-container'>
+              <div className={`view-image-container ${diary.imageUrl ? "has-image" : "no-image"}`}>
                 {diary.imageUrl ? (
-                  <img
-                    src={diary.imageUrl}
-                    alt="Diary"
-                  />
+                  <img src={diary.imageUrl} alt="Diary" />
                 ) : null}
                 <p>{getEmojiFromEmotion(diary.emotion as Emotion)}</p>
               </div>
