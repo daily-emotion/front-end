@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { BASE_URL } from '../../configs/apiConfig';
 import classNames from 'classnames';
-import stylesReportPage from '../styles/pages/ReportPage.module.css';
+import stylesReportPage from '../../styles/pages/ReportPage.module.css';
 
 import * as Recharts from 'recharts';
 const { PieChart, Pie, Cell, ResponsiveContainer } = Recharts;
