@@ -1,0 +1,350 @@
+.reportContainer {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.cardWrapper {
+  display: flex;
+  gap: 40px;
+}
+
+.emotionCard {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  width: 600px;
+  border: 1px solid #f0e4cb;
+}
+
+.emotionChartContainer {
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.emotionChartHeader,
+.keywordsSectionLeftHeader {
+  font-size: 28px;
+  font-weight: bold;
+  border-bottom: 1px solid #dadada80;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.headerIcon {
+  display: inline-block;
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+
+.iconBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #00577c;
+  border-radius: 50%;
+}
+
+.iconImage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: auto;
+}
+
+.chartSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chartMain {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #dadada80;
+  width: 65%;
+  padding: 20px;
+}
+
+.chartTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chartHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.viewReportBtn {
+  padding: 12px 16px;
+  background-color: #f6f6f6;
+  color: #135f7f;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.viewReportBtn:hover {
+  background-color: #0056b3;
+}
+
+.progressContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+.progressBar {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  border-radius: 10px;
+  height: 100%;
+}
+
+.progressCenterEmotion {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+}
+
+.progressCenterEmotion img {
+  width: 50px;
+  height: 50px;
+}
+
+.progressSegment {
+  width: 100%;
+  display: block;
+  border-radius: 10px;
+}
+
+.progressSegmentHappy {
+  background-color: #f8c6c6;
+}
+
+.progressSegmentNeutral {
+  background-color: #ffc107;
+}
+
+.progressSegmentSad {
+  background-color: #6c757d;
+}
+
+.emotionSummary {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.emotionPercentages {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 5px;
+}
+
+.emotionDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.emotionPercentage {
+  border: 1px solid #dadada80;
+  border-radius: 10px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+  gap: 3px;
+}
+
+.statsSummary {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  width: 35%;
+}
+
+.statsContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: #f6f6f6;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  border-bottom: 1px solid #0000000d;
+  padding: 15px 0;
+}
+
+/* 첫 번째 .stat 요소의 위쪽 padding 제거 */
+.stat:first-child {
+  padding-top: 0;
+}
+
+/* 마지막 .stat 요소의 아래쪽 padding 제거 */
+.stat:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.statEmotionCount {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.statEmotionRecordContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.statEmotionRecord {
+  color: #1c1f3793;
+  font-size: 12px;
+}
+
+.statEmotionCount,
+.statEmotionRecord {
+  margin: 0;
+}
+
+.keywordsSection {
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.keywordsSectionHeader {
+  border-bottom: none;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.speechBubbleContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.speechBubble {
+  z-index: 1;
+  position: relative;
+  top: -3px;
+  right: -8px;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e3e5f3;
+  padding: 8px 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  font-size: 10px;
+  color: #383838;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* 말풍선의 꼬리 */
+.speechBubble::after {
+  content: '';
+  position: absolute;
+  top: -7px;
+  right: 15px;
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  border-top: 1px solid #e3e5f3;
+  border-left: 1px solid #e3e5f3;
+  transform: rotate(45deg);
+}
+
+.speechBubble::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 15px;
+  width: 0;
+  height: 0;
+  border-bottom: 8px solid white;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+}
+
+.speechBubble strong {
+  color: #1a73e8;
+}
+
+.keywords {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 20px;
+}
+
+.keywordsLeft,
+.keywordsRight {
+  display: flex;
+  flex-direction: column;
+  width: 48%;
+}
+
+.keywordItem {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  background-color: #f6f6f6;
+  border-radius: 8px;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.keywordItemHasKeyword {
+  background-color: #eef7fe;
+  color: #00577c;
+  font-weight: bold;
+}

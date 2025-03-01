@@ -1,4 +1,4 @@
-.container {
+.report-container {
   font-family: Arial, sans-serif;
   padding: 20px;
   display: flex; /* 내부 요소들을 플렉스 컨테이너로 설정 */
@@ -347,10 +347,4 @@
   background-color: #eef7fe; /* 키워드가 있을 때 배경색 */
   color: #00577c;
   font-weight: bold;
-}
-
-.keywords h3 {
-  margin-bottom: 10px;
-  border-bottom: 1px solid #e0e0e0;
-  padding-bottom: 10px;
 }

@@ -7,7 +7,7 @@ import { BASE_URL } from '../../configs/apiConfig';
 import * as Recharts from 'recharts';
 const { PieChart, Pie, Cell, ResponsiveContainer } = Recharts;
 
-import stylesDummyMonthlyChart from '../../styles/pages/DummyMonthlyChart.module.css';
+import stylesMonthlyChart from '../../styles/pages/MonthlyChart.module.css';
 
 import EmotionStatsHeaderIconImage from '../../assets/images/ReportPage/ReportPage_EmotionStats_Header_Icon.png';
 
@@ -193,23 +193,23 @@ const MonthlyChart = () => {
 
   return (
     <>
-      <div className={stylesDummyMonthlyChart.emotionChartContainer}>
-        <div className={stylesDummyMonthlyChart.emotionChartHeader}>
-          <div className={stylesDummyMonthlyChart.headerIcon}>
-            <span className={stylesDummyMonthlyChart.iconBackground}></span>{' '}
+      <div className={stylesMonthlyChart.emotionChartContainer}>
+        <div className={stylesMonthlyChart.emotionChartHeader}>
+          <div className={stylesMonthlyChart.headerIcon}>
+            <span className={stylesMonthlyChart.iconBackground}></span>{' '}
             {/* 배경을 나타내는 span */}
             <img
-              className={stylesDummyMonthlyChart.iconImage}
+              className={stylesMonthlyChart.iconImage}
               src={EmotionStatsHeaderIconImage}
               alt="감정 통계 페이지 헤더 아이콘 그림"
             />
           </div>
-          <span>{userName}의 이번 달은?</span>
+          <span>{userName}님의 이번 달은?</span>
         </div>
-        <div className={stylesDummyMonthlyChart.chartSection}>
-          <div className={stylesDummyMonthlyChart.chartMain}>
-            <div className={stylesDummyMonthlyChart.chartLeft}>
-              <div className={stylesDummyMonthlyChart.chartHeader}>
+        <div className={stylesMonthlyChart.chartSection}>
+          <div className={stylesMonthlyChart.chartMain}>
+            <div className={stylesMonthlyChart.chartLeft}>
+              <div className={stylesMonthlyChart.chartHeader}>
                 <p
                   style={{
                     margin: '0px',
@@ -221,17 +221,17 @@ const MonthlyChart = () => {
                 </p>
                 <h3 style={{ margin: '0px' }}>가장 많이 느꼈던 감정</h3>
               </div>
-              <div className={stylesDummyMonthlyChart.emotionPercentages}>
-                <div className={stylesDummyMonthlyChart.emotionPercentagesLeft}>
+              <div className={stylesMonthlyChart.emotionPercentages}>
+                <div className={stylesMonthlyChart.emotionPercentagesLeft}>
                   {Object.keys(emotionTranslations)
                     .slice(0, 4)
                     .map((key) => (
                       <div
-                        className={stylesDummyMonthlyChart.emotionPercentage}
+                        className={stylesMonthlyChart.emotionPercentage}
                         key={key}
                       >
                         <span
-                          className={stylesDummyMonthlyChart.emotionDot}
+                          className={stylesMonthlyChart.emotionDot}
                           style={{
                             backgroundColor: emotionColors[key],
                           }}
@@ -243,18 +243,16 @@ const MonthlyChart = () => {
                       </div>
                     ))}
                 </div>
-                <div
-                  className={stylesDummyMonthlyChart.emotionPercentagesRight}
-                >
+                <div className={stylesMonthlyChart.emotionPercentagesRight}>
                   {Object.keys(emotionTranslations)
                     .slice(4, 8)
                     .map((key) => (
                       <div
-                        className={stylesDummyMonthlyChart.emotionPercentage}
+                        className={stylesMonthlyChart.emotionPercentage}
                         key={key}
                       >
                         <span
-                          className={stylesDummyMonthlyChart.emotionDot}
+                          className={stylesMonthlyChart.emotionDot}
                           style={{
                             backgroundColor: emotionColors[key],
                           }}
@@ -271,8 +269,8 @@ const MonthlyChart = () => {
           </div>
           <div
             className={[
-              stylesDummyMonthlyChart.chartRight,
-              stylesDummyMonthlyChart.progressContainer,
+              stylesMonthlyChart.chartRight,
+              stylesMonthlyChart.progressContainer,
             ].join(' ')}
           >
             {isReady ? (
@@ -354,11 +352,11 @@ const MonthlyChart = () => {
             )}
           </div>
         </div>
-        <div className={stylesDummyMonthlyChart.barCharts}>
+        <div className={stylesMonthlyChart.barCharts}>
           {Object.keys(emotionTranslations).map((key) => (
-            <div className={stylesDummyMonthlyChart.barChart} key={key}>
+            <div className={stylesMonthlyChart.barChart} key={key}>
               <img
-                className={stylesDummyMonthlyChart.barChartImg}
+                className={stylesMonthlyChart.barChartImg}
                 src={emotionIcons[key]}
                 alt="막대 차트 항목 별 이미지"
               />
@@ -368,7 +366,7 @@ const MonthlyChart = () => {
                 <strong>{emotionCounts[key] || 0}일</strong>
               </div>
               <div
-                className={stylesDummyMonthlyChart.barChartPercentage}
+                className={stylesMonthlyChart.barChartPercentage}
                 style={{
                   display: 'flex',
                   justifyContent: 'center',

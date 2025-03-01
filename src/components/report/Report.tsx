@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { BASE_URL } from '../../configs/apiConfig';
+import classNames from 'classnames';
+import stylesReportPage from '../styles/pages/ReportPage.module.css';
 
 import * as Recharts from 'recharts';
 const { PieChart, Pie, Cell, ResponsiveContainer } = Recharts;
@@ -238,14 +240,15 @@ const Report = ({ year, month, title }: ReportProps) => {
   console.log(`maxValue: ${maxValue}`);
 
   return (
-    <div className="emotion-card">
-      <div className="emotion-chart-container">
-        <div className="emotion-chart-header">
-          <div className="header-icon">
-            <span className="icon-background"></span>{' '}
+    <div className={stylesReportPage.emotionCard}>
+      <div className={stylesReportPage.emotionChartContainer}>
+        {/* 감정 통계 헤더 */}
+        <div className={stylesReportPage.emotionChartHeader}>
+          <div className={stylesReportPage.headerIcon}>
+            <span className={stylesReportPage.iconBackground}></span>{' '}
             {/* 배경을 나타내는 span */}
             <img
-              className="icon-image"
+              className={stylesReportPage.iconImage}
               src={EmotionStatsHeaderIconImage}
               alt="감정 통계 페이지 헤더 아이콘 그림"
             />
@@ -254,10 +257,12 @@ const Report = ({ year, month, title }: ReportProps) => {
             {userName}의 {title} 감정기록
           </span>
         </div>
-        <div className="chart-section">
-          <div className="chart-main">
-            <div className="chart-top">
-              <div className="chart-header">
+
+        {/* 감정 통계 섹션 */}
+        <div className={stylesReportPage.chartSection}>
+          <div className={stylesReportPage.chartMain}>
+            <div className={stylesReportPage.chartTop}>
+              <div className={stylesReportPage.chartHeader}>
                 <h3 style={{ margin: '0px' }}>감정 통계</h3>
                 <p
                   style={{
@@ -271,9 +276,13 @@ const Report = ({ year, month, title }: ReportProps) => {
                   {new Date(year, month, 0).getDate()}
                 </p>
               </div>
-              <button className="view-report-btn">View Report</button>
+              <button className={stylesReportPage.viewReportBtn}>
+                View Report
+              </button>
             </div>
-            <div className="progress-container">
+
+            {/* 감정 통계 차트 */}
+            <div className={stylesReportPage.progressContainer}>
               {isReady ? (
                 <>
                   <ResponsiveContainer width={160} height={160}>
@@ -300,7 +309,7 @@ const Report = ({ year, month, title }: ReportProps) => {
                         )}
                       </Pie>
 
-                      {/* 바깥쪽 원 */}
+                      {/* 바깥쪽 강조하는 원 */}
                       <Pie
                         data={pieData} // 차트에 들어갈 데이터
                         cx="50%" // 차트를 컨테이너 중앙에 배치 (X축)
@@ -323,7 +332,7 @@ const Report = ({ year, month, title }: ReportProps) => {
                         ))}
                       </Pie>
 
-                      {/* 안쪽 원 */}
+                      {/* 안쪽 강조하는 원 */}
                       <Pie
                         data={pieData} // 차트에 들어갈 데이터
                         cx="50%" // 차트를 컨테이너 중앙에 배치 (X축)
@@ -348,7 +357,8 @@ const Report = ({ year, month, title }: ReportProps) => {
                     </PieChart>
                   </ResponsiveContainer>
 
-                  <div className="progress-center-emotion">
+                  {/* 중앙 감정 아이콘 */}
+                  <div className={stylesReportPage.progressCenterEmotion}>
                     <img
                       src={
                         sortedStatDetails?.sortedTopEmotions?.[0]
@@ -369,7 +379,7 @@ const Report = ({ year, month, title }: ReportProps) => {
             </div>
             <div>
               {/* 감정 요약 문구 */}
-              <div className="emotion-summary">
+              <div className={stylesReportPage.emotionSummary}>
                 {sortedStatDetails ? (
                   <p>
                     <span style={{ color: '#ff3fa4' }}>
@@ -390,13 +400,16 @@ const Report = ({ year, month, title }: ReportProps) => {
                 )}
               </div>
               {/* 감정 비율 (수평 정렬) */}
-              <div className="emotion-percentages">
+              <div className={stylesReportPage.emotionPercentages}>
                 {sortedStatDetails?.sortedTopEmotions
                   .slice(0, 3)
                   .map((emotion, index) => (
-                    <div className="emotion-percentage" key={index}>
+                    <div
+                      className={stylesReportPage.emotionPercentage}
+                      key={index}
+                    >
                       <span
-                        className="emotion-dot"
+                        className={stylesReportPage.emotionDot}
                         style={{
                           backgroundColor:
                             emotionColors[Object.keys(emotion)[0]],
@@ -411,16 +424,24 @@ const Report = ({ year, month, title }: ReportProps) => {
               </div>
             </div>
           </div>
-          <div className="stats-summary">
-            <div className="stats-container">
+
+          {/* 감정 기록 통계 */}
+          <div className={stylesReportPage.statsSummary}>
+            <div className={stylesReportPage.statsContainer}>
               {sortedStatDetails?.sortedTopEmotions
                 .slice(0, 3)
                 .map((emotion, index) => (
-                  <div className="stat">
-                    <p className="stat-emotion-count" key={index}>
+                  <div className={stylesReportPage.stat}>
+                    <p
+                      className={stylesReportPage.statEmotionCount}
+                      key={index}
+                    >
                       {Object.values(emotion)[0]}일
                     </p>
-                    <div className="stat-emotion-record-container" key={index}>
+                    <div
+                      className={stylesReportPage.statEmotionRecordContainer}
+                      key={index}
+                    >
                       <img
                         src={
                           sortedStatDetails?.sortedTopEmotions?.[index]
@@ -434,7 +455,7 @@ const Report = ({ year, month, title }: ReportProps) => {
                         alt={`기록 ${index + 1}위 감정`}
                         style={{ width: '18px', height: 'auto' }}
                       />
-                      <p className="stat-emotion-record">
+                      <p className={stylesReportPage.statEmotionRecord}>
                         {emotionTranslations[Object.keys(emotion)[0] || 0]} 감정
                         기록됨
                       </p>
@@ -445,10 +466,12 @@ const Report = ({ year, month, title }: ReportProps) => {
           </div>
         </div>
       </div>
-      <div className="keywords-section">
-        <div className="keywords-section-header">
+
+      {/* 키워드 섹션 */}
+      <div className={stylesReportPage.keywordsSection}>
+        <div className={stylesReportPage.keywordsSectionHeader}>
           <div
-            className="keywords-section-Left-Header"
+            className={stylesReportPage.keywordsSectionLeftHeader}
             style={{
               borderBottom: 'none',
               flex: 6, // ✅ 60% 차지
@@ -472,7 +495,7 @@ const Report = ({ year, month, title }: ReportProps) => {
             </span>
           </div>
           <div
-            className="keywords-section-Right-Header"
+            className={stylesReportPage.keywordsSectionRightHeader}
             style={{
               display: 'flex',
               justifyContent: 'flex-end', // ✅ 오른쪽 정렬
@@ -481,10 +504,10 @@ const Report = ({ year, month, title }: ReportProps) => {
               padding: '10px 20px',
             }}
           >
-            <div className="speech-bubble-container">
-              {/* 아이콘 */}
+            <div className={stylesReportPage.speechBubbleContainer}>
+              {/* 키워드 아이콘 */}
               <div
-                className="header-icon"
+                className={stylesReportPage.headerIcon}
                 style={{
                   position: 'relative',
                   width: '28px',
@@ -492,7 +515,7 @@ const Report = ({ year, month, title }: ReportProps) => {
                 }}
               >
                 <span
-                  className="icon-background"
+                  className={stylesReportPage.iconBackground}
                   style={{
                     backgroundColor: '#DDF4FC',
                     width: '28px',
@@ -505,7 +528,7 @@ const Report = ({ year, month, title }: ReportProps) => {
                   }}
                 ></span>
                 <img
-                  className="icon-image"
+                  className={stylesReportPage.iconImage}
                   src={TagStatsRightHeaderIconImage}
                   style={{
                     width: '20px',
@@ -520,7 +543,7 @@ const Report = ({ year, month, title }: ReportProps) => {
               </div>
 
               {/* 말풍선 */}
-              <div className="speech-bubble">
+              <div className={stylesReportPage.speechBubble}>
                 {sortedStatDetails?.sortedTopTags?.[0] ? (
                   <>
                     <strong>
@@ -537,14 +560,19 @@ const Report = ({ year, month, title }: ReportProps) => {
             </div>
           </div>
         </div>
-        <div className="keywords">
-          <div className="keywords-left">
+
+        {/* 키워드 리스트 */}
+        <div className={stylesReportPage.keywords}>
+          <div className={stylesReportPage.keywordsLeft}>
             {Array.from({ length: 3 }, (_, i) => {
               const tag = tags[i]; // 1~3등 키워드 가져오기
               return (
                 <div
                   key={i}
-                  className={`keyword-item ${tag ? 'has-keyword' : ''}`}
+                  className={classNames(stylesReportPage.keywordItem, {
+                    [stylesReportPage.hasKeyword]: tag,
+                  })}
+                  // className={`${stylesReportPage.keywordItem} ${tag ? stylesReportPage.hasKeyword : ''}`}
                 >
                   {tag ? (
                     <span># {tag}</span>
@@ -556,13 +584,16 @@ const Report = ({ year, month, title }: ReportProps) => {
             })}
           </div>
 
-          <div className="keywords-right">
+          <div className={stylesReportPage.keywordsRight}>
             {Array.from({ length: 3 }, (_, i) => {
               const tag = tags[3 + i]; // 4~6등 키워드 가져오기
               return (
                 <div
                   key={i}
-                  className={`keyword-item ${tag ? 'has-keyword' : ''}`}
+                  // classNames 라이브러리 이용
+                  className={classNames(stylesReportPage.keywordItem, {
+                    [stylesReportPage.hasKeyword]: tag,
+                  })}
                 >
                   {tag ? (
                     <span># {tag}</span>
