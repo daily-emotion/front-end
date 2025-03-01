@@ -27,6 +27,7 @@
     "@mui/material": "^6.2.1",
     "@tanstack/react-query": "^5.62.8",
     "axios": "^1.7.9",
+    "classnames": "^2.5.1",
     "date-fns": "^4.1.0",
     "eslint-config-prettier": "^9.1.0",
     "fullcalendar": "^6.1.15",
