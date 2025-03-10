@@ -1,5 +1,4 @@
 import Logo from '../../src/assets/images/logo/mainLogo.png';
-import BackGround from '../../src/assets/images/LoginPage/LoginPage_BackGround.png';
 import { BASE_URL } from '../configs/apiConfig';
 import '../styles/pages/LoginPage.css';
 import NaverLoginLogo from '../../src/assets/images/LoginPage/LoginButton_NaverLogo.png';
@@ -24,16 +23,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div
-      className="container"
-      style={{
-        backgroundImage: `url(${BackGround})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        width: '100vw',
-        height: '100vh',
-      }}
-    >
+    <div className="container">
       <div
         className="sub_container"
         style={{
