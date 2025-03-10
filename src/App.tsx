@@ -8,14 +8,13 @@ import './App.css';
 import LoginPage from './pages/LoginPage';
 import RedirectHandler from './pages/redirectHandler';
 import MainPage from './pages/MainPage';
-import MainPage2 from './pages/MainPage2';
 import DiaryDetail from './pages/viewDiaryPage';
 import CreateDiary from './pages/createDiary';
 import UpdateDiaryPage from './pages/updateDiary';
 import ReportPage from './pages/ReportPage';
 import Header from './components/common/Header';
-import ChartTestPage from './pages/ChartTestPage';
-import DummyMonthlyChart from './components/report/DummyMonthlyChart';
+
+import BackGround from './assets/images/common/background-Image.png';
 
 function Layout() {
   // 모든 경로 정보를 안정적으로 확인하기 위함
@@ -27,18 +26,25 @@ function Layout() {
         location.pathname !== '/oauth/callback' &&
         location.pathname !== '/dummyreport' &&
         location.pathname !== '/dummymonthlychart' && <Header />}
-      <main className="content">
+      <main
+        className="content"
+        style={{
+          paddingTop: location.pathname == '/' ? '0' : '80px',
+          backgroundImage: `url(${BackGround})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          width: '100vw',
+          height: '100vh',
+        }}
+      >
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/oauth/callback" element={<RedirectHandler />} />
           <Route path="/main" element={<MainPage />} />
-          <Route path="/main2" element={<MainPage2 />} />
           <Route path="/diaries/view/:date" element={<DiaryDetail />} />
           <Route path="/diaries/new/:date" element={<CreateDiary />} />
           <Route path="/diaries/edit/:date" element={<UpdateDiaryPage />} />
           <Route path="/report" element={<ReportPage />} />
-
-          <Route path="/dummymonthlychart" element={<DummyMonthlyChart />} />
         </Routes>
       </main>
     </>
