@@ -207,63 +207,61 @@ const MonthlyChart = () => {
           <span>{userName}님의 이번 달은?</span>
         </div>
         <div className={stylesMonthlyChart.chartSection}>
-          <div className={stylesMonthlyChart.chartMain}>
-            <div className={stylesMonthlyChart.chartLeft}>
-              <div className={stylesMonthlyChart.chartHeader}>
-                <p
-                  style={{
-                    margin: '0px',
-                    color: '#1c1f3793',
-                    fontSize: '12px',
-                  }}
-                >
-                  {year}.{String(month).padStart(2, '0')}
-                </p>
-                <h3 style={{ margin: '0px' }}>가장 많이 느꼈던 감정</h3>
+          <div className={stylesMonthlyChart.chartLeft}>
+            <div className={stylesMonthlyChart.chartHeader}>
+              <p
+                style={{
+                  margin: '0px',
+                  color: '#1c1f3793',
+                  fontSize: '12px',
+                }}
+              >
+                {year}.{String(month).padStart(2, '0')}
+              </p>
+              <h3 style={{ margin: '0px' }}>가장 많이 느꼈던 감정</h3>
+            </div>
+            <div className={stylesMonthlyChart.emotionPercentages}>
+              <div className={stylesMonthlyChart.emotionPercentagesLeft}>
+                {Object.keys(emotionTranslations)
+                  .slice(0, 4)
+                  .map((key) => (
+                    <div
+                      className={stylesMonthlyChart.emotionPercentage}
+                      key={key}
+                    >
+                      <span
+                        className={stylesMonthlyChart.emotionDot}
+                        style={{
+                          backgroundColor: emotionColors[key],
+                        }}
+                      ></span>
+                      <span>
+                        {emotionTranslations[key]}(
+                        {emotionPercentages[key] || 0}%)
+                      </span>
+                    </div>
+                  ))}
               </div>
-              <div className={stylesMonthlyChart.emotionPercentages}>
-                <div className={stylesMonthlyChart.emotionPercentagesLeft}>
-                  {Object.keys(emotionTranslations)
-                    .slice(0, 4)
-                    .map((key) => (
-                      <div
-                        className={stylesMonthlyChart.emotionPercentage}
-                        key={key}
-                      >
-                        <span
-                          className={stylesMonthlyChart.emotionDot}
-                          style={{
-                            backgroundColor: emotionColors[key],
-                          }}
-                        ></span>
-                        <span>
-                          {emotionTranslations[key]}(
-                          {emotionPercentages[key] || 0}%)
-                        </span>
-                      </div>
-                    ))}
-                </div>
-                <div className={stylesMonthlyChart.emotionPercentagesRight}>
-                  {Object.keys(emotionTranslations)
-                    .slice(4, 8)
-                    .map((key) => (
-                      <div
-                        className={stylesMonthlyChart.emotionPercentage}
-                        key={key}
-                      >
-                        <span
-                          className={stylesMonthlyChart.emotionDot}
-                          style={{
-                            backgroundColor: emotionColors[key],
-                          }}
-                        ></span>
-                        <span>
-                          {`${emotionTranslations[key]} `} (
-                          {emotionPercentages[key] || 0}%)
-                        </span>
-                      </div>
-                    ))}
-                </div>
+              <div className={stylesMonthlyChart.emotionPercentagesRight}>
+                {Object.keys(emotionTranslations)
+                  .slice(4, 8)
+                  .map((key) => (
+                    <div
+                      className={stylesMonthlyChart.emotionPercentage}
+                      key={key}
+                    >
+                      <span
+                        className={stylesMonthlyChart.emotionDot}
+                        style={{
+                          backgroundColor: emotionColors[key],
+                        }}
+                      ></span>
+                      <span>
+                        {`${emotionTranslations[key]} `} (
+                        {emotionPercentages[key] || 0}%)
+                      </span>
+                    </div>
+                  ))}
               </div>
             </div>
           </div>

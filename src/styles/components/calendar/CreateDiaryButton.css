@@ -1,0 +1,9 @@
+.createDiaryButton {
+  color: blue;
+  opacity: 0;
+  transition-duration: 0.5s;
+}
+
+.createDiaryButton:hover {
+  opacity: 1;
+}

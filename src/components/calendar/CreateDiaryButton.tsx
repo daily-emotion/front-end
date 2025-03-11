@@ -1,3 +1,5 @@
+import '../../styles/components/calendar/CreateDiaryButton.css';
+
 const CreateDiaryButton = ({
   date,
   onGoToCreateDiary,
@@ -6,7 +8,7 @@ const CreateDiaryButton = ({
   onGoToCreateDiary: (date: string) => void;
 }) => {
   return (
-    <span onClick={() => onGoToCreateDiary(date)} style={{ color: 'blue' }}>
+    <span onClick={() => onGoToCreateDiary(date)} className="createDiaryButton">
       +
     </span>
   ); // 추후 원 안에 + 들어간 icon으로 변경;

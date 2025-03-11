@@ -12,10 +12,6 @@ const MainPage = () => {
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState('');
 
-  const handleSelectDate = () => {
-    // setSelectedDate()
-  };
-
   const handleGoToCreateDiary = () => {
     navigate(`/diaries/new/${selectedDate}`, { state: { selectedDate } });
   };
@@ -32,7 +28,7 @@ const MainPage = () => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          gap: '16px',
+          gap: '56px',
           color: 'black',
           margin: '20px',
         }}
