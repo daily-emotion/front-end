@@ -8,9 +8,9 @@ const CreateDiaryButton = ({
   onGoToCreateDiary: (date: string) => void;
 }) => {
   return (
-    <span onClick={() => onGoToCreateDiary(date)} className="createDiaryButton">
-      +
-    </span>
+    <div className="createDiaryButton">
+      <span onClick={() => onGoToCreateDiary(date)}>+</span>
+    </div>
   ); // 추후 원 안에 + 들어간 icon으로 변경;
 };
 
