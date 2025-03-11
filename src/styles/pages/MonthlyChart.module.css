@@ -1,31 +1,7 @@
-.monthlyChartContainer {
-  font-family: Arial, sans-serif;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 40px;
-}
-
-.cardWrapper {
-  display: flex;
-  gap: 40px;
-}
-
-.emotionCard {
-  background-color: white;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
-  width: 400px;
-  border: 1px solid #f0e4cb;
-}
-
 .emotionChartContainer {
-  margin-bottom: 20px;
+  margin: auto 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
-  padding: 10px;
 }
 
 .emotionChartHeader {
@@ -175,6 +151,7 @@
   border: 1px solid #dadada80;
   border-radius: 10px;
   padding: 5px 10px;
+  min-width: max-content;
   display: flex;
   align-items: center;
   font-size: 16px;
@@ -186,6 +163,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  font-size: 12px;
 }
 
 .barChart {
@@ -195,6 +173,15 @@
 }
 
 .barChartImg {
-  width: 48px;
+  width: 36px;
   height: auto;
+}
+
+.barChartPercentage {
+  display: flex;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  border-radius: 50%;
 }

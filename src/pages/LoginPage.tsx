@@ -36,6 +36,7 @@ const LoginPage = () => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center', // 가로 방향으로 자식 요소들을 중앙에 배치
+          textAlign: 'center',
         }}
       >
         <div

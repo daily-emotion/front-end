@@ -258,7 +258,7 @@ const MonthlyChart = () => {
                           }}
                         ></span>
                         <span>
-                          {emotionTranslations[key]}(
+                          {`${emotionTranslations[key]} `} (
                           {emotionPercentages[key] || 0}%)
                         </span>
                       </div>
@@ -368,13 +368,7 @@ const MonthlyChart = () => {
               <div
                 className={stylesMonthlyChart.barChartPercentage}
                 style={{
-                  display: 'flex',
-                  justifyContent: 'center',
                   backgroundColor: emotionColors[key],
-                  width: '48px',
-                  height: '48px',
-                  alignItems: 'center',
-                  borderRadius: '50%  ',
                 }}
               >
                 <strong>{emotionPercentages[key] || 0}%</strong>

@@ -26,7 +26,17 @@ const MainPage = () => {
 
   return (
     <>
-      <div style={{ display: 'flex', gap: '16px', color:'black' }}>
+      <div
+        className="mainPageContainer"
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '16px',
+          color: 'black',
+          margin: '20px',
+        }}
+      >
         <Calendar
           onViewDiary={handleViewDiary}
           onGoToCreateDiary={handleGoToCreateDiary}
