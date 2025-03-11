@@ -109,12 +109,6 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     };
 
     fetchDiaryData();
-
-    // setDiaryData([
-    //   { emotion: 'ANGER', date: '2025-01-02' },
-    //   { emotion: 'HAPPINESS', date: '2025-01-03' },
-    //   { emotion: 'SAD', date: '2025-01-04' },
-    // ]);
   }, [currentYear, currentMonth]);
 
   const handleGoToCreateDiary = (date: string) => {

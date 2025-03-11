@@ -5,6 +5,9 @@
   background-color: transparent;
   opacity: 0;
   transition-duration: 0.5s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .createDiaryButton:hover {
