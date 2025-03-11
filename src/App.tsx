@@ -30,6 +30,7 @@ function Layout() {
         className="content"
         style={{
           paddingTop: location.pathname == '/' ? '0' : '80px',
+          backgroundImage: `url(${BackGround})`,
         }}
       >
         <Routes>

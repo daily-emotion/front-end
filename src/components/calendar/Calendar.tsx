@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CalendarApi } from '@fullcalendar/core/index.js';
 import { useCalendarStore } from '../../stores/useCalendarStore';
-import API, { BASE_URL } from '../../configs/apiConfig';
+import { BASE_URL } from '../../configs/apiConfig';
 
 interface CalendarProps {
   onViewDiary: () => void;

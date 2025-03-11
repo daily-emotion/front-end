@@ -1,12 +1,7 @@
-#root {
-  width: 1710px;
-  text-align: center;
-  color: black;
-}
-
 /* 본문 */
-.content{
-  width: 100%;
-  margin: 0 auto;
-  padding-top: 80px;
+.content {
+  background-size: cover;
+  background-position: center center;
+  width: 100vw;
+  height: 100vh;
 }
