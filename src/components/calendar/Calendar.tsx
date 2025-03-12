@@ -64,7 +64,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
       setCalendarRef(ref); // 전역 상태 저장
       setCalendarApi(api); // 전역 상태 저장
       setCalendarApiLocal(api); // 로컬 상태 저장 (필요할 경우)
-      setDisplayDate(api.getDate);
+      setDisplayDate(api.getDate());
     }
   }, [calendarRef.current]);
 
