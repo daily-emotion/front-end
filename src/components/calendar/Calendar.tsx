@@ -140,8 +140,6 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
         datesSet={() => {
           if (calendarRef.current) {
             setCalendarApi(calendarRef.current.getApi() as CalendarApi);
-            setDisplayDate(calendarApi?.getDate || currentDate);
-            console.log(`displayDate: ${displayDate}`);
           }
         }} // 캘린더가 로드될 때 실행
         dayHeaderContent={(info) => {
