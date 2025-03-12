@@ -22,13 +22,19 @@ interface CalendarProps {
 
 type DiaryData = { [key: string]: string }[]; // 배열 안에 여러 객체를 담을 수 있는 형태
 
+// 현재 시간 (한국 기준 - 전역 상태관리 적용 안될 경우)
+const now = new Date();
+const koreanDate = new Date(now.getTime() + 9 * 60 * 60 * 1000); // UTC+9 적용
+
 // React.FC<CalendarProps>는 이 컴포넌트는 함수형, CalendarProps라는 형태의 props를 사용한다는 뜻
 const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
   const { setCalendarRef, setCalendarApi } = useCalendarStore();
   const calendarRef = useRef<FullCalendar>(null);
   const [calendarApi, setCalendarApiLocal] = useState<CalendarApi | null>(null);
   const navigate = useNavigate();
-  const [currentDate, setCurrentDate] = useState<Date | null>(null);
+
+  // 현재 실시간 Date
+  const [currentDate, setCurrentDate] = useState<Date>(koreanDate); // 얘
   console.log(`currentDate: ${currentDate}`);
   const [currentYear, setCurrentYear] = useState<number>(
     currentDate ? currentDate.getFullYear() : 0
@@ -36,6 +42,17 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
   const [currentMonth, setCurrentMonth] = useState<number>(
     currentDate ? currentDate.getMonth() + 1 : 0
   );
+
+  // 현재 달력에서 보여주고 있는 Date
+  const [displayDate, setDisplayDate] = useState<Date>(koreanDate); // 얘
+  console.log(`displayDate: ${displayDate}`);
+  const [displayYear, setDisplayYear] = useState<number>(
+    displayDate ? displayDate.getFullYear() : currentDate.getFullYear()
+  );
+  const [displayMonth, setDisplayMonth] = useState<number>(
+    displayDate ? displayDate.getMonth() + 1 : 0
+  );
+
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [diaryData, setDiaryData] = useState<DiaryData>([{}]);
 
@@ -47,6 +64,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
       setCalendarRef(ref); // 전역 상태 저장
       setCalendarApi(api); // 전역 상태 저장
       setCalendarApiLocal(api); // 로컬 상태 저장 (필요할 경우)
+      setDisplayDate(api.getDate);
     }
   }, [calendarRef.current]);
 
@@ -78,38 +96,22 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     fetchDiaryData();
   }, [calendarApi]); // calendarApi가 변경될 때마다 실행
 
-  // 일기 더미 데이터 (라이프사이클 콜백 함수 이용하지 않으면 렌더링 무한루프 발생)
   useEffect(() => {
-    if (!currentYear || !currentMonth) return;
+    const nextMonthButton =
+      document.querySelector<HTMLButtonElement>('.fc-next-button');
 
-    // 해당 월 일기 데이터 받아오기 (useEffect()로 변경 필요)
+    if (!nextMonthButton) return;
 
-    const requestYearMonth = `${currentYear}${String(currentMonth).padStart(2, '0')}`;
-    console.log('월 일기 데이터 요청 연도, 월: ', requestYearMonth);
-    const fetchDiaryData = async () => {
-      try {
-        const res = await axios.get<DiaryData>(
-          `https://dailyemotion.site/api/diaries/monthly/${requestYearMonth}`,
-          // `https://dailyemotion.site/api/diaries/monthly/${currentYear}${String(currentMonth).padStart(2, '0')}`,
-          {
-            headers: { Authorization: accessToken },
-          }
-        );
-        const newDiaryData: DiaryData = res.data;
-        console.log(
-          `${currentYear}년 ${currentMonth}월의 일기 데이터: ${newDiaryData}`
-        );
-        setDiaryData(newDiaryData);
-      } catch (error) {
-        console.error(
-          '해당 월의 일기 데이터를 불러오는데 실패하였습니다:',
-          error
-        );
-      }
-    };
-
-    fetchDiaryData();
-  }, [currentYear, currentMonth]);
+    if (currentYear === displayYear && currentMonth === displayMonth) {
+      // nextMonthButton.setAttribute('disabled', 'true'); => nextMonthButton의 타입이 Element일 때
+      nextMonthButton.disabled = false;
+      nextMonthButton.classList.add('nextMonthButtonDisabled');
+    } else {
+      // nextMonthButton.setAttribute('disabled', 'false'); => nextMonthButton의 타입이 Element일 때
+      nextMonthButton.disabled = false;
+      nextMonthButton.classList.remove('nextMonthButtonDisabled');
+    }
+  }, [calendarRef.current]);
 
   const handleGoToCreateDiary = (date: string) => {
     console.log(`받아온 날짜: ${date}`);
@@ -137,6 +139,8 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
         datesSet={() => {
           if (calendarRef.current) {
             setCalendarApi(calendarRef.current.getApi() as CalendarApi);
+            setDisplayDate(calendarApi?.getDate || currentDate);
+            console.log(`displayDate: ${displayDate}`);
           }
         }} // 캘린더가 로드될 때 실행
         dayHeaderContent={(info) => {
@@ -150,7 +154,6 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
           // 날짜 글씨 색깔 변경
           const day = info.date.getDay();
           const color = day === 0 ? 'red' : day === 6 ? 'blue' : 'black';
-
           return (
             <div>
               <span style={{ color }}>{info.date.getDate()}</span>
