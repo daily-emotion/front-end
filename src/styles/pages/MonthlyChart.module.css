@@ -54,7 +54,7 @@
   justify-content: flex-start;
   align-items: flex-start;
   min-width: max-content;
-  gap: 20px;
+  gap: 10px;
 }
 
 .chartHeader {
@@ -121,7 +121,6 @@
 .emotionPercentages {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
   gap: 5px;
 }
 
@@ -129,7 +128,6 @@
 .emotionPercentagesRight {
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px;
   gap: 10px;
 }
 

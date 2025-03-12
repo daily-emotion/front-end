@@ -98,17 +98,18 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
 
   useEffect(() => {
     const nextMonthButton =
+      // document.querySelector<Element>('.fc-next-button');
       document.querySelector<HTMLButtonElement>('.fc-next-button');
 
     if (!nextMonthButton) return;
 
     if (currentYear === displayYear && currentMonth === displayMonth) {
-      // nextMonthButton.setAttribute('disabled', 'true'); => nextMonthButton의 타입이 Element일 때
-      nextMonthButton.disabled = false;
+      // nextMonthButton.setAttribute('disabled', 'true'); // => nextMonthButton의 타입이 Element일 때
+      nextMonthButton.disabled = true; // => nextMonthButton의 타입이 HTMLButtonElement일 때
       nextMonthButton.classList.add('nextMonthButtonDisabled');
     } else {
-      // nextMonthButton.setAttribute('disabled', 'false'); => nextMonthButton의 타입이 Element일 때
-      nextMonthButton.disabled = false;
+      // nextMonthButton.setAttribute('disabled', 'false'); // => nextMonthButton의 타입이 Element일 때
+      nextMonthButton.disabled = false; // => nextMonthButton의 타입이 HTMLButtonElement일 때
       nextMonthButton.classList.remove('nextMonthButtonDisabled');
     }
   }, [calendarRef.current]);
