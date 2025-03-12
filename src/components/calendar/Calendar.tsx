@@ -34,7 +34,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
   const navigate = useNavigate();
 
   // 현재 실시간 Date
-  const [currentDate, setCurrentDate] = useState<Date>(koreanDate); // 얘
+  const [currentDate, setCurrentDate] = useState<Date>(koreanDate);
   console.log(`currentDate: ${currentDate}`);
   const [currentYear, setCurrentYear] = useState<number>(
     currentDate ? currentDate.getFullYear() : 0
@@ -44,8 +44,9 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
   );
 
   // 현재 달력에서 보여주고 있는 Date
-  const [displayDate, setDisplayDate] = useState<Date>(koreanDate); // 얘
+  const [displayDate, setDisplayDate] = useState<Date>(koreanDate);
   console.log(`displayDate: ${displayDate}`);
+
   const [displayYear, setDisplayYear] = useState<number>(
     displayDate ? displayDate.getFullYear() : currentDate.getFullYear()
   );
@@ -64,16 +65,14 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
       setCalendarRef(ref); // 전역 상태 저장
       setCalendarApi(api); // 전역 상태 저장
       setCalendarApiLocal(api); // 로컬 상태 저장 (필요할 경우)
-      setDisplayDate(api.getDate());
     }
-  }, [calendarRef.current]);
+  }, []);
 
   useEffect(() => {
     if (!calendarApi) return;
 
-    const date = calendarApi.getDate();
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
+    const year = displayYear;
+    const month = displayMonth;
 
     const fetchDiaryData = async () => {
       try {
@@ -94,9 +93,11 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     };
 
     fetchDiaryData();
-  }, [calendarApi]); // calendarApi가 변경될 때마다 실행
+  }, [calendarApi, displayYear, displayMonth]); // calendarApi가 변경될 때마다 실행
 
   useEffect(() => {
+    if (!calendarApi) return;
+
     const nextMonthButton =
       // document.querySelector<Element>('.fc-next-button');
       document.querySelector<HTMLButtonElement>('.fc-next-button');
@@ -112,7 +113,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
       nextMonthButton.disabled = false; // => nextMonthButton의 타입이 HTMLButtonElement일 때
       nextMonthButton.classList.remove('nextMonthButtonDisabled');
     }
-  }, [calendarRef.current]);
+  }, [calendarApi, currentYear, currentMonth, displayYear, displayMonth]);
 
   const handleGoToCreateDiary = (date: string) => {
     console.log(`받아온 날짜: ${date}`);
@@ -139,7 +140,11 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
         locale="ko" // 한글 번역 적용
         datesSet={() => {
           if (calendarRef.current) {
-            setCalendarApi(calendarRef.current.getApi() as CalendarApi);
+            const api = calendarRef.current.getApi();
+            setCalendarApi(api);
+            setDisplayDate(api.getDate());
+            setDisplayYear(api.getDate().getFullYear());
+            setDisplayMonth(api.getDate().getMonth() + 1);
           }
         }} // 캘린더가 로드될 때 실행
         dayHeaderContent={(info) => {
