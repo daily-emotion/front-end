@@ -202,7 +202,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
             setTimeout(() => {
               handleDeleteLastRow();
               handleDeleteEvents();
-            }, 50); // 50ms 딜레이
+            }, 500); // 500ms 딜레이
           }
         }} // 캘린더가 로드될 때 실행
         dayHeaderContent={(info) => {
