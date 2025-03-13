@@ -134,13 +134,19 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
       const calendarRows = document.querySelectorAll('tBody > tr');
       const lastCalendarRow = calendarRows[calendarRows.length - 1];
 
-      if (!lastCalendarRow) return;
+      if (!lastCalendarRow) {
+        console.error('캘린더의 마지막 행을 인식할 수 없음');
+        return;
+      }
 
       for (let i = 0; i < lastCalendarRow.children.length; i++) {
         const eventCell = lastCalendarRow.children[i].children[0].children[1];
-        if (!eventCell.classList.contains('fc-day-other')) return;
-        else {
+        if (!eventCell.classList.contains('fc-day-other')) {
+        } else {
           lastCalendarRow.remove();
+          console.error(
+            '해당 월에 포함되지 않은 날짜로 이루어진 마지막 행 제거 실패'
+          );
         }
       }
     };
@@ -152,9 +158,19 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     const handleDeleteEvents = () => {
       const otherDates = document.querySelectorAll('.fc-day-other');
 
+      if (!otherDates) {
+        console.error('해당 월에 포함되지 않은 날짜들을 인식할 수 없음');
+        return;
+      }
+
       for (let i = 0; i < otherDates.length; i++) {
-        const parent = otherDates[i];
-        parent?.children[1].remove();
+        const eventParent = otherDates[i].children[0];
+
+        if (eventParent.children.length > 0) {
+          eventParent.children[1].remove();
+        } else {
+          console.error('해당 월에 포함되지 않은 날짜 제거 실패');
+        }
       }
     };
 
