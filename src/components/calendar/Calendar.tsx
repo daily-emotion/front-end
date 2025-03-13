@@ -182,6 +182,15 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     }
   };
 
+  // 별도의 useEffect에서 DOM 조작 수행
+  useEffect(() => {
+    if (!calendarApi) return;
+
+    // 리렌더링이 완료된 후 실행
+    handleDeleteLastRow();
+    handleDeleteEvents();
+  }, [displayYear, displayMonth, calendarApi]); // 의존성 배열에 상태 변수 포함
+
   return (
     <div className="calendar-container">
       <FullCalendar
@@ -198,11 +207,6 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
             setDisplayDate(api.getDate());
             setDisplayYear(api.getDate().getFullYear());
             setDisplayMonth(api.getDate().getMonth() + 1);
-
-            setTimeout(() => {
-              handleDeleteLastRow();
-              handleDeleteEvents();
-            }, 500); // 500ms 딜레이
           }
         }} // 캘린더가 로드될 때 실행
         dayHeaderContent={(info) => {
