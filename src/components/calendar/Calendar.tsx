@@ -130,27 +130,35 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
   };
 
   useEffect(() => {
-    const calendarRows = document.querySelectorAll('tBody > tr');
-    const lastCalendarRow = calendarRows[calendarRows.length - 1];
+    const handleDeleteLastRow = () => {
+      const calendarRows = document.querySelectorAll('tBody > tr');
+      const lastCalendarRow = calendarRows[calendarRows.length - 1];
 
-    if (!lastCalendarRow) return;
+      if (!lastCalendarRow) return;
 
-    for (let i = 0; i < lastCalendarRow.children.length; i++) {
-      const eventCell = lastCalendarRow.children[i].children[0].children[1];
-      if (!eventCell.classList.contains('fc-day-other')) return;
-      else {
-        lastCalendarRow.remove();
+      for (let i = 0; i < lastCalendarRow.children.length; i++) {
+        const eventCell = lastCalendarRow.children[i].children[0].children[1];
+        if (!eventCell.classList.contains('fc-day-other')) return;
+        else {
+          lastCalendarRow.remove();
+        }
       }
-    }
-  });
-
-  useEffect(() => {
-    const handleRemoveEvents = () => {
-      const parent = document.querySelector('.fc-day-other')?.firstChild;
-      parent?.firstChild?.nextSibling?.remove();
     };
 
-    handleRemoveEvents();
+    handleDeleteLastRow();
+  }, [displayYear, displayMonth]);
+
+  useEffect(() => {
+    const handleDeleteEvents = () => {
+      const otherDates = document.querySelectorAll('.fc-day-other');
+
+      for (let i = 0; i < otherDates.length; i++) {
+        const parent = otherDates[i];
+        parent?.children[1].remove();
+      }
+    };
+
+    handleDeleteEvents();
   }, [displayYear, displayMonth]);
 
   return (
