@@ -129,6 +129,30 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     navigate(`/diaries/view/${date}`);
   };
 
+  useEffect(() => {
+    const calendarRows = document.querySelectorAll('tBody > tr');
+    const lastCalendarRow = calendarRows[calendarRows.length - 1];
+
+    if (!lastCalendarRow) return;
+
+    for (let i = 0; i < lastCalendarRow.children.length; i++) {
+      const eventCell = lastCalendarRow.children[i].children[0].children[1];
+      if (!eventCell.classList.contains('fc-day-other')) return;
+      else {
+        lastCalendarRow.remove();
+      }
+    }
+  });
+
+  useEffect(() => {
+    const handleRemoveEvents = () => {
+      const parent = document.querySelector('.fc-day-other')?.firstChild;
+      parent?.firstChild?.nextSibling?.remove();
+    };
+
+    handleRemoveEvents();
+  }, [displayYear, displayMonth]);
+
   return (
     <div className="calendar-container">
       <FullCalendar
