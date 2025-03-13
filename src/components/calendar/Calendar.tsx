@@ -234,6 +234,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
             date.setDate(date.getDate() + 1)
           ) {
             const formattedDate = date.toISOString().split('T')[0];
+            console.table(`diaryData: ${diaryData}`);
 
             const matchingEntry = diaryData.find(
               (entry) => entry.date === formattedDate
