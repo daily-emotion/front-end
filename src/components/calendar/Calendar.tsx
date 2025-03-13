@@ -132,6 +132,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
   const handleDeleteLastRow = () => {
     const calendarRows = document.querySelectorAll('tBody > tr');
     const lastCalendarRow = calendarRows[calendarRows.length - 1];
+    console.log(lastCalendarRow);
 
     if (!lastCalendarRow) {
       console.error('캘린더의 마지막 행을 인식할 수 없음');
@@ -141,8 +142,8 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     let isOtherMonthRow = true;
 
     for (let i = 0; i < lastCalendarRow.children.length; i++) {
-      const eventCell = lastCalendarRow.children[i].children[0].children[1];
-      if (!eventCell.classList.contains('fc-day-other')) {
+      const otherMonthDate = lastCalendarRow.children[i];
+      if (!otherMonthDate.classList.contains('fc-day-other')) {
         isOtherMonthRow = false;
         console.log('마지막 행에 해당 월 날짜 포함');
         break;
@@ -157,7 +158,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
   const handleDeleteEvents = () => {
     const otherDates = document.querySelectorAll('.fc-day-other');
 
-    if (!otherDates) {
+    if (!otherDates || otherDates.length === 0) {
       console.error('해당 월에 포함되지 않은 날짜들을 인식할 수 없음');
       return;
     }
@@ -165,10 +166,18 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     for (let i = 0; i < otherDates.length; i++) {
       const eventParent = otherDates[i].children[0];
 
-      if (eventParent.children.length > 0) {
-        eventParent.children[1].remove();
+      if (!eventParent) {
+        console.error('이벤트 부모 요소를 찾을 수 없음');
+        continue;
+      }
+
+      const eventToRemove = eventParent.querySelector('.fc-daygrid-day-events'); // fc-daygrid-day-events
+
+      if (eventToRemove) {
+        console.log(`이벤트를 제거합니다:`, eventToRemove);
+        eventToRemove.remove();
       } else {
-        console.error('해당 월에 포함되지 않은 날짜 제거 실패');
+        console.warn('삭제할 이벤트가 없습니다.');
       }
     }
   };
