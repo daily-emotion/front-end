@@ -234,19 +234,24 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
             date.setDate(date.getDate() + 1)
           ) {
             const formattedDate = date.toISOString().split('T')[0];
-            console.table(`diaryData: ${diaryData}`);
+            console.table(diaryData);
 
             const matchingEntry = diaryData.find(
               (entry) => entry.date === formattedDate
             );
 
-            events.push({
-              title: '',
-              start: formattedDate,
-              extendedProps: {
-                emotion: matchingEntry ? matchingEntry.emotion : null,
-              },
-            });
+            if (
+              date.getFullYear() === displayYear &&
+              date.getMonth() + 1 === displayMonth
+            ) {
+              events.push({
+                title: '',
+                start: formattedDate,
+                extendedProps: {
+                  emotion: matchingEntry ? matchingEntry.emotion : null,
+                },
+              });
+            }
           }
 
           successCallback(events);
