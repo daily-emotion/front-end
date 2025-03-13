@@ -132,7 +132,6 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
   const handleDeleteLastRow = () => {
     const calendarRows = document.querySelectorAll('tBody > tr');
     const lastCalendarRow = calendarRows[calendarRows.length - 1];
-    console.log(lastCalendarRow);
 
     if (!lastCalendarRow) {
       console.error('캘린더의 마지막 행을 인식할 수 없음');
@@ -151,6 +150,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     }
 
     if (isOtherMonthRow) {
+      console.log(`이벤트를 제거합니다:`, lastCalendarRow);
       lastCalendarRow.remove();
     }
   };
@@ -198,8 +198,11 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
             setDisplayDate(api.getDate());
             setDisplayYear(api.getDate().getFullYear());
             setDisplayMonth(api.getDate().getMonth() + 1);
-            handleDeleteLastRow();
-            handleDeleteEvents();
+
+            setTimeout(() => {
+              handleDeleteLastRow();
+              handleDeleteEvents();
+            }, 50); // 50ms 딜레이
           }
         }} // 캘린더가 로드될 때 실행
         dayHeaderContent={(info) => {
