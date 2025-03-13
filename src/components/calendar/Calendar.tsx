@@ -129,53 +129,49 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     navigate(`/diaries/view/${date}`);
   };
 
-  useEffect(() => {
-    const handleDeleteLastRow = () => {
-      const calendarRows = document.querySelectorAll('tBody > tr');
-      const lastCalendarRow = calendarRows[calendarRows.length - 1];
+  const handleDeleteLastRow = () => {
+    const calendarRows = document.querySelectorAll('tBody > tr');
+    const lastCalendarRow = calendarRows[calendarRows.length - 1];
 
-      if (!lastCalendarRow) {
-        console.error('캘린더의 마지막 행을 인식할 수 없음');
-        return;
+    if (!lastCalendarRow) {
+      console.error('캘린더의 마지막 행을 인식할 수 없음');
+      return;
+    }
+
+    let isOtherMonthRow = true;
+
+    for (let i = 0; i < lastCalendarRow.children.length; i++) {
+      const eventCell = lastCalendarRow.children[i].children[0].children[1];
+      if (!eventCell.classList.contains('fc-day-other')) {
+        isOtherMonthRow = false;
+        console.log('마지막 행에 해당 월 날짜 포함');
+        break;
       }
+    }
 
-      for (let i = 0; i < lastCalendarRow.children.length; i++) {
-        const eventCell = lastCalendarRow.children[i].children[0].children[1];
-        if (!eventCell.classList.contains('fc-day-other')) {
-        } else {
-          lastCalendarRow.remove();
-          console.error(
-            '해당 월에 포함되지 않은 날짜로 이루어진 마지막 행 제거 실패'
-          );
-        }
+    if (isOtherMonthRow) {
+      lastCalendarRow.remove();
+    }
+  };
+
+  const handleDeleteEvents = () => {
+    const otherDates = document.querySelectorAll('.fc-day-other');
+
+    if (!otherDates) {
+      console.error('해당 월에 포함되지 않은 날짜들을 인식할 수 없음');
+      return;
+    }
+
+    for (let i = 0; i < otherDates.length; i++) {
+      const eventParent = otherDates[i].children[0];
+
+      if (eventParent.children.length > 0) {
+        eventParent.children[1].remove();
+      } else {
+        console.error('해당 월에 포함되지 않은 날짜 제거 실패');
       }
-    };
-
-    handleDeleteLastRow();
-  }, [displayYear, displayMonth]);
-
-  useEffect(() => {
-    const handleDeleteEvents = () => {
-      const otherDates = document.querySelectorAll('.fc-day-other');
-
-      if (!otherDates) {
-        console.error('해당 월에 포함되지 않은 날짜들을 인식할 수 없음');
-        return;
-      }
-
-      for (let i = 0; i < otherDates.length; i++) {
-        const eventParent = otherDates[i].children[0];
-
-        if (eventParent.children.length > 0) {
-          eventParent.children[1].remove();
-        } else {
-          console.error('해당 월에 포함되지 않은 날짜 제거 실패');
-        }
-      }
-    };
-
-    handleDeleteEvents();
-  }, [displayYear, displayMonth]);
+    }
+  };
 
   return (
     <div className="calendar-container">
@@ -193,6 +189,8 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
             setDisplayDate(api.getDate());
             setDisplayYear(api.getDate().getFullYear());
             setDisplayMonth(api.getDate().getMonth() + 1);
+            handleDeleteLastRow();
+            handleDeleteEvents();
           }
         }} // 캘린더가 로드될 때 실행
         dayHeaderContent={(info) => {
