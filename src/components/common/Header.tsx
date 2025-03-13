@@ -50,20 +50,26 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    logout().then(() => {
-      alert("로그아웃되었습니다.");
-      localStorage.clear();
-      navigate('/');
-    }).catch((err) => {
-      console.error("로그아웃 실패", err);
-      alert("로그아웃 중 문제가 발생하였습니다.");
-      localStorage.clear(); //서버에서 로그아웃에 실패하더라도 클라에서 토큰 삭제
-      navigate('/');
-    })
+    logout()
+      .then(() => {
+        alert('로그아웃되었습니다.');
+        localStorage.clear();
+        navigate('/');
+      })
+      .catch((err) => {
+        console.error('로그아웃 실패', err);
+        alert('로그아웃 중 문제가 발생하였습니다.');
+        localStorage.clear(); //서버에서 로그아웃에 실패하더라도 클라에서 토큰 삭제
+        navigate('/');
+      });
   };
 
   const handleGoToReport = () => {
     navigate('/report');
+  };
+
+  const handleGoToMain = () => {
+    navigate('/main');
   };
 
   return (
@@ -75,13 +81,12 @@ const Header = () => {
             style={{ width: '50px' }}
             onClick={NavigateMain}
           />
-          <h4 onClick={NavigateMain}>
-            Daily-Emotion
-          </h4>
+          <h4 onClick={NavigateMain}>Daily-Emotion</h4>
         </div>
         <div>
           <h3>{userName} 님</h3>
         </div>
+
         <div className="mainMenu">
           <Button
             onClick={handleLogout}
@@ -89,7 +94,11 @@ const Header = () => {
           >
             LOGOUT
           </Button>
-          <Button onClick={handleGoToReport}>REPORT</Button>
+          {location.pathname !== '/report' ? (
+            <Button onClick={handleGoToReport}>REPORT</Button>
+          ) : (
+            <Button onClick={handleGoToMain}>MAIN</Button>
+          )}
         </div>
       </div>
     </>
