@@ -150,7 +150,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     }
 
     if (isOtherMonthRow) {
-      console.log(`이벤트를 제거합니다:`, lastCalendarRow);
+      console.log(`이번 달을 포함하지 않는 행을 제거합니다:`, lastCalendarRow);
       lastCalendarRow.remove();
     }
   };
@@ -187,8 +187,10 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     if (!calendarApi) return;
 
     // 리렌더링이 완료된 후 실행
-    handleDeleteLastRow();
-    handleDeleteEvents();
+    setTimeout(() => {
+      handleDeleteLastRow();
+      handleDeleteEvents();
+    }, 50);
   }, [displayYear, displayMonth, calendarApi]); // 의존성 배열에 상태 변수 포함
 
   return (
