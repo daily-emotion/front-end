@@ -187,7 +187,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     const targetNode = document.querySelector('.fc-day-other');
 
     if (!targetNode) {
-      console.error('타켓 노트 감지 불가');
+      console.error('타켓 노드 감지 불가');
       return;
     }
 
@@ -199,8 +199,8 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
       for (const mutation of mutationList) {
         if (mutation.type === 'childList') {
           console.log('fc-day-other 클래스 div 내 자식 노드 감지됨');
-          handleDeleteLastRow();
           handleDeleteEvents();
+          handleDeleteLastRow();
         }
       }
     };
@@ -264,7 +264,6 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
             date.setDate(date.getDate() + 1)
           ) {
             const formattedDate = date.toISOString().split('T')[0];
-            console.table(diaryData);
 
             const matchingEntry = diaryData.find(
               (entry) => entry.date === formattedDate
