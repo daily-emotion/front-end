@@ -182,16 +182,40 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     }
   };
 
-  // 별도의 useEffect에서 DOM 조작 수행
   useEffect(() => {
-    if (!calendarApi) return;
+    // 변경을 감지할 노드 선택
+    const targetNode = document.querySelector('.fc-day-other');
 
-    // 리렌더링이 완료된 후 실행
-    setTimeout(() => {
-      handleDeleteLastRow();
-      handleDeleteEvents();
-    }, 50);
-  }, [displayYear, displayMonth, calendarApi]); // 의존성 배열에 상태 변수 포함
+    if (!targetNode) {
+      console.error('타켓 노트 감지 불가');
+      return;
+    }
+
+    // 감지 옵션 (감지할 변경)
+    const config = { attributes: true, childList: true, subtree: true };
+
+    // 변경 감지 시 실행할 콜백 함수
+    const callback: MutationCallback = (mutationList, observer) => {
+      for (const mutation of mutationList) {
+        if (mutation.type === 'childList') {
+          console.log('fc-day-other 클래스 div 내 자식 노드 감지됨');
+          handleDeleteLastRow();
+          handleDeleteEvents();
+        }
+      }
+    };
+
+    // 옵저버 인스턴스 생성
+    const observer = new MutationObserver(callback);
+
+    // 감지 시작
+    observer.observe(targetNode, config);
+
+    // 언마운트 시 옵저버 해제
+    return () => {
+      observer.disconnect();
+    };
+  }, [displayYear, displayMonth, calendarApi]);
 
   return (
     <div className="calendar-container">
