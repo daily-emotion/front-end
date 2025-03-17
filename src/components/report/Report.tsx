@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { BASE_URL } from '../../configs/apiConfig';
+import API, { BASE_URL } from '../../configs/apiConfig';
 import classNames from 'classnames';
 import stylesReportPage from '../../styles/pages/ReportPage.module.css';
 
@@ -111,12 +111,17 @@ const Report = ({ year, month, title }: ReportProps) => {
 
     const fetchMonthlyStat = async () => {
       try {
-        const res = await axios.get<StatData>(
-          `${BASE_URL}/reports/summary/${year}/${month}`,
-          {
-            headers: { Authorization: accessToken },
-          }
+        // const res = await axios.get<StatData>(
+        //   `${BASE_URL}/reports/summary/${year}/${month}`,
+        //   {
+        //     headers: { Authorization: accessToken },
+        //   }
+        // );
+
+        const res = await API.get<StatData>(
+          `/reports/summary/${year}/${month}`
         );
+
         if (res.data) {
           const selectedStatData = res.data.monthlyStats.find(
             (stat) =>

@@ -18,7 +18,8 @@ export const diaryService = {
   // 프로필 조회
   getName: async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/user/profile`);
+      // const response = await axios.get(`${BASE_URL}/user/profile`);
+      const response = await API.get(`/user/profile`);
       return response.data;
     } catch {
       console.log('API : 프로필 조회에 실패하였습니다.');
@@ -36,16 +37,19 @@ export const diaryService = {
         imageUrl: diary.imageUrl,
       };
 
-      const response = await axios.post(
-        `${BASE_URL}/diaries/${date}`,
-        diaryData,
-        {
-          headers: {
-            Authorization: token,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      // const response = await axios.post(
+      //   `${BASE_URL}/diaries/${date}`,
+      //   diaryData,
+      //   {
+      //     headers: {
+      //       Authorization: token,
+      //       'Content-Type': 'application/json',
+      //     },
+      //   }
+      // );
+
+      const response = await API.post(`/diaries/${date}`, diaryData);
+
       console.log('생성 : ', response.data);
       return response.data;
     } catch {
@@ -61,16 +65,22 @@ export const diaryService = {
       const formData = new FormData();
       formData.append('file', imageFile); // 파일 객체 추가
 
-      const response = await axios.post(
-        `${BASE_URL}/diaries/images`,
-        formData,
-        {
-          headers: {
-            Authorization: token,
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
+      // const response = await axios.post(
+      //   `${BASE_URL}/diaries/images`,
+      //   formData,
+      //   {
+      //     headers: {
+      //       Authorization: token,
+      //       'Content-Type': 'multipart/form-data',
+      //     },
+      //   }
+      // );
+
+      const response = await API.post(`/diaries/images`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       return response.data as string; // 타입을 명식적으로 변환
     } catch {
@@ -81,12 +91,17 @@ export const diaryService = {
   // 특정 날짜 일기 조회
   getDiaryByDate: async (date: string) => {
     try {
-      const response = await axios.get<Diary>(`${BASE_URL}/diaries/${date}`, {
-        headers: {
-          Authorization: token,
-          'Content-Type': 'application/json',
-        },
+      // const response = await axios.get<Diary>(`${BASE_URL}/diaries/${date}`, {
+      //   headers: {
+      //     Authorization: token,
+      //     'Content-Type': 'application/json',
+      //   },
+      // });
+
+      const response = await API.get<Diary>(`/diaries/${date}`, {
+        headers: { 'Content-Type': 'application/json' },
       });
+
       return response.data;
     } catch {
       console.log('API : 특정 날짜 일기 조회에 실패하였습니다.');
@@ -105,16 +120,23 @@ export const diaryService = {
       };
       console.log('API로 보낼 태그 데이터:', diaryData.tag);
 
-      const response = await axios.put(
-        `${BASE_URL}/diaries/${date}`,
-        updateDiary,
-        {
-          headers: {
-            Authorization: token,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      // const response = await axios.put(
+      //   `${BASE_URL}/diaries/${date}`,
+      //   updateDiary,
+      //   {
+      //     headers: {
+      //       Authorization: token,
+      //       'Content-Type': 'application/json',
+      //     },
+      //   }
+      // );
+
+      const response = await API.put(`/diaries/${date}`, updateDiary, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
       console.log('수정 : ', response.data);
       return response.data;
     } catch (error) {
@@ -126,12 +148,20 @@ export const diaryService = {
   // 일기 삭제
   deleteDiary: async (date: string) => {
     try {
-      const response = await axios.delete(`${BASE_URL}/diaries/${date}`, {
+      //   const response = await axios.delete(`${BASE_URL}/diaries/${date}`, {
+      //     headers: {
+      //       Authorization: token,
+      //       'Content-Type': 'application/json',
+      //     },
+      //   });
+
+      const response = await API.delete(`${BASE_URL}/diaries/${date}`, {
         headers: {
           Authorization: token,
           'Content-Type': 'application/json',
         },
       });
+
       console.log('삭제 : ', response.data);
       return response.data;
     } catch {
@@ -147,16 +177,7 @@ export const logout = async () => {
     const accessToken = localStorage.getItem('Authorization');
     const refreshToken = localStorage.getItem('RefreshToken');
 
-    await API.post(
-      `${BASE_URL}/logout`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          RefreshToken: `Bearer ${refreshToken}`,
-        },
-      }
-    );
+    await API.post(`/logout`, {});
   } catch (error) {
     console.error('로그아웃 실패', error);
   }

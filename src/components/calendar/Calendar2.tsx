@@ -11,7 +11,7 @@ import CreateDiaryButton from './CreateDiaryButton';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CalendarApi } from '@fullcalendar/core/index.js';
-import { BASE_URL } from '../../configs/apiConfig';
+import API, { BASE_URL } from '../../configs/apiConfig';
 
 interface CalendarProps {
   onViewDiary: () => void;
@@ -66,8 +66,8 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
     console.log('월 일기 데이터 요청 연도, 월: ', requestYearMonth);
     const fetchDiaryData = async () => {
       try {
-        const res = await axios.get<DiaryData>(
-          `${BASE_URL}/diaries/monthly/${currentYear}${String(currentMonth).padStart(2, '0')}`,
+        const res = await API.get<DiaryData>(
+          `/diaries/monthly/${currentYear}${String(currentMonth).padStart(2, '0')}`,
           // `https://dailyemotion.site/api/diaries/monthly/${currentYear}${String(currentMonth).padStart(2, '0')}`,
           {
             headers: { Authorization: accessToken },

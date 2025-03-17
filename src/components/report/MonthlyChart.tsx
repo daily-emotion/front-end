@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCalendarStore } from '../../stores/useCalendarStore';
-import { BASE_URL } from '../../configs/apiConfig';
+import API, { BASE_URL } from '../../configs/apiConfig';
 
 import * as Recharts from 'recharts';
 const { PieChart, Pie, Cell, ResponsiveContainer } = Recharts;
@@ -159,16 +159,21 @@ const MonthlyChart = () => {
 
     const fetchEmotionCountsData = async () => {
       try {
-        const res = await axios.get<{
+        // const res = await axios.get<{
+        //   yearMonth: string;
+        //   emotionCounts: Record<string, number>;
+        // }>(
+        //   `${BASE_URL}/reports/emotions/${year}/${month}`,
+        //   // `https://dailyemotion.site/api/reports/emotions/${year}/${month}`,
+        //   {
+        //     headers: { Authorization: accessToken },
+        //   }
+        // );
+
+        const res = await API.get<{
           yearMonth: string;
           emotionCounts: Record<string, number>;
-        }>(
-          `${BASE_URL}/reports/emotions/${year}/${month}`,
-          // `https://dailyemotion.site/api/reports/emotions/${year}/${month}`,
-          {
-            headers: { Authorization: accessToken },
-          }
-        );
+        }>(`/reports/emotions/${year}/${month}`);
 
         console.log('이번 달 작성된 일기 감정 빈도: ', res.data);
         setYearMonth(res.data.yearMonth);
