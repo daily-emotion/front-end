@@ -224,6 +224,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
         timeZone="Asia/Seoul"
         plugins={[interactionPlugin, dayGridPlugin]}
         initialView="dayGridMonth"
+        fixedWeekCount={false}
         selectable={false}
         locale="ko" // 한글 번역 적용
         datesSet={() => {
@@ -233,12 +234,6 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
             setDisplayDate(api.getDate());
             setDisplayYear(api.getDate().getFullYear());
             setDisplayMonth(api.getDate().getMonth() + 1);
-
-            // 렌더링 끝난 시점에 바로 실행!
-            setTimeout(() => {
-              handleDeleteLastRow();
-              handleDeleteEvents();
-            }, 50);
           }
         }} // 캘린더가 로드될 때 실행
         dayHeaderContent={(info) => {
