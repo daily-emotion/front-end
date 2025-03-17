@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Diary, DiaryService } from '../services/diary/DiaryService';
+import { Diary, diaryService } from '../services/diary/diaryService';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Emotion, EmotionKey, emotions } from '../contants/emtionsContants';
 import { Button } from '@mui/material';
-import '../styles/pages/ViewDiaryPage.css'
+import '../styles/pages/ViewDiaryPage.css';
 
 const DiaryDetail: React.FC = () => {
   const { date } = useParams<{ date: string }>(); // URL 파라미터에서 date 가져오기
@@ -13,8 +13,8 @@ const DiaryDetail: React.FC = () => {
   const navigate = useNavigate();
 
   // 감정표현 이모티콘으로 변환
-  const getEmojiFromEmotion = (emotion:Emotion | null) => {
-    return(
+  const getEmojiFromEmotion = (emotion: Emotion | null) => {
+    return (
       Object.keys(emotions).find(
         (emoji) => emotions[emoji as EmotionKey] === emotion
       ) || ''
@@ -25,9 +25,9 @@ const DiaryDetail: React.FC = () => {
     const fetchDiary = async () => {
       setLoading(true);
       try {
-        const data = await DiaryService.getDiaryByDate(date!); // ! 을 붙인 이유는 절대 undefined가 올 수 없음을 알려준다.
+        const data = await diaryService.getDiaryByDate(date!); // ! 을 붙인 이유는 절대 undefined가 올 수 없음을 알려준다.
         setDiary(data!);
-        console.log("조회 페이지 태그:", data?.tag);
+        console.log('조회 페이지 태그:', data?.tag);
         setError(null);
       } catch (err) {
         console.error('Error fetching diary:', err); // 오류 로그 출력
@@ -49,12 +49,12 @@ const DiaryDetail: React.FC = () => {
   }, [error, navigate, date]); // 의존성 배열을 추가함으로써 불필요한 렌더링 방지
 
   const updateDiary = () => {
-    navigate(`/diaries/edit/${date}`, { state : { tags : diary?.tag||[]}});
+    navigate(`/diaries/edit/${date}`, { state: { tags: diary?.tag || [] } });
   };
 
   const deleteDiary = async () => {
     try {
-      await DiaryService.deleteDiary(date!); // 삭제 요청
+      await diaryService.deleteDiary(date!); // 삭제 요청
       setDiary(null); // 삭제 후 화면에서 제거
       alert('일기가 성공적으로 삭제되었습니다.'); // 성공 메시지
       navigate(`/main`);
@@ -74,46 +74,46 @@ const DiaryDetail: React.FC = () => {
   };
 
   // 날짜 변환
-  const formatDate = (dateString : string) => {
+  const formatDate = (dateString: string) => {
     const dateObj = new Date(dateString);
     return `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}월 ${dateObj.getDate().toString().padStart(2, '0')}일 ${getDayName(dateObj)}요일`;
   };
 
   return (
     <>
-      <div className='diary-container'>
+      <div className="diary-container">
         {/* 배경에 아이콘 추가 */}
         <div className="diary-icon-third"></div>
-        <div className='view-container'>
+        <div className="view-container">
           {diary ? (
             <>
-              <div className='view-title'>
-                <h2 className='view-title-date'>{formatDate(date ?? '')}</h2>
+              <div className="view-title">
+                <h2 className="view-title-date">{formatDate(date ?? '')}</h2>
 
-                <div className='view-title-button'>
+                <div className="view-title-button">
                   <Button onClick={updateDiary}>수정</Button>
                   <Button onClick={deleteDiary}>삭제</Button>
                 </div>
               </div>
 
-              <div className={`view-image-container ${diary.imageUrl ? "has-image" : "no-image"}`}>
+              <div
+                className={`view-image-container ${diary.imageUrl ? 'has-image' : 'no-image'}`}
+              >
                 {diary.imageUrl ? (
                   <img src={diary.imageUrl} alt="Diary" />
                 ) : null}
                 <p>{getEmojiFromEmotion(diary.emotion as Emotion)}</p>
               </div>
-              <div className='view-content-container'>
+              <div className="view-content-container">
                 <p>{diary.content || '내용이 없습니다.'}</p>
               </div>
-              <div className='view-tag-container'>
+              <div className="view-tag-container">
                 <p>
                   {diary.tag?.length > 0
                     ? diary.tag.map((t, index) => <span key={index}>#{t}</span>)
-                    : '태그가 없습니다.'
-                  }
+                    : '태그가 없습니다.'}
                 </p>
               </div>
-              
             </>
           ) : null}
         </div>

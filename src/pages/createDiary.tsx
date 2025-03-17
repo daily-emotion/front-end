@@ -5,10 +5,10 @@ import ModalTagSelector from '../components/diary/tagSelectorModal';
 import MyDropzone from '../components/diary/addImage';
 import EmotionSelectorModal from '../components/diary/emotionSelectorModal';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { DiaryService } from '../services/diary/DiaryService';
+import { diaryService } from '../services/diary/diaryService';
 import { emotions, Emotion, EmotionKey } from '../contants/emtionsContants';
 import { tags } from '../contants/tagsContants';
-import '../styles/pages/DiaryPage.css'
+import '../styles/pages/DiaryPage.css';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
@@ -17,12 +17,10 @@ const CreateDiaryPage: React.FC = () => {
   const location = useLocation();
 
   // date (초기값을 url에 적힌 날짜로 설정)
-  const [selectedDate, setSelectedDate] = useState<Date>(
-    () => {
-      const dateFromUrl = location.pathname.split('/').pop();
-      return dateFromUrl ? new Date(dateFromUrl) : new Date();
-    }
-  );
+  const [selectedDate, setSelectedDate] = useState<Date>(() => {
+    const dateFromUrl = location.pathname.split('/').pop();
+    return dateFromUrl ? new Date(dateFromUrl) : new Date();
+  });
   // Emotion
   const [selectedEmotion, setSelectedEmotion] = useState<Emotion | null>(null);
   const [isEmotionModalOpen, setIsEmotionModalOpen] = useState(false);
@@ -74,10 +72,9 @@ const CreateDiaryPage: React.FC = () => {
 
   // 이미지 관련
   const handleAddImage = async (file: File) => {
-
     // 이미지 한 개만 업로드 가능
-    if(uploadedImages.length >= 1){
-      alert('이미지는 한 개만 업로드 할 수 있습니다.')
+    if (uploadedImages.length >= 1) {
+      alert('이미지는 한 개만 업로드 할 수 있습니다.');
       return;
     }
 
@@ -87,32 +84,31 @@ const CreateDiaryPage: React.FC = () => {
         `업로드 가능한 최대 용량은 5MB입니다. (현재 파일 용량 : ${(file.size / (1024 * 1024)).toFixed(2)}MB)`
       );
       return;
-    } 
+    }
 
-    try{
+    try {
       // 이미지 주소 변환
-      const imageUrl = await DiaryService.imageUpload(file);
-      if(imageUrl) {
+      const imageUrl = await diaryService.imageUpload(file);
+      if (imageUrl) {
         setUploadedImageUrl([imageUrl]);
         setUploadedImages([file]);
       } else {
-        console.log('이미지 URL이 반환되지않았습니다.')
+        console.log('이미지 URL이 반환되지않았습니다.');
       }
-    } catch(error){
+    } catch (error) {
       console.error('이미지 업로드 실패:', error);
       alert('이미지 업로드 중 오류가 발생했습니다.');
     }
   };
 
   const handleDeleteImage = () => {
-
-    const deleteOk = window.confirm("이미지를 삭제하시겠습니까?");
+    const deleteOk = window.confirm('이미지를 삭제하시겠습니까?');
     if (deleteOk) {
-      alert("삭제되었습니다.")
+      alert('삭제되었습니다.');
       setUploadedImageUrl([]);
       setUploadedImages([]);
     } else {
-      alert("이미지 삭제를 취소하였습니다."); 
+      alert('이미지 삭제를 취소하였습니다.');
     }
   };
 
@@ -138,7 +134,7 @@ const CreateDiaryPage: React.FC = () => {
       };
 
       // 전달할 API
-      const response = await DiaryService.createDiary(diary, diary.date);
+      const response = await diaryService.createDiary(diary, diary.date);
 
       // console.log(`response: ${response}`);
 
@@ -159,44 +155,46 @@ const CreateDiaryPage: React.FC = () => {
 
   return (
     <>
-    <div className='diary-container'>
-      {/* 배경에 아이콘 추가 */}
-      <div className="diary-icon-third"></div>
+      <div className="diary-container">
+        {/* 배경에 아이콘 추가 */}
+        <div className="diary-icon-third"></div>
 
-      <div className='diary-content'>
-        <div className='diary-date'>
-          <h2>
-            {`${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}월 ${selectedDate.getDate().toString().padStart(2, '0')}일 ${getDayName(selectedDate)}요일`}
-          </h2>
-        </div>
-
-        <div className='content-container'>
-          <div className='content-left'>
-            <DatePicker selected={selectedDate} onChange={handleDateChange} inline />
+        <div className="diary-content">
+          <div className="diary-date">
+            <h2>
+              {`${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}월 ${selectedDate.getDate().toString().padStart(2, '0')}일 ${getDayName(selectedDate)}요일`}
+            </h2>
           </div>
 
-          <div className='content-right'>
-            <div className='content-tag-area'>
-              <div className='content-tag-title'>
-                <p>해시태그 추가</p>
-                <IconButton 
-                  className='tag-add-button'
-                  color="primary" 
-                  onClick={() => setIsModalOpen(true)}
-                  aria-label="태그 추가"
-                >
-                  <AddIcon />
-                </IconButton>
-              </div>
-                <div className='content-tag-list'>
+          <div className="content-container">
+            <div className="content-left">
+              <DatePicker
+                selected={selectedDate}
+                onChange={handleDateChange}
+                inline
+              />
+            </div>
+
+            <div className="content-right">
+              <div className="content-tag-area">
+                <div className="content-tag-title">
+                  <p>해시태그 추가</p>
+                  <IconButton
+                    className="tag-add-button"
+                    color="primary"
+                    onClick={() => setIsModalOpen(true)}
+                    aria-label="태그 추가"
+                  >
+                    <AddIcon />
+                  </IconButton>
+                </div>
+                <div className="content-tag-list">
                   {selectedTags.length === 0 ? (
                     <p>태그를 선택해주세요</p>
                   ) : (
                     <ul>
                       {selectedTags.map((tag, index) => (
-                        <li key={index}>
-                          #{tag}
-                        </li>
+                        <li key={index}>#{tag}</li>
                       ))}
                     </ul>
                   )}
@@ -209,62 +207,67 @@ const CreateDiaryPage: React.FC = () => {
                     onSave={handleSaveTags}
                   />
                 )}
-            </div>
+              </div>
 
-            <div className='content-right-bottom'>
-              <div className='content-image'>
-                <p>이미지 업로드</p>
-                {uploadedImageUrl.length === 0 &&  <MyDropzone addImage={handleAddImage}/>}
+              <div className="content-right-bottom">
+                <div className="content-image">
+                  <p>이미지 업로드</p>
+                  {uploadedImageUrl.length === 0 && (
+                    <MyDropzone addImage={handleAddImage} />
+                  )}
 
-                {/* 이미지 미리보기 */}
-                {uploadedImageUrl.length > 0 && (
-                  <div className='diary-image'>
-                    <img 
-                      src={uploadedImageUrl[0]} 
-                      alt="Uploaded Preview Image" 
-                      onClick={handleDeleteImage}
-                    />
-                  </div>
+                  {/* 이미지 미리보기 */}
+                  {uploadedImageUrl.length > 0 && (
+                    <div className="diary-image">
+                      <img
+                        src={uploadedImageUrl[0]}
+                        alt="Uploaded Preview Image"
+                        onClick={handleDeleteImage}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div className="content-emotion">
+                  <p>감정 추가</p>
+                  <span
+                    className="emotion-emoji"
+                    onClick={() => setIsEmotionModalOpen(true)}
+                  >
+                    {selectedEmotion ? (
+                      getEmojiFromEmotion(selectedEmotion)
+                    ) : (
+                      <SentimentSatisfiedAltIcon />
+                    )}
+                  </span>
+                </div>
+                {isEmotionModalOpen && (
+                  <EmotionSelectorModal
+                    selectedEmotion={selectedEmotion}
+                    onSelect={(emotion) => setSelectedEmotion(emotion)}
+                    onClose={() => setIsEmotionModalOpen(false)}
+                  />
                 )}
               </div>
-
-              <div className='content-emotion'>
-                <p>감정 추가</p>
-                <span className="emotion-emoji" onClick={() => setIsEmotionModalOpen(true)}>
-                  {selectedEmotion ? (
-                    getEmojiFromEmotion(selectedEmotion)
-                  ) : (
-                    <SentimentSatisfiedAltIcon/>
-                  )}
-                </span>
-              </div>
-              {isEmotionModalOpen && (
-                <EmotionSelectorModal
-                  selectedEmotion={selectedEmotion}
-                  onSelect={(emotion) => setSelectedEmotion(emotion)}
-                  onClose={() => setIsEmotionModalOpen(false)}
-                />
-              )}
             </div>
           </div>
-        </div>
-        
-        <div className='content-text'>
-          <textarea
-            placeholder="내용을 입력해주세요"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          ></textarea>
-        </div>
 
-        <div className="diary-buttons">
-          <button onClick={() => navigate('/main')}>취소</button>
-          <button onClick={handleSubmit}>등록</button>
-        </div>
+          <div className="content-text">
+            <textarea
+              placeholder="내용을 입력해주세요"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            ></textarea>
+          </div>
 
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+          <div className="diary-buttons">
+            <button onClick={() => navigate('/main')}>취소</button>
+            <button onClick={handleSubmit}>등록</button>
+          </div>
+
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+        </div>
       </div>
-    </div>
     </>
   );
 };

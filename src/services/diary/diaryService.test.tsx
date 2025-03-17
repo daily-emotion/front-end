@@ -1,6 +1,6 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { API_BASE_URL, DiaryService } from './DiaryService';
+import { API_BASE_URL, diaryService } from './diaryService';
 
 // DiaryService 테스트를 위한 describe 블록
 describe('DiaryService 테스트', () => {

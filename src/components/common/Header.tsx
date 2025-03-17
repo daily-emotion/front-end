@@ -5,7 +5,7 @@ import { BASE_URL } from '../../configs/apiConfig';
 import '../../styles/common/header.css';
 // 로고 이미지
 import mainLogo from '../../assets/images/logo/mainLogo.png';
-import { logout } from '../../services/diary/DiaryService';
+import { logout } from '../../services/diary/diaryService';
 import { Button } from '@mui/material';
 
 const Header = () => {

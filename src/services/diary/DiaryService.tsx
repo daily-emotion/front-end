@@ -13,8 +13,8 @@ export interface Diary {
 // 토큰 관리
 const token = localStorage.getItem('Authorization');
 
-// DiaryService 정의
-export const DiaryService = {
+// diaryService 정의
+export const diaryService = {
   // 프로필 조회
   getName: async () => {
     try {
@@ -98,12 +98,12 @@ export const DiaryService = {
     // Partial<Diary> : Diary 타입의 모든 속성을 필수에서 선택으로 변경됨
     try {
       const diaryData = {
-        emotion : updateDiary.emotion,
-        tag : updateDiary.tag,
-        content : updateDiary.content || '',
-        imageUrl : updateDiary.imageUrl || '',
-      }
-      console.log("API로 보낼 태그 데이터:", diaryData.tag);
+        emotion: updateDiary.emotion,
+        tag: updateDiary.tag,
+        content: updateDiary.content || '',
+        imageUrl: updateDiary.imageUrl || '',
+      };
+      console.log('API로 보낼 태그 데이터:', diaryData.tag);
 
       const response = await axios.put(
         `${BASE_URL}/diaries/${date}`,
@@ -117,9 +117,9 @@ export const DiaryService = {
       );
       console.log('수정 : ', response.data);
       return response.data;
-    } catch (error){
+    } catch (error) {
       console.log('API : 일기 수정에 실패하였습니다.');
-      throw error;  // 에러를 던져서 catch 블록에서 처리할 수 있게 만듦
+      throw error; // 에러를 던져서 catch 블록에서 처리할 수 있게 만듦
     }
   },
 
@@ -147,13 +147,17 @@ export const logout = async () => {
     const accessToken = localStorage.getItem('Authorization');
     const refreshToken = localStorage.getItem('RefreshToken');
 
-    await API.post(`${BASE_URL}/logout`,{},{
-      headers : {
-        Authorization: `Bearer ${accessToken}`,
-        RefreshToken : `Bearer ${refreshToken}`,
-      },
-    });
+    await API.post(
+      `${BASE_URL}/logout`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          RefreshToken: `Bearer ${refreshToken}`,
+        },
+      }
+    );
   } catch (error) {
     console.error('로그아웃 실패', error);
-  } 
+  }
 };

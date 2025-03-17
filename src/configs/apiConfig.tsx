@@ -7,7 +7,6 @@ export const BASE_URL = 'https://dailyemotion.site/api';
 // Axios 인스턴스 생성
 const API = axios.create({
   baseURL: BASE_URL,
-  // baseURL: 'https://dailyemotion.site/api',
   withCredentials: true, // 쿠키 전송을 위해 필요 (옵션)
 });
 
