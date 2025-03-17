@@ -5,7 +5,7 @@ import ModalTagSelector from '../components/diary/tagSelectorModal';
 import MyDropzone from '../components/diary/addImage';
 import EmotionSelectorModal from '../components/diary/emotionSelectorModal';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { diaryService } from '../services/diary/diaryService';
+import { diaryService } from '../services/diary/diaryService.tsx';
 import { emotions, Emotion, EmotionKey } from '../contants/emtionsContants';
 import { tags } from '../contants/tagsContants';
 import '../styles/pages/DiaryPage.css';
