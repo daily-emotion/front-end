@@ -155,7 +155,7 @@ export const diaryService = {
       //     },
       //   });
 
-      const response = await API.delete(`${BASE_URL}/diaries/${date}`, {
+      const response = await API.delete(`/diaries/${date}`, {
         headers: {
           Authorization: token,
           'Content-Type': 'application/json',

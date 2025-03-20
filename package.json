@@ -31,6 +31,7 @@
     "date-fns": "^4.1.0",
     "eslint-config-prettier": "^9.1.0",
     "fullcalendar": "^6.1.15",
+    "jwt-decode": "^4.0.0",
     "nite": "^8.9.2",
     "prettier": "^3.4.2",
     "react": "^18.3.1",

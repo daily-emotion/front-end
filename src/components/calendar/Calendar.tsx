@@ -89,6 +89,7 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
           '해당 월의 일기 데이터를 불러오는데 실패하였습니다:',
           error
         ); //
+        alert(`해당 월의 일기 데이터를 불러오는데 실패하였습니다`);
       }
     };
 

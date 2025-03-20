@@ -194,16 +194,21 @@ const Report = ({ year, month, title }: ReportProps) => {
 
     const fetchEmotionCountsData = async () => {
       try {
-        const res = await axios.get<{
+        // const res = await axios.get<{
+        //   yearMonth: string;
+        //   emotionCounts: Record<string, number>;
+        // }>(
+        //   `${BASE_URL}/reports/emotions/${year}/${month}`,
+        //   // `https://dailyemotion.site/api/reports/emotions/${year}/${month}`,
+        //   {
+        //     headers: { Authorization: accessToken },
+        //   }
+        // );
+
+        const res = await API.get<{
           yearMonth: string;
           emotionCounts: Record<string, number>;
-        }>(
-          `${BASE_URL}/reports/emotions/${year}/${month}`,
-          // `https://dailyemotion.site/api/reports/emotions/${year}/${month}`,
-          {
-            headers: { Authorization: accessToken },
-          }
-        );
+        }>(`/reports/emotions/${year}/${month}`);
 
         console.log('이번 달 작성된 일기 감정 빈도: ', res.data);
         // setYearMonth(res.data.yearMonth);
