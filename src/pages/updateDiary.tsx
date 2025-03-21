@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Diary, diaryService } from '../services/diary/diaryService.tsx';
+import { Diary, diaryService } from '../services/diary/diaryService.ts';
 import EmotionSelectorModal from '../components/diary/emotionSelectorModal';
 import { Emotion, EmotionKey, emotions } from '../contants/emtionsContants';
 import ModalTagSelector from '../components/diary/tagSelectorModal';

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Diary, diaryService } from '../services/diary/diaryService';
+import { Diary, diaryService } from '../services/diary/diaryService.ts';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Emotion, EmotionKey, emotions } from '../contants/emtionsContants';
 import { Button } from '@mui/material';
