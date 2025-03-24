@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { handleAccessTokenExpTimeout } from '../services/auth/tokenService';
 
 const RedirectHandler = () => {
   const navigate = useNavigate();
@@ -16,10 +17,13 @@ const RedirectHandler = () => {
       localStorage.setItem('Authorization', `Bearer ${accessToken}`);
       localStorage.setItem('Refresh Token', `Bearer ${refreshToken}`);
       console.log('로그인 성공');
+
+      // 액세스 토큰에 만료시간 전 1분 이내일 때 갱신하는 API 호출하도록
+      handleAccessTokenExpTimeout(accessToken);
+
       navigate('/main');
     } else {
       console.error('No Tokens Received');
-      console.log('로그인에 실패하였습니다');
     }
   });
 

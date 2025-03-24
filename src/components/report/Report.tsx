@@ -608,7 +608,13 @@ const Report = ({ year, month, title }: ReportProps) => {
                   {tag ? (
                     <span># {tag}</span>
                   ) : (
-                    <span># {i + 4}등 키워드</span> // 기본값 출력
+                    <span
+                      style={{
+                        color: 'rgba(28, 31, 55, 0.333)',
+                      }}
+                    >
+                      NO KEYWORD
+                    </span> // 기본값 출력
                   )}
                 </div>
               );

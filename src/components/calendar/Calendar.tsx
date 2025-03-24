@@ -256,7 +256,8 @@ const Calendar: React.FC<CalendarProps> = ({ accessToken }) => {
         }}
         events={(fetchInfo, successCallback) => {
           const startDate = new Date(fetchInfo.start);
-          const endDate = new Date(fetchInfo.end);
+          const endDate = new Date(fetchInfo.end); //
+          // 현재 연, 월 보여줄 시 오늘까지만 이벤트 부여하는 코드로 변경 필요
           const events = [];
 
           // 캘린더에 표시될 모든 날짜를 반복하며 이벤트 생성

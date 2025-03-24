@@ -22,10 +22,9 @@ function Layout() {
 
   return (
     <>
-      {location.pathname !== '/' &&
-        location.pathname !== '/oauth/callback' &&
-        location.pathname !== '/dummyreport' &&
-        location.pathname !== '/dummymonthlychart' && <Header />}
+      {location.pathname !== '/' && location.pathname !== '/oauth/callback' && (
+        <Header />
+      )}
       <main
         className="content"
         style={{
