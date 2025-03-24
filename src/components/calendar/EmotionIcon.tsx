@@ -1,4 +1,8 @@
-import { emotions, Emotion, EmotionKey } from '../../contants/emtionsContants';
+import {
+  emotions,
+  Emotion,
+  EmotionKey,
+} from '../../constants/emotionConstants';
 
 const EmotionIcon = ({
   date,

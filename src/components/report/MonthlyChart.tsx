@@ -241,7 +241,7 @@ const MonthlyChart = () => {
                         }}
                       ></span>
                       <span>
-                        {emotionTranslations[key]}(
+                        {`${emotionTranslations[key]} `} (
                         {emotionPercentages[key] || 0}%)
                       </span>
                     </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Diary, diaryService } from '../services/diary/diaryService.ts';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Emotion, EmotionKey, emotions } from '../contants/emtionsContants';
+import { Emotion, EmotionKey, emotions } from '../constants/emotionConstants';
 import { Button } from '@mui/material';
 import '../styles/pages/ViewDiaryPage.css';
 
